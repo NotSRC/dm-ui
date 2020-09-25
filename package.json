@@ -2,7 +2,7 @@
   "name": "dm-ui",
   "version": "0.0.0",
   "private": true,
-  "main": "dist/ui/esm2015/ui.js",
+  "main": "dist/ui/bundles/ui.umd.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
