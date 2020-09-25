@@ -9,7 +9,6 @@
     "build": "ng build",
     "build:lib": "ng build ui",
     "prepare": "npm run build:lib",
-    "postinstall": "ngcc",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

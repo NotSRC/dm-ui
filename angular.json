@@ -140,7 +140,10 @@
             "production": {
               "tsConfig": "projects/ui/tsconfig.lib.prod.json"
             }
-          }
+          },
+          "allowedCommonJsDependencies": [
+            "inputmask"
+          ]
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",

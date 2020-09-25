@@ -3,10 +3,11 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/lib",
-    "module": "ES2015",
-    "target": "ES5",
+    "module": "esnext",
+    "target": "es2015",
     "declaration": true,
-    "inlineSources": false,
+    "declarationMap": true,
+    "inlineSources": true,
     "types": [],
     "lib": [
       "dom",
@@ -16,8 +17,6 @@
   "angularCompilerOptions": {
     "skipTemplateCodegen": true,
     "strictMetadataEmit": true,
-    "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true,
     "enableResourceInlining": true
   },
   "exclude": [

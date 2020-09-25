@@ -8,7 +8,7 @@ import {
   Renderer2,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import InputmaskInstance from 'inputmask/dist/inputmask';
+import InputmaskInstance from 'inputmask';
 import { Instance, Options } from 'inputmask';
 
 @Directive({
