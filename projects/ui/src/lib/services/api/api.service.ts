@@ -7,8 +7,7 @@ import { Injectable } from '@angular/core';
 export abstract class ApiService {
   protected abstract debug: boolean;
   protected abstract apiUrl: string;
-
-  constructor(private http: HttpClient) {}
+  protected abstract http: HttpClient;
 
   async get(url: string, params: Params = {}): Promise<any> {
     if (this.debug) {
