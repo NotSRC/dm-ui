@@ -5,7 +5,7 @@
   "main": "dist/ui/bundles/ui.umd.js",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --port=4300",
     "build": "ng build",
     "build:lib": "ng build ui",
     "prepare": "npm run build:lib",
