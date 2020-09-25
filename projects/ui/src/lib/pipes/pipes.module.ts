@@ -10,4 +10,4 @@ import { CutNumberPipe } from './cut-number/cut-number.pipe';
     CommonModule
   ]
 })
-export class PipesModule { }
+export class DmPipesModule { }
