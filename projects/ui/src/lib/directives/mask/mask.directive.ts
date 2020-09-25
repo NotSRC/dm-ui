@@ -1,7 +1,6 @@
 import { Directive, ElementRef, forwardRef, HostListener, Input, OnChanges, OnInit, Renderer2 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import InputmaskInstance from 'inputmask/dist/inputmask';
-import { Instance, Options } from 'inputmask';
+import Inputmask from 'inputmask/dist/inputmask';
 
 @Directive({
   selector: 'input[dmMask]',
@@ -15,7 +14,7 @@ import { Instance, Options } from 'inputmask';
 })
 export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit {
   @Input() dmMask: string;
-  @Input('options') inputOptions: Options = {};
+  @Input('options') inputOptions = {};
 
   get options() {
     return {
@@ -24,7 +23,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit {
   }
 
   private value: string = '';
-  private inputMasked: Instance;
+  private inputMasked: Inputmask;
 
   constructor(private el: ElementRef, private renderer2: Renderer2) {
   }
@@ -54,7 +53,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit {
   maskInput() {
     if (!this.inputMasked) {
       console.log(this.dmMask, this.options);
-      this.inputMasked = InputmaskInstance(this.dmMask, this.options).mask(this.el.nativeElement);
+      this.inputMasked = Inputmask(this.dmMask, this.options).mask(this.el.nativeElement);
     }
     console.log(this.inputMasked);
   }
