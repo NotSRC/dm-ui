@@ -5,8 +5,8 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export abstract class ApiService {
-  protected abstract debug: boolean = false;
-  protected abstract apiUrl: string = null;
+  protected abstract debug: boolean;
+  protected abstract apiUrl: string;
 
   constructor(private http: HttpClient) {}
 
