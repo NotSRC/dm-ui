@@ -8,7 +8,7 @@ import {
   Renderer2,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import Inputmask from 'inputmask';
+import Inputmask  from 'inputmask/dist/inputmask.js';
 import { Instance, Options } from 'inputmask';
 
 @Directive({
@@ -50,7 +50,9 @@ export class DecimalMaskDirective implements ControlValueAccessor, OnChanges {
 
   private inputMasked: Instance;
 
-  constructor(private el: ElementRef, private renderer2: Renderer2) {}
+  constructor(private el: ElementRef, private renderer2: Renderer2) {
+    console.log(Inputmask);
+  }
 
   @HostListener('input', ['$event.target'])
   inputListener(target: HTMLInputElement) {
