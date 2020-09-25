@@ -3,7 +3,7 @@ import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-abstract class ApiService {
+export abstract class ApiService {
   protected abstract debug: boolean;
   protected abstract apiUrl: string;
 
