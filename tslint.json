@@ -83,7 +83,7 @@
       }
     },
     "typedef": [
-      true,
+      false,
       "call-signature"
     ],
     "typedef-whitespace": {
@@ -139,13 +139,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "app",
+      "dm",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "app",
+      "dm",
       "kebab-case"
     ]
   }
