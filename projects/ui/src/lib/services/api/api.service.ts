@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Params } from '@angular/router';
+import { Injectable } from '@angular/core';
 
 
+@Injectable()
 export abstract class ApiService {
   protected abstract debug: boolean = false;
   protected abstract apiUrl: string = null;
