@@ -1,69 +1,77 @@
 import { HttpClient } from '@angular/common/http';
 import { Params } from '@angular/router';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
-export abstract class ApiService {
+abstract class ApiService {
   protected abstract debug: boolean;
   protected abstract apiUrl: string;
 
-  constructor(protected http: HttpClient) {
-  }
+  constructor(protected http: HttpClient) {}
 
-  get(url: string, params: Params = {}) {
+  get(url: string, params: Params = {}): Observable<any> {
     if (this.debug) {
       console.log('get', url, params);
     }
-    const res = this.http
-      .get(`${this.apiUrl}/${url}`, {params});
-    if (this.debug) {
-      console.log(res);
-    }
-    return res;
+    return this.http.get(`${this.apiUrl}/${url}`, { params }).pipe(
+      tap(res => {
+        if (this.debug) {
+          console.log(res);
+        }
+      })
+    );
   }
 
-  post(url: string, data: any) {
+  post(url: string, data: any): Observable<any> {
     if (this.debug) {
       console.log('post', url, data);
     }
-    const res = this.http.post(`${this.apiUrl}/${url}`, data).toPromise();
-    if (this.debug) {
-      console.log(res);
-    }
-    return res;
+    return this.http.post(`${this.apiUrl}/${url}`, data).pipe(
+      tap(res => {
+        if (this.debug) {
+          console.log(res);
+        }
+      })
+    );
   }
 
-  patch(url: string, data: any) {
+  patch(url: string, data: any): Observable<any> {
     if (this.debug) {
       console.log('patch', url, data);
     }
-    const res = this.http
-      .patch(`${this.apiUrl}/${url}`, data);
-    if (this.debug) {
-      console.log(res);
-    }
-    return res;
+    return this.http.patch(`${this.apiUrl}/${url}`, data).pipe(
+      tap(res => {
+        if (this.debug) {
+          console.log(res);
+        }
+      })
+    );
   }
 
-  delete(url: string, params: Params = {}) {
+  delete(url: string, params: Params = {}): Observable<any> {
     if (this.debug) {
       console.log('delete', url);
     }
-    const res = this.http
-      .delete(`${this.apiUrl}/${url}`, {params});
-    if (this.debug) {
-      console.log(res);
-    }
-    return res;
+    return this.http.delete(`${this.apiUrl}/${url}`, { params }).pipe(
+      tap(res => {
+        if (this.debug) {
+          console.log(res);
+        }
+      })
+    );
   }
 
-  getSingle(url: string, params: Params = {}) {
+  getSingle(url: string, params: Params = {}): Observable<any> {
     if (this.debug) {
       console.log('getSingle', url);
     }
-    const res = this.http
-      .get(`${this.apiUrl}/${url}`, {params});
-    if (this.debug) {
-      console.log(res);
-    }
-    return res;
+    return this.http.get(`${this.apiUrl}/${url}`, { params }).pipe(
+      tap(res => {
+        if (this.debug) {
+          console.log(res);
+        }
+      })
+    );
   }
 }
+
