@@ -12,9 +12,6 @@
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
-  "files": [
-    "dist/**/*"
-  ],
   "dependencies": {
     "@angular/animations": "~10.1.3",
     "@angular/common": "~10.1.3",
