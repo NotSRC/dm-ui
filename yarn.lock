@@ -1239,11 +1239,6 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/inputmask@^4.0.1":
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/@types/inputmask/-/inputmask-4.0.1.tgz#c58d6a6f4c511d491a49d4ed889fa02ea670e4c7"
-  integrity sha512-d05er00IwTq5IiNy0muGohQwbxiH/utEDRo10D54V+b94kf5FsmI34yc8j1PBmqLbu4Nb1+zJyRuhHd/fzBPKQ==
-
 "@types/jasmine@*", "@types/jasmine@~3.5.0":
   version "3.5.14"
   resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-3.5.14.tgz#f41a14e8ffa939062a71cf9722e5ee7d4e1f94af"
