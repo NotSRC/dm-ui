@@ -1,6 +1,7 @@
 import { Directive, ElementRef, forwardRef, HostListener, Input, OnChanges, Renderer2, } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import Inputmask from 'inputmask';
+import InputmaskInstance from 'inputmask/dist/inputmask';
+import { Instance, Options } from 'inputmask';
 
 @Directive({
   selector: 'input[dmIntegerMask]',
@@ -20,11 +21,11 @@ export class IntegerMaskDirective
   value: number | string;
 
   // https://github.com/RobinHerbots/Inputmask/blob/5.x/lib/extensions/inputmask.numeric.extensions.js
-  get options() {
+  get options(): Options {
     return {
       alias: 'integer',
-      min: this.min,
-      max: this.max,
+      min: this.min as any,
+      max: this.max as any,
       rightAlign: false,
       unmaskAsNumber: false,
       showMaskOnHover: false,
@@ -38,7 +39,7 @@ export class IntegerMaskDirective
     };
   }
 
-  private inputMasked: Inputmask;
+  private inputMasked: Instance;
 
   constructor(private el: ElementRef, private renderer2: Renderer2) {
   }
@@ -64,7 +65,7 @@ export class IntegerMaskDirective
 
   maskInput() {
     if (!this.inputMasked) {
-      this.inputMasked = Inputmask(this.options).mask(this.el.nativeElement);
+      this.inputMasked = InputmaskInstance(this.options).mask(this.el.nativeElement);
     }
   }
 

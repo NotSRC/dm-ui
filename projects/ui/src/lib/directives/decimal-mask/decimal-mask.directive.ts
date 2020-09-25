@@ -8,7 +8,8 @@ import {
   Renderer2,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import Inputmask from 'inputmask';
+import InputmaskInstance from 'inputmask/dist/inputmask';
+import { Instance, Options } from 'inputmask';
 
 @Directive({
   selector: 'input[dmDecimalMask]',
@@ -28,7 +29,7 @@ export class DecimalMaskDirective implements ControlValueAccessor, OnChanges {
   value: number | string;
 
   // https://github.com/RobinHerbots/Inputmask/blob/5.x/lib/extensions/inputmask.numeric.extensions.js
-  get options() {
+  get options(): Options {
     return {
       alias: 'decimal',
       min: this.min as any,
@@ -47,7 +48,7 @@ export class DecimalMaskDirective implements ControlValueAccessor, OnChanges {
     };
   }
 
-  private inputMasked: Inputmask;
+  private inputMasked: Instance;
 
   constructor(private el: ElementRef, private renderer2: Renderer2) {}
 
@@ -72,7 +73,7 @@ export class DecimalMaskDirective implements ControlValueAccessor, OnChanges {
 
   maskInput() {
     if (!this.inputMasked) {
-      this.inputMasked = Inputmask(this.options).mask(this.el.nativeElement);
+      this.inputMasked = InputmaskInstance(this.options).mask(this.el.nativeElement);
     }
   }
 
