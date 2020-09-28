@@ -2,7 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { DmDirectivesModule } from '../../projects/ui/src/public-api';
+import { DmComponentsModule, DmDirectivesModule } from '../../projects/ui/src/public-api';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -10,7 +11,10 @@ import { DmDirectivesModule } from '../../projects/ui/src/public-api';
   ],
   imports: [
     BrowserModule,
-    DmDirectivesModule
+    DmComponentsModule,
+    DmDirectivesModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

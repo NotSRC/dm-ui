@@ -1,1 +1,16 @@
-/* You can add global styles to this file, and also import other style files */
+@import "~normalize.css";
+
+@import "./app/styles/variables.scss";
+@import "./app/styles/theme.scss";
+@import "./app/styles/base/index";
+@import "./app/styles/mixins.scss";
+
+@import "./app/styles/components/index";
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 20px;
+}

@@ -1,0 +1,10 @@
+<div class="dm-search">
+  <input
+    #input
+    type="text"
+    [value]="value"
+    [placeholder]="placeholder"
+    [attr.maxlength]="maxlength"
+    (input)="changeValue($event.target.value)">
+  <mat-icon>search</mat-icon>
+</div>
