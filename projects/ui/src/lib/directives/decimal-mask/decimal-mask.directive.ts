@@ -1,13 +1,5 @@
-import {
-  Directive,
-  ElementRef,
-  forwardRef,
-  HostListener,
-  Input,
-  OnChanges,
-  Renderer2,
-} from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Directive, ElementRef, Inject, Input, OnChanges, Renderer2, } from '@angular/core';
+import { ControlValueAccessor } from '@angular/forms';
 import Inputmask from 'inputmask';
 
 @Directive({
@@ -49,7 +41,10 @@ export class DecimalMaskDirective implements ControlValueAccessor, OnChanges {
 
   private inputMasked: Inputmask;
 
-  constructor(private el: ElementRef, private renderer2: Renderer2) {
+  constructor(
+    @Inject(ElementRef) private el: ElementRef,
+    @Inject(Renderer2) private renderer2: Renderer2
+  ) {
 
   }
 

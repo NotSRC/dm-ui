@@ -7,8 +7,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    // MaskDirective,
-    // IntegerMaskDirective,
+    MaskDirective,
+    IntegerMaskDirective,
     DecimalMaskDirective,
   ],
   exports: [
