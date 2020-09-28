@@ -8,7 +8,7 @@ import Inputmask from 'inputmask';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => IntegerMaskDirective), // replace name as appropriate
-      multi: false,
+      multi: true,
     },
   ],
 })
