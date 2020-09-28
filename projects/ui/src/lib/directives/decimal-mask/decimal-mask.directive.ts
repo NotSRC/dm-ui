@@ -1,16 +1,16 @@
-import { Directive, ElementRef, Inject, Input, OnChanges, Renderer2, } from '@angular/core';
-import { ControlValueAccessor } from '@angular/forms';
+import { Directive, ElementRef, forwardRef, HostListener, Input, OnChanges, Renderer2, } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import Inputmask from 'inputmask';
 
 @Directive({
   selector: 'input[dmDecimalMask]',
-  // providers: [
-  //   {
-  //     provide: NG_VALUE_ACCESSOR,
-  //     useExisting: forwardRef(() => DecimalMaskDirective), // replace name as appropriate
-  //     multi: false,
-  //   },
-  // ],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => DecimalMaskDirective), // replace name as appropriate
+      multi: false,
+    },
+  ],
 })
 export class DecimalMaskDirective implements ControlValueAccessor, OnChanges {
   @Input() min: number = null;
@@ -42,18 +42,18 @@ export class DecimalMaskDirective implements ControlValueAccessor, OnChanges {
   private inputMasked: Inputmask;
 
   constructor(
-    @Inject(ElementRef) private el: ElementRef,
-    @Inject(Renderer2) private renderer2: Renderer2
+    private el: ElementRef,
+    private renderer2: Renderer2
   ) {
 
   }
 
-  // @HostListener('input', ['$event.target'])
-  // inputListener(target: HTMLInputElement) {
-  //   const val = parseFloat(target.value);
-  //   const resValue = val || val === 0 ? val : null;
-  //   this.changeValue(resValue);
-  // }
+  @HostListener('input', ['$event.target'])
+  inputListener(target: HTMLInputElement) {
+    const val = parseFloat(target.value);
+    const resValue = val || val === 0 ? val : null;
+    this.changeValue(resValue);
+  }
 
   ngOnChanges(): void {
     this.unmaskInput();

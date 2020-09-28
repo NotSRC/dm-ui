@@ -12,8 +12,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     DecimalMaskDirective,
   ],
   exports: [
-    // MaskDirective,
-    // IntegerMaskDirective,
+    MaskDirective,
+    IntegerMaskDirective,
     DecimalMaskDirective,
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
