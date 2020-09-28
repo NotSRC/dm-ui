@@ -12,13 +12,13 @@ import Inputmask from 'inputmask';
 
 @Directive({
   selector: 'input[dmDecimalMask]',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => DecimalMaskDirective), // replace name as appropriate
-      multi: false,
-    },
-  ],
+  // providers: [
+  //   {
+  //     provide: NG_VALUE_ACCESSOR,
+  //     useExisting: forwardRef(() => DecimalMaskDirective), // replace name as appropriate
+  //     multi: false,
+  //   },
+  // ],
 })
 export class DecimalMaskDirective implements ControlValueAccessor, OnChanges {
   @Input() min: number = null;
@@ -53,12 +53,12 @@ export class DecimalMaskDirective implements ControlValueAccessor, OnChanges {
 
   }
 
-  @HostListener('input', ['$event.target'])
-  inputListener(target: HTMLInputElement) {
-    const val = parseFloat(target.value);
-    const resValue = val || val === 0 ? val : null;
-    this.changeValue(resValue);
-  }
+  // @HostListener('input', ['$event.target'])
+  // inputListener(target: HTMLInputElement) {
+  //   const val = parseFloat(target.value);
+  //   const resValue = val || val === 0 ? val : null;
+  //   this.changeValue(resValue);
+  // }
 
   ngOnChanges(): void {
     this.unmaskInput();

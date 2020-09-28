@@ -6,8 +6,16 @@ import { IntegerMaskDirective } from './integer-mask/integer-mask.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [MaskDirective, DecimalMaskDirective, IntegerMaskDirective],
-  exports: [MaskDirective, DecimalMaskDirective, IntegerMaskDirective],
+  declarations: [
+    // MaskDirective,
+    // IntegerMaskDirective,
+    DecimalMaskDirective,
+  ],
+  exports: [
+    // MaskDirective,
+    // IntegerMaskDirective,
+    DecimalMaskDirective,
+  ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
 })
 export class DmDirectivesModule {}
