@@ -1,4 +1,4 @@
-import { CrudListQuery, SortDirection } from '../interfaces/crud-list-query';
+import { CrudListQuery, SortDirection } from '../../interfaces/crud-list-query';
 
 export class QueryParamsBuilder {
   private queryParams: CrudListQuery = {
