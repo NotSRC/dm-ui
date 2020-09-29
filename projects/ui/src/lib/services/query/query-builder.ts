@@ -9,7 +9,7 @@ export class QueryParamsBuilder {
 
   private queryParams: CrudListQuery = {
     page: 1,
-    limit: 15,
+    limit: 25,
     filter: null,
     sortField: null,
     sortDirection: null
