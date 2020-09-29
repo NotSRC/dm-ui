@@ -3,7 +3,7 @@ import { CrudListQuery, SortDirection } from '../interfaces/crud-list-query';
 export class QueryParamsBuilder {
   private queryParams: CrudListQuery = {
     page: 1,
-    perPage: 15,
+    limit: 15,
     filter: null,
     sortField: null,
     sortDirection: null
@@ -14,8 +14,8 @@ export class QueryParamsBuilder {
     return this;
   }
 
-  perPage(perPage: number) {
-    this.queryParams.perPage = perPage || 25;
+  perPage(limit: number) {
+    this.queryParams.limit = limit || 25;
     return this;
   }
 

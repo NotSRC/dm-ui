@@ -6,7 +6,7 @@ export enum SortDirection {
 export interface CrudListQuery {
   page?: number;
   filter?: string;
-  perPage?: number;
+  limit?: number;
   sortField?: string;
   sortDirection?: SortDirection;
 }
