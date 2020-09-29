@@ -27,3 +27,8 @@ export * from './lib/services/filter/filter.service';
  */
 export * from './lib/components/components.module';
 export * from './lib/components/search/search.component';
+
+/*
+ * Export interfaces
+ */
+export * from './lib/interfaces/crud-list-query';
