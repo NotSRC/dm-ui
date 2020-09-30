@@ -1,13 +1,18 @@
 import { CrudListQuery, SortDirection } from '../../interfaces/crud-list-query';
 import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, filter } from 'rxjs/operators';
 
 export class QueryParamsBuilder {
 
-  private onChange = new Subject();
-  public onChange$ = this.onChange.pipe(debounceTime(10));
+  private cancelChange = false;
+  private onChange = new Subject<{[key: string]: string}>();
+  public onChange$ = this.onChange
+    .pipe(
+      filter(() => this.cancelChange ? this.cancelChange = false : true),
+      debounceTime(this.changeDebounceTime),
+    );
 
-  private queryParams: CrudListQuery = {
+  protected queryParams: CrudListQuery = {
     page: 1,
     limit: 25,
     filter: null,
@@ -15,27 +20,39 @@ export class QueryParamsBuilder {
     sortDirection: null
   }
 
+  constructor(protected changeDebounceTime = 10) {
+  }
+
+  protected emitChange() {
+    this.onChange.next(this.getAvailableFields());
+  }
+
+  public cancelCurrentChangeEvent() {
+    this.cancelChange = true;
+    return this;
+  }
+
   page(page: number) {
     this.queryParams.page = page || 1;
-    this.onChange.next();
+    this.emitChange();
     return this;
   }
 
   limit(limit: number) {
     this.queryParams.limit = limit || 25;
-    this.onChange.next();
+    this.emitChange();
     return this;
   }
 
   filter(filter: string) {
     this.queryParams.filter = filter || null;
-    this.onChange.next();
+    this.emitChange();
     return this;
   }
 
   sortField(sortField: string) {
     this.queryParams.sortField = sortField || null;
-    this.onChange.next();
+    this.emitChange();
     return this;
   }
 
@@ -44,17 +61,28 @@ export class QueryParamsBuilder {
     if (!sortDirection) {
       this.queryParams.sortField = null;
     }
-    this.onChange.next();
+    this.emitChange();
+    return this;
+  }
+
+  setFromObject(data: {[key: string]: string}) {
+    Object.keys(this.queryParams).forEach(key => {
+      if (Object.prototype.hasOwnProperty.call(this.queryParams, key)) {
+        this.queryParams[key] = data[key];
+      }
+    });
+    this.emitChange();
     return this;
   }
 
   getAvailableFields(): {[key: string]: string} {
-    return Object.keys(this.queryParams).reduce((acc, key) => {
+    const a = Object.keys(this.queryParams).reduce((acc, key) => {
       const param = this.queryParams[key];
       if (param || param === 0 || param === false) {
         acc[key] = param;
       }
       return acc;
     }, {});
+    return a;
   }
 }
