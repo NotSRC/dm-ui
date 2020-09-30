@@ -32,8 +32,8 @@ export class QueryParamsBuilder {
     return this;
   }
 
-  getParam(key: keyof CrudListQuery) {
-    return this.queryParams[key];
+  getParam<T>(key: keyof CrudListQuery): T {
+    return this.queryParams[key] as any;
   }
 
   page(page: number) {
