@@ -32,6 +32,10 @@ export class QueryParamsBuilder {
     return this;
   }
 
+  getParam(key: keyof CrudListQuery) {
+    return this.queryParams[key];
+  }
+
   page(page: number) {
     this.queryParams.page = page || 1;
     this.emitChange();
