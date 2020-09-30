@@ -11,10 +11,10 @@ export class QuerySetter {
   }
 
   setQueryParams(query: { [key: string]: string }) {
-    const queryParams = new URLSearchParams(location.search);
+    const queryParams = new URLSearchParams();
     Object.keys(query).forEach((key) => {
       queryParams.set(key, query[key]);
     });
-    window.history.replaceState({}, '', `${location.pathname}?${queryParams.toString()}`);
+    window.history.replaceState({}, '', `${location.pathname}?${queryParams}`);
   }
 }

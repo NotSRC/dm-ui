@@ -8,5 +8,5 @@ export interface CrudListQuery {
   filter?: string;
   limit?: number;
   sortField?: string;
-  sortDirection?: SortDirection;
+  sortDirection?: SortDirection | 'asc' | 'desc';
 }

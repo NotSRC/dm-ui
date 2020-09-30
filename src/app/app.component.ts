@@ -15,10 +15,13 @@ export class AppComponent {
 
   constructor() {
 
+    this.queryBuilder.sortField('sdfsdfsd').sortDirection('asc');
     this.queryBuilder.onChange$.subscribe(res => {
-      console.log(res);
       this.querySetter.setQueryParams(res);
     });
     this.queryBuilder.setFromObject(this.querySetter.getQueryParams());
+    setTimeout(() => {
+      this.queryBuilder.sortDirection(null);
+    }, 3000);
   }
 }

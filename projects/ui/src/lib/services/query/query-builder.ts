@@ -60,8 +60,8 @@ export class QueryParamsBuilder {
     return this;
   }
 
-  sortDirection(sortDirection: SortDirection) {
-    this.queryParams.sortDirection = sortDirection;
+  sortDirection(sortDirection: SortDirection | 'asc' | 'desc') {
+    this.queryParams.sortDirection = sortDirection || null;
     if (!sortDirection) {
       this.queryParams.sortField = null;
     }
