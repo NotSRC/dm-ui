@@ -16,6 +16,7 @@ export class AppComponent {
   constructor() {
 
     this.queryBuilder.onChange$.subscribe(res => {
+      console.log(res);
       this.querySetter.setQueryParams(res);
     });
     this.queryBuilder.setFromObject(this.querySetter.getQueryParams());

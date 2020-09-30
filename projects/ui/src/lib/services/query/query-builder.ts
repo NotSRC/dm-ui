@@ -1,15 +1,11 @@
 import { CrudListQuery, SortDirection } from '../../interfaces/crud-list-query';
 import { Subject } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class QueryParamsBuilder {
 
   private cancelChange = false;
-  private onChange = new Subject<{[key: string]: string}>();
+  private onChange = new Subject<{ [key: string]: string }>();
   public onChange$ = this.onChange
     .pipe(
       filter(() => this.cancelChange ? this.cancelChange = false : true),
@@ -22,7 +18,7 @@ export class QueryParamsBuilder {
     filter: null,
     sortField: null,
     sortDirection: null
-  }
+  };
 
   constructor(protected changeDebounceTime = 10) {
   }
@@ -69,8 +65,8 @@ export class QueryParamsBuilder {
     return this;
   }
 
-  setFromObject(data: {[key: string]: string}) {
-    Object.keys(this.queryParams).forEach(key => {
+  setFromObject(data: { [key: string]: string }) {
+    Object.keys(data).forEach(key => {
       if (Object.prototype.hasOwnProperty.call(this.queryParams, key)) {
         this.queryParams[key] = data[key];
       }
@@ -79,14 +75,13 @@ export class QueryParamsBuilder {
     return this;
   }
 
-  getAvailableFields(): {[key: string]: string} {
-    const a = Object.keys(this.queryParams).reduce((acc, key) => {
+  getAvailableFields(): { [key: string]: string } {
+    return Object.keys(this.queryParams).reduce((acc, key) => {
       const param = this.queryParams[key];
       if (param || param === 0 || param === false) {
         acc[key] = param;
       }
       return acc;
     }, {});
-    return a;
   }
 }
