@@ -1,7 +1,9 @@
 import { CrudListQuery, SortDirection } from '../../interfaces/crud-list-query';
 import { Subject } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 
+@Injectable()
 export class QueryParamsBuilder {
 
   private cancelChange = false;

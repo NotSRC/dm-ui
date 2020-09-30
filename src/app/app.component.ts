@@ -11,8 +11,9 @@ export class AppComponent {
   title = 'dm-ui';
 
   queryBuilder = new QueryParamsBuilder();
+  querySetter = new QuerySetter();
 
-  constructor(private querySetter: QuerySetter) {
+  constructor() {
 
     this.queryBuilder.onChange$.subscribe(res => {
       this.querySetter.setQueryParams(res);
