@@ -3,7 +3,9 @@ import { Subject } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class QueryParamsBuilder {
 
   private cancelChange = false;
