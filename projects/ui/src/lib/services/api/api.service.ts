@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -22,11 +22,11 @@ export abstract class ApiService {
     );
   }
 
-  post(url: string, data: any): Observable<any> {
+  post(url: string, data: any, params?: HttpParams | { [param: string]: string | string[] }): Observable<any> {
     if (this.debug) {
-      console.log('post', url, data);
+      console.log('post', url, data, params);
     }
-    return this.http.post(`${this.apiUrl}/${url}`, data).pipe(
+    return this.http.post(`${this.apiUrl}/${url}`, data, { params }).pipe(
       tap(res => {
         if (this.debug) {
           console.log(res);

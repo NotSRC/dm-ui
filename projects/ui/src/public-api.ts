@@ -23,6 +23,8 @@ export * from './lib/services/api/api.service';
 export * from './lib/services/filter/filter.service';
 export * from './lib/services/query/query-builder';
 export * from './lib/services/query/query-setter';
+export * from './lib/services/file/file.service.module';
+export * from './lib/services/file/file.service';
 
 /**
  * Export components
