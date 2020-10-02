@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { QueryParamsBuilder } from '../../projects/ui/src/lib/services/query/query-builder';
-import { QuerySetter } from '../../projects/ui/src/lib/services/query/query-setter';
 
 @Component({
   selector: 'app-root',
@@ -10,18 +8,7 @@ import { QuerySetter } from '../../projects/ui/src/lib/services/query/query-sett
 export class AppComponent {
   title = 'dm-ui';
 
-  queryBuilder = new QueryParamsBuilder();
-  querySetter = new QuerySetter();
-
   constructor() {
 
-    this.queryBuilder.sortField('sdfsdfsd').sortDirection('asc');
-    this.queryBuilder.onChange$.subscribe(res => {
-      this.querySetter.setQueryParams(res);
-    });
-    this.queryBuilder.setFromObject(this.querySetter.getQueryParams());
-    setTimeout(() => {
-      this.queryBuilder.sortDirection(null);
-    }, 3000);
   }
 }

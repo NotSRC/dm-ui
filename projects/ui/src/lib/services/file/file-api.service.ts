@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../api/api.service';
 import { HttpClient } from '@angular/common/http';
-import { ApiConfig } from './../../models/api-config.model';
+import { ApiConfig } from '../../models/api-config.model';
 
 @Injectable({
   providedIn: 'root',

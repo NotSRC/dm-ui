@@ -55,8 +55,8 @@
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */
+import 'trix/dist/trix';
 import 'zone.js/dist/zone';  // Included with Angular CLI.
-
 
 /***************************************************************************************************
  * APPLICATION IMPORTS

@@ -1,5 +1,5 @@
-import { FileService } from './../file/file.service';
-import { ApiConfig } from './../../models/api-config.model';
+import { FileService } from './file.service';
+import { ApiConfig } from '../../models/api-config.model';
 import { FileApiService } from './file-api.service';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 
