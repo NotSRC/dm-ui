@@ -1,2 +1,3 @@
-<dm-textarea [(ngModel)]="title"></dm-textarea>
-{{ title }}
+<dm-textarea [formControl]="text"></dm-textarea>
+<button (click)="reset()">sdfsdfs</button>
+{{ text.value }}

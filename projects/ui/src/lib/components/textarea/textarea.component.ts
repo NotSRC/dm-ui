@@ -38,6 +38,8 @@ export class TextareaComponent implements AfterViewInit, ControlValueAccessor {
   }
 
   setEditorValue() {
+    this.editor?.setSelectedRange([0, this.length]);
+    this.editor?.deleteInDirection("forward");
     this.editor?.insertHTML(this.value || null);
     this.length = this.value?.length;
   }
@@ -58,6 +60,7 @@ export class TextareaComponent implements AfterViewInit, ControlValueAccessor {
   }
 
   writeValue(value: string): void {
+    console.log('value', value);
     this.value = value || '';
     this.setEditorValue();
   }
