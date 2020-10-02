@@ -8,7 +8,5 @@
     "trix": "1.2.4"
   },
   "dependencies": {
-    "trix": "1.2.4",
-    "tslib": "^2.0.0"
   }
 }
