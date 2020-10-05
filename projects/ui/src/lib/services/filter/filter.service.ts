@@ -7,10 +7,18 @@ export enum FilterConditions {
   Include = 'IN',
 }
 
+export enum FilterOperator {
+  Or = 'or',
+  And = 'and',
+  Not = 'not',
+  NotOr = 'nor'
+}
+
 export interface FilterInputPlain {
   field: string;
   search: any;
   condition: FilterConditions;
+  operator?: FilterOperator;
 }
 
 export class FilterInput<T> {
@@ -20,6 +28,9 @@ export class FilterInput<T> {
   private _search: T;
   // tslint:disable-next-line:variable-name
   private _condition: FilterConditions;
+
+  // tslint:disable-next-line:variable-name
+  private _operator: FilterOperator = FilterOperator.And;
 
   set field(field) {
     this._field = field;
@@ -45,14 +56,24 @@ export class FilterInput<T> {
     return this._condition;
   }
 
+  set operator(operator) {
+    this._operator = operator;
+  }
+
+  get operator() {
+    return this._operator;
+  }
+
   constructor(params: {
     field?: string,
     search?: T,
-    condition?: FilterConditions
+    condition?: FilterConditions,
+    operator?: FilterOperator
   } = {}) {
     this._field = params.field;
     this._search = params.search;
-    this._condition = params.condition;
+    this._condition = params.condition || FilterConditions.Equal;
+    this._operator = params.operator || FilterOperator.And;
   }
 
 }
@@ -74,7 +95,8 @@ export abstract class FilterService {
           this.filters[key] = new FilterInput<any>({
             field: plain[key].field,
             search: plain[key].search,
-            condition: plain[key].condition
+            condition: plain[key].condition,
+            operator: plain[key].operator,
           });
         }
       });
@@ -126,5 +148,6 @@ function getFilterPlain(filter: FilterInput<any>) {
     field: filter.field,
     search: filter.search,
     condition: filter.condition,
+    operator: filter.operator
   };
 }
