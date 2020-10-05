@@ -7,7 +7,7 @@ import { DateByTimezonePipe } from './date-by-timezone/date-by-timezone.pipe';
 
 @NgModule({
   declarations: [CutNumberPipe, SafeHtmlPipe, DateByTimezonePipe],
-  exports: [CutNumberPipe, SafeHtmlPipe],
+  exports: [CutNumberPipe, SafeHtmlPipe, DateByTimezonePipe],
   imports: [
     CommonModule
   ]
