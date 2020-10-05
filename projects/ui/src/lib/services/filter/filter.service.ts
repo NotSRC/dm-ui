@@ -97,7 +97,7 @@ export abstract class FilterService {
   }
 
   getJsonFilters(): string {
-    return TransformArrayFiltersToJson(this.getFiltersArray());
+    return JSON.stringify(this.getFiltersArray());
   }
 }
 
