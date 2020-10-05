@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { CutNumberPipe } from './cut-number/cut-number.pipe';
 import { SafeHtmlPipe } from './safe-html/safe-html.pipe';
 import { DateByTimezonePipe } from './date-by-timezone/date-by-timezone.pipe';
@@ -10,6 +10,9 @@ import { DateByTimezonePipe } from './date-by-timezone/date-by-timezone.pipe';
   exports: [CutNumberPipe, SafeHtmlPipe, DateByTimezonePipe],
   imports: [
     CommonModule
+  ],
+  providers: [
+    DatePipe
   ]
 })
 export class DmPipesModule { }

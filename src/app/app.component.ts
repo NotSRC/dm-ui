@@ -8,6 +8,7 @@ import { FormControl } from '@angular/forms';
 })
 export class AppComponent {
   title = 'dm-ui';
+  date = (new Date()).toUTCString();
 
   text = new FormControl('asd');
 

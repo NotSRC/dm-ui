@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { DmComponentsModule, DmDirectivesModule } from '../../projects/ui/src/public-api';
+import { DmComponentsModule, DmDirectivesModule, DmPipesModule } from '../../projects/ui/src/public-api';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
@@ -13,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     BrowserModule,
     DmComponentsModule,
     DmDirectivesModule,
+    DmPipesModule,
     FormsModule,
     ReactiveFormsModule
   ],
