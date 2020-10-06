@@ -1,9 +1,10 @@
 import { CrudListQuery, SortDirection } from '../../interfaces/crud-list-query';
 import { Subject } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
+import { QueryStorageSaver } from './query-storage-saver';
+import { Optional } from '@angular/core';
 
 export class QueryParamsBuilder {
-
   private cancelChange = false;
   private onChange = new Subject<{ [key: string]: string }>();
   public onChange$ = this.onChange
