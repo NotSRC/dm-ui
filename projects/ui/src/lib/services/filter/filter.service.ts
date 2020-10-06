@@ -59,11 +59,11 @@ export class FilterInput<T> {
 
 export type filtersPlainType = { [key: string]: FilterInputPlain };
 
-export type filtersType<T> = { [key in keyof T]: FilterInput<any> };
+export type filtersType = { [key: string]: FilterInput<any> };
 
 export abstract class FilterService {
 
-  abstract readonly filters: filtersType<{}>;
+  abstract readonly filters: filtersType;
 
   setFiltersFromPlain(plain: filtersPlainType) {
     Object.keys(plain || {})
@@ -111,17 +111,17 @@ export function TransformArrayFiltersToJson(filters: Array<FilterInputPlain|Filt
   return JSON.stringify(filtersArray);
 }
 
-export function TransformPlainFiltersToJson(plain: filtersPlainType): string {
+export function TransformPlainFiltersToJson(plain: filtersPlainType|filtersType): string {
   const filtersArray = Object
     .keys(plain)
     .map(key => plain[key])
     .filter(f => f.search !== undefined && f.search !== null)
-    .map(filter => filter);
+    .map(filter => getFilterPlain(filter));
 
   return JSON.stringify(filtersArray);
 }
 
-function getFilterPlain(filter: FilterInput<any>) {
+function getFilterPlain(filter: FilterInputPlain|FilterInput<any>) {
   return {
     field: filter.field,
     search: filter.search,
