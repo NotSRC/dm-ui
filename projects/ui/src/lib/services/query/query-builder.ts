@@ -16,7 +16,7 @@ export class QueryParamsBuilder {
 
   constructor(
     protected changeDebounceTime = 10,
-    protected queryStorageSaver: QueryStorageSaver
+    protected queryStorageSaver = new QueryStorageSaver()
   ) {
     this.queryParams = {
       page: this.queryStorageSaver.getItem<number>('page') || 1,
