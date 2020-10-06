@@ -16,7 +16,7 @@ export class CutNumberPipe implements PipeTransform {
       return `${Number(value / 1000).toFixed(1)} k`;
     }
 
-    return `${value}`;
+    return `${Math.round(Number(value))}`;
   }
 
 }
