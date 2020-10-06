@@ -1,8 +1,6 @@
 import { CrudListQuery, SortDirection } from '../../interfaces/crud-list-query';
 import { Subject } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
-import { QueryStorageSaver } from './query-storage-saver';
-import { Optional } from '@angular/core';
 
 export class QueryParamsBuilder {
   private cancelChange = false;
@@ -37,14 +35,14 @@ export class QueryParamsBuilder {
     return this.queryParams[key] as any;
   }
 
-  page(page: number) {
-    this.queryParams.page = page || 1;
+  page(page: number|string) {
+    this.queryParams.page = parseInt(`${page}`, 10) || 1;
     this.emitChange();
     return this;
   }
 
-  limit(limit: number) {
-    this.queryParams.limit = limit || 25;
+  limit(limit: number|string) {
+    this.queryParams.limit = parseInt(`${limit}`, 10) || 25;
     this.emitChange();
     return this;
   }
