@@ -8,17 +8,4 @@ import { FormControl } from '@angular/forms';
 })
 export class AppComponent {
   title = 'dm-ui';
-  date = (new Date()).toUTCString();
-
-  text = new FormControl('asd');
-
-  constructor() {
-    setTimeout(() => {
-      this.reset();
-    }, 2000);
-  }
-
-  reset() {
-    this.text.reset();
-  }
 }

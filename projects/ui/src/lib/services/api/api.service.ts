@@ -1,7 +1,20 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+
+type httpOptions = {
+  headers?: HttpHeaders | {
+    [header: string]: string | string[];
+  };
+  observe?: 'body';
+  params?: HttpParams | {
+    [param: string]: string | string[];
+  };
+  reportProgress?: boolean;
+  responseType?: 'json';
+  withCredentials?: boolean;
+}
 
 export abstract class ApiService {
   protected abstract debug: boolean;
@@ -9,11 +22,11 @@ export abstract class ApiService {
 
   constructor(protected http: HttpClient) {}
 
-  get(url: string, params: Params = {}): Observable<any> {
+  get(url: string, options?: httpOptions): Observable<any> {
     if (this.debug) {
-      console.log('get', url, params);
+      console.log('get', url, options);
     }
-    return this.http.get(`${this.apiUrl}/${url}`, { params }).pipe(
+    return this.http.get(`${this.apiUrl}/${url}`, options).pipe(
       tap(res => {
         if (this.debug) {
           console.log(res);
@@ -22,11 +35,11 @@ export abstract class ApiService {
     );
   }
 
-  post(url: string, data: any, params?: HttpParams | { [param: string]: string | string[] }): Observable<any> {
+  post(url: string, data: any, options?: httpOptions): Observable<any> {
     if (this.debug) {
-      console.log('post', url, data, params);
+      console.log('post', url, data, options);
     }
-    return this.http.post(`${this.apiUrl}/${url}`, data, { params }).pipe(
+    return this.http.post(`${this.apiUrl}/${url}`, data, options).pipe(
       tap(res => {
         if (this.debug) {
           console.log(res);
@@ -35,11 +48,11 @@ export abstract class ApiService {
     );
   }
 
-  patch(url: string, data: any): Observable<any> {
+  patch(url: string, data: any, options: httpOptions): Observable<any> {
     if (this.debug) {
       console.log('patch', url, data);
     }
-    return this.http.patch(`${this.apiUrl}/${url}`, data).pipe(
+    return this.http.patch(`${this.apiUrl}/${url}`, data, options).pipe(
       tap(res => {
         if (this.debug) {
           console.log(res);
@@ -48,11 +61,11 @@ export abstract class ApiService {
     );
   }
 
-  delete(url: string, params: Params = {}): Observable<any> {
+  delete(url: string, options?: httpOptions): Observable<any> {
     if (this.debug) {
       console.log('delete', url);
     }
-    return this.http.delete(`${this.apiUrl}/${url}`, { params }).pipe(
+    return this.http.delete(`${this.apiUrl}/${url}`, options).pipe(
       tap(res => {
         if (this.debug) {
           console.log(res);
@@ -61,11 +74,11 @@ export abstract class ApiService {
     );
   }
 
-  getSingle(url: string, params: Params = {}): Observable<any> {
+  getSingle(url: string, options?: httpOptions): Observable<any> {
     if (this.debug) {
       console.log('getSingle', url);
     }
-    return this.http.get(`${this.apiUrl}/${url}`, { params }).pipe(
+    return this.http.get(`${this.apiUrl}/${url}`, options).pipe(
       tap(res => {
         if (this.debug) {
           console.log(res);

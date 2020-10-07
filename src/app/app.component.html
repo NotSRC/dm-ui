@@ -1,6 +1,3 @@
-<dm-textarea [formControl]="text"></dm-textarea>
-<button (click)="reset()">sdfsdfs</button>
-{{ text.value }}<br/>
-{{ date }}<br/>
-{{ date | date : 'dd:MM:yyyy hh:mm:ss' }}<br/>
-{{ date | dateByTimezone : 'dd:MM:yyyy hh:mm:ss' }}
+<dm-attach-file [size]="2">
+  <span>Attach file</span>
+</dm-attach-file>

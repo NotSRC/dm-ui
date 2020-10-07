@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from '../api/api.service';
+import { ApiService } from '../../services/api/api.service';
 import { HttpClient } from '@angular/common/http';
 import { ApiConfig } from '../../models/api-config.model';
 
@@ -7,15 +7,13 @@ import { ApiConfig } from '../../models/api-config.model';
   providedIn: 'root',
 })
 export class FileApiService extends ApiService {
-  protected debug;
-  protected apiUrl;
+  apiUrl = this.apiConfig.apiUrl;
+  debug = this.apiConfig.isProduction;
 
   constructor(
     protected httpClient: HttpClient,
     private apiConfig: ApiConfig
   ) {
     super(httpClient as any);
-    this.apiUrl = apiConfig.apiUrl;
-    this.debug = apiConfig.isProduction;
   }
 }

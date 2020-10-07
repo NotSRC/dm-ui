@@ -24,8 +24,8 @@ export * from './lib/services/filter/filter.service';
 export * from './lib/services/query/query-builder';
 export * from './lib/services/query/query-setter';
 export * from './lib/services/query/query-storage-saver';
-export * from './lib/services/file/file.service.module';
-export * from './lib/services/file/file.service';
+export * from './lib/file/file-uploader.module';
+export * from './lib/file/services/file.service';
 
 /**
  * Export components
@@ -37,3 +37,9 @@ export * from './lib/components/search/search.component';
  * Export interfaces
  */
 export * from './lib/interfaces/crud-list-query';
+export * from './lib/interfaces/base-result';
+
+/*
+ * Export models
+ */
+export * from './lib/models/file.model';

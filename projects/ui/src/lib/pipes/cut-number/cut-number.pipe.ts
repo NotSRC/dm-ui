@@ -10,13 +10,13 @@ export class CutNumberPipe implements PipeTransform {
       value = Number(value);
     }
     if (value > 999999) {
-      return `${Number(value / 1000000).toFixed(2)} m`;
+      return `${(value / 1000000).toFixed(2)} m`;
     }
     if (value > 999) {
-      return `${Number(value / 1000).toFixed(1)} k`;
+      return `${(value / 1000).toFixed(1)} k`;
     }
 
-    return `${Math.round(Number(value))}`;
+    return `${Math.round((value))}`;
   }
 
 }

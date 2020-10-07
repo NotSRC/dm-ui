@@ -6,10 +6,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoaderComponent } from './loader/loader.component';
 import { TextareaComponent } from './textarea/textarea.component';
+import { AttachFileComponent } from './attach-file/attach-file.component';
 
 @NgModule({
-  declarations: [SearchComponent, LoaderComponent, TextareaComponent],
-  exports: [SearchComponent, LoaderComponent, TextareaComponent],
+  declarations: [SearchComponent, LoaderComponent, TextareaComponent, AttachFileComponent],
+  exports: [SearchComponent, LoaderComponent, TextareaComponent, AttachFileComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
     CommonModule,

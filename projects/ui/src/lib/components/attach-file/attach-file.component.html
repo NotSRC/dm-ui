@@ -1,0 +1,15 @@
+<form #form class="attach-file-form" (click)="resetForm()">
+  <div class="attach-file-form-content">
+    <ng-content></ng-content>
+    <input
+      type="file"
+      [name]="inputName"
+      [accept]="accept.join(',')"
+      (change)="fileUpload()">
+  </div>
+  <div class="error">
+    <mat-error *ngIf="sizeError">
+      File size must be less then {{ size }} Mb
+    </mat-error>
+  </div>
+</form>
