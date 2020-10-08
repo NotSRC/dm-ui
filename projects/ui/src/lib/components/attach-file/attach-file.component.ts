@@ -9,7 +9,7 @@ export class AttachFileComponent {
 
   //Size in Megabyte
   @Input() size = 5;
-  @Input() disabled = true;
+  @Input() disabled = false;
   @Input() inputName = 'file';
   @Input() accept: string[] = ['image/png', 'image/jpeg', 'image/gif', 'image/heic', 'application/pdf'];
   @Output() uploadFile = new EventEmitter<FormData>();
