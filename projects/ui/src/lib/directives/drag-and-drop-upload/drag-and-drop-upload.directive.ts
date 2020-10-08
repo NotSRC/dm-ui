@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, HostBinding, Inject, Input, Output, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectorRef, Directive, ElementRef, EventEmitter, HostBinding, Inject, Input, Output, PLATFORM_ID } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { debounceTime, filter, mergeMap, takeUntil, tap } from 'rxjs/operators';
@@ -60,6 +60,7 @@ export class DragAndDropUploadDirective {
 
   constructor(
     private el: ElementRef<HTMLElement>,
+    private cd: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId
   ) {
     if (isPlatformBrowser(this.platformId)) {
@@ -140,6 +141,7 @@ export class DragAndDropUploadDirective {
     const file = formData.get(this.inputName) as File;
     if (this.fileAcceptIsValid(file) && this.fileSizeIsValid(file)) {
       this.uploadFile.emit(formData);
+      this.cd.detectChanges();
     }
     this.form.reset();
   }

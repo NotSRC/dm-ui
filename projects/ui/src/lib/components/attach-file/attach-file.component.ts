@@ -1,9 +1,10 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'dm-attach-file',
   templateUrl: './attach-file.component.html',
-  styleUrls: ['./attach-file.component.scss']
+  styleUrls: ['./attach-file.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AttachFileComponent {
 
@@ -18,11 +19,17 @@ export class AttachFileComponent {
   sizeError = false;
   formatError = false;
 
+  constructor(private cd: ChangeDetectorRef) {
+
+  }
+
+
   fileUpload() {
     const formData = new FormData(this.form.nativeElement);
     const file = formData.get(this.inputName) as File;
     if (file && this.fileSizeIsValid(file) && this.fileAcceptIsValid(file)) {
       this.uploadFile.emit(formData);
+      this.cd.detectChanges();
     }
     this.form.nativeElement.reset();
   }
