@@ -15,14 +15,13 @@ export class AttachFileComponent {
   @ViewChild('form') private form: ElementRef<HTMLFormElement>;
 
   sizeError = false;
+  formatError = false;
 
   fileUpload() {
     const formData = new FormData(this.form.nativeElement);
     const file = formData.get(this.inputName) as File;
-    if (file && this.fileSizeIsValid(file)) {
+    if (file && this.fileSizeIsValid(file) && this.fileAcceptIsValid(file)) {
       this.uploadFile.emit(formData);
-    } else {
-      this.sizeError = true;
     }
     this.form.nativeElement.reset();
   }
@@ -30,10 +29,25 @@ export class AttachFileComponent {
   resetForm() {
     this.form.nativeElement.reset();
     this.sizeError = false;
+    this.formatError = false;
+  }
+
+  fileAcceptIsValid(file: File) {
+    if (this.accept.includes(file.type)) {
+      return true;
+    } else {
+      this.formatError = true;
+      return false;
+    }
   }
 
   fileSizeIsValid(file: File) {
-    return (file.size / 1000) / 1000 < this.size;
+    if ((file.size / 1000) / 1000 < this.size) {
+      return true;
+    } else {
+      this.sizeError = true;
+      return false;
+    }
   }
 
 }
