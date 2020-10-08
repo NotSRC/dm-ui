@@ -49,6 +49,7 @@ export class DragAndDropUploadDirective {
 
   //Size in Megabyte
   @Input() size = 2000;
+  @Input() disabled = false;
   @Input() inputName = 'file';
   @Input() accept: string[] = ['image/png', 'image/jpeg', 'image/gif', 'image/heic'];
   @Output() uploadFile = new EventEmitter<FormData>();
@@ -95,6 +96,7 @@ export class DragAndDropUploadDirective {
 
     fromEvent(this.input, 'change')
       .pipe(takeUntil(this.subscription))
+      .pipe(filter(() => this.disabled))
       .subscribe((e: DragEvent) => this.fileUpload());
 
     fromEvent(document, 'dragleave')
@@ -103,15 +105,20 @@ export class DragAndDropUploadDirective {
 
     fromEvent(document, 'dragover')
       .pipe(takeUntil(this.subscription))
+      .pipe(filter(() => this.disabled))
       .subscribe((e: DragEvent) => leaveFilter.next({filter: false, event: e}));
 
     leaveFilter
+      .pipe(takeUntil(this.subscription))
+      .pipe(filter(() => this.disabled))
       .pipe(tap(val => this.dragEnter(val.event)))
       .pipe(filter(val => !val.filter))
       .pipe(debounceTime(500))
       .subscribe((val) => leaveFilter.next({...val, filter: true}));
 
     dragLeave
+      .pipe(takeUntil(this.subscription))
+      .pipe(filter(() => this.disabled))
       .pipe(mergeMap(() => leaveFilter))
       .pipe(filter(val => val.filter))
       .pipe(debounceTime(100))
