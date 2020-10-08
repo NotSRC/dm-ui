@@ -96,21 +96,22 @@ export class DragAndDropUploadDirective {
 
     fromEvent(this.input, 'change')
       .pipe(takeUntil(this.subscription))
-      .pipe(filter(() => this.disabled))
+      .pipe(filter(() => !this.disabled))
       .subscribe((e: DragEvent) => this.fileUpload());
 
     fromEvent(document, 'dragleave')
       .pipe(takeUntil(this.subscription))
+      .pipe(filter(() => !this.disabled))
       .subscribe((e: DragEvent) => dragLeave.next(e));
 
     fromEvent(document, 'dragover')
       .pipe(takeUntil(this.subscription))
-      .pipe(filter(() => this.disabled))
+      .pipe(filter(() => !this.disabled))
       .subscribe((e: DragEvent) => leaveFilter.next({filter: false, event: e}));
 
     leaveFilter
       .pipe(takeUntil(this.subscription))
-      .pipe(filter(() => this.disabled))
+      .pipe(filter(() => !this.disabled))
       .pipe(tap(val => this.dragEnter(val.event)))
       .pipe(filter(val => !val.filter))
       .pipe(debounceTime(500))
@@ -118,7 +119,7 @@ export class DragAndDropUploadDirective {
 
     dragLeave
       .pipe(takeUntil(this.subscription))
-      .pipe(filter(() => this.disabled))
+      .pipe(filter(() => !this.disabled))
       .pipe(mergeMap(() => leaveFilter))
       .pipe(filter(val => val.filter))
       .pipe(debounceTime(100))

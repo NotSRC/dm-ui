@@ -3,7 +3,7 @@
     <ng-content></ng-content>
     <input
       type="file"
-      *ngIf="!disabled"
+      [disabled]="disabled"
       [name]="inputName"
       [accept]="accept.join(',')"
       (change)="fileUpload()">
