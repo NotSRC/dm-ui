@@ -1,8 +1,9 @@
 <form #form class="attach-file-form" (click)="resetForm()">
-  <div class="attach-file-form-content">
+  <div class="attach-file-form-content" [class.attach-file-form-disabled]="disabled">
     <ng-content></ng-content>
     <input
       type="file"
+      *ngIf="!disabled"
       [name]="inputName"
       [accept]="accept.join(',')"
       (change)="fileUpload()">

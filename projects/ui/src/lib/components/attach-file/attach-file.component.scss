@@ -21,6 +21,15 @@
       z-index: 99;
       cursor: pointer;
     }
+
+    &.attach-file-form-disabled {
+      cursor: default;
+      ::ng-deep {
+        * {
+          opacity: .5;
+        }
+      }
+    }
   }
 
   .error {
