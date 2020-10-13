@@ -57,8 +57,8 @@ export class FilterInput<T> {
 
   set search(search) {
     if (
-      this.options.parseFunction &&
-      typeof this.options.parseFunction === 'function'
+      this.options?.parseFunction &&
+      typeof this.options?.parseFunction === 'function'
     ) {
       this._search = this.options.parseFunction(search) || null;
     } else {
