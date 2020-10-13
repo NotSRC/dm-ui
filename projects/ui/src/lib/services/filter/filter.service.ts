@@ -29,8 +29,8 @@ export interface FilterInputPlain {
 }
 
 interface FilterOption {
-  nullable: boolean;
-  parseFunction: Function;
+  nullable?: boolean;
+  parseFunction?: Function;
 }
 
 export class FilterInput<T> {
@@ -110,7 +110,7 @@ export class FilterInput<T> {
       operator?: FilterOperators;
       children?: filtersType;
     } = {},
-    options = {
+    options: FilterOption = {
       nullable: false,
       parseFunction: null,
     }
