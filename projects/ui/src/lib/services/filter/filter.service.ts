@@ -167,8 +167,10 @@ function TransformPaintFilterToArray(
     .map((key) => filters[key])
     .filter((f) => {
       return (
-        (f.options?.nullable && f.search === null) ||
-        (f.search !== undefined && f.field !== null) ||
+        (f.options?.nullable &&
+          f.search === null &&
+          f.search !== undefined &&
+          f.field !== null) ||
         f.children
       );
     })
