@@ -7,10 +7,25 @@ export enum FilterConditions {
   Include = 'IN',
 }
 
+export enum FilterOperators {
+  And = 'AND',
+  Or = 'OR',
+}
+
+export interface FilterInputArray {
+  field?: string;
+  search?: any;
+  condition?: FilterConditions;
+  operator?: FilterOperators;
+  children?: FilterInputArray[];
+}
+
 export interface FilterInputPlain {
-  field: string;
-  search: any;
-  condition: FilterConditions;
+  field?: string;
+  search?: any;
+  condition?: FilterConditions;
+  operator?: FilterOperators;
+  children?: filtersPlainType;
 }
 
 export class FilterInput<T> {
@@ -20,6 +35,10 @@ export class FilterInput<T> {
   private _search: T;
   // tslint:disable-next-line:variable-name
   private _condition: FilterConditions;
+  // tslint:disable-next-line:variable-name
+  private _operator: FilterOperators;
+  // tslint:disable-next-line:variable-name
+  private _children: filtersType;
 
   set field(field) {
     this._field = field;
@@ -45,16 +64,37 @@ export class FilterInput<T> {
     return this._condition;
   }
 
-  constructor(params: {
-    field?: string,
-    search?: T,
-    condition?: FilterConditions
-  } = {}) {
+  set operator(operator) {
+    this._operator = operator;
+  }
+
+  get operator() {
+    return this._operator;
+  }
+
+  set children(children) {
+    this._children = children;
+  }
+
+  get children() {
+    return this._children;
+  }
+
+  constructor(
+    params: {
+      field?: string;
+      search?: T;
+      condition?: FilterConditions;
+      operator?: FilterOperators;
+      children?: filtersType;
+    } = {}
+  ) {
     this._field = params.field;
     this._search = params.search;
     this._condition = params.condition;
+    this._operator = params.operator;
+    this._children = params.children;
   }
-
 }
 
 export type filtersPlainType = { [key: string]: FilterInputPlain };
@@ -62,66 +102,79 @@ export type filtersPlainType = { [key: string]: FilterInputPlain };
 export type filtersType = { [key: string]: FilterInput<any> };
 
 export abstract class FilterService {
-
   abstract readonly filters: filtersType;
 
-  setFiltersFromPlain(plain: filtersPlainType) {
-    Object.keys(plain || {})
-      .forEach(key => {
-        if (Object.prototype.hasOwnProperty.call(this.filters, key)) {
-          this.filters[key].search = plain[key].search;
-        } else {
-          this.filters[key] = new FilterInput<any>({
-            field: plain[key].field,
-            search: plain[key].search,
-            condition: plain[key].condition
-          });
+  setFiltersFromPlain(plain: filtersPlainType, filterSrc = this.filters) {
+    Object.keys(plain || {}).forEach((key) => {
+      if (Object.prototype.hasOwnProperty.call(filterSrc, key)) {
+        filterSrc[key].search = plain[key].search;
+        if (plain[key].children) {
+          this.setFiltersFromPlain(
+            plain[key].children,
+            filterSrc[key].children
+          );
         }
-      });
+      }
+    });
   }
 
-  getFiltersPlain(): filtersPlainType {
-    return Object.keys(this.filters)
-      .reduce((acc, key) => {
-        acc[key] = getFilterPlain(this.filters[key]);
-        return acc;
-      }, {});
+  getFiltersPlain(filters = this.filters): filtersPlainType {
+    return Object.keys(filters).reduce((acc, key) => {
+      const filter = filters[key];
+      if (filter.children) {
+        acc[key] = {
+          operator: filter.operator,
+          children: this.getFiltersArray(filter.children),
+        };
+      } else {
+        acc[key] = getFilterPlain(filter);
+      }
+      return acc;
+    }, {});
   }
 
-  getFiltersArray(): FilterInputPlain[] {
-    return Object
-      .keys(this.filters)
-      .map(key => this.filters[key])
-      .filter(f => f.search !== undefined && f.search !== null)
-      .map(filter => getFilterPlain(filter));
+  getFiltersArray(filters: filtersType): FilterInputArray[] {
+    return TransformPaintFilterToArray(filters);
   }
 
   getJsonFilters(): string {
-    return JSON.stringify(this.getFiltersArray());
+    return JSON.stringify(this.getFiltersArray(this.filters));
   }
 }
 
-export function TransformArrayFiltersToJson(filters: Array<FilterInputPlain|FilterInput<any>>) {
-  const filtersArray =  Object
-    .keys(filters)
-    .map(key => filters[key])
-    .filter(f => f.search !== undefined && f.search !== null)
-    .map(filter => getFilterPlain(filter));
-
-  return JSON.stringify(filtersArray);
+export function TransformFiltersToJson(
+  filters:
+    | filtersPlainType
+    | filtersType
+    | Array<FilterInputPlain | FilterInputArray | FilterInput<any>>
+): string {
+  return JSON.stringify(TransformPaintFilterToArray(filters));
 }
 
-export function TransformPlainFiltersToJson(plain: filtersPlainType|filtersType): string {
-  const filtersArray = Object
-    .keys(plain)
-    .map(key => plain[key])
-    .filter(f => f.search !== undefined && f.search !== null)
-    .map(filter => getFilterPlain(filter));
-
-  return JSON.stringify(filtersArray);
+function TransformPaintFilterToArray(
+  filters:
+    | filtersPlainType
+    | filtersType
+    | Array<FilterInputPlain | FilterInputArray | FilterInput<any>>
+): FilterInputArray[] {
+  return Object.keys(filters)
+    .map((key) => filters[key])
+    .filter((f) => f.search !== undefined && f.field !== null && !f.children)
+    .map((filter) => {
+      if (filter.children) {
+        return {
+          operator: filter.operator,
+          children: TransformPaintFilterToArray(filter.children),
+        };
+      } else {
+        return getFilterPlain(filter);
+      }
+    });
 }
 
-function getFilterPlain(filter: FilterInputPlain|FilterInput<any>) {
+function getFilterPlain(
+  filter: FilterInputPlain | FilterInputArray | FilterInput<any>
+) {
   return {
     field: filter.field,
     search: filter.search,
