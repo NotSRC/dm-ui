@@ -234,7 +234,7 @@ function IsAvailableFilter(f: FilterInput<any>) {
   ) {
     return true;
   }
-  const childLength = Object.keys(f.children)?.length;
+  const childLength = Object.keys(f.children || {})?.length;
   return (
     (f.search !== undefined &&
       f.search !== null &&
