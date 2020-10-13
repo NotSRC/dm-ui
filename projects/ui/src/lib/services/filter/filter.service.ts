@@ -133,7 +133,7 @@ export abstract class FilterService {
     }, {});
   }
 
-  getFiltersArray(filters: filtersType): FilterInputArray[] {
+  getFiltersArray(filters: filtersType = this.filters): FilterInputArray[] {
     return TransformPaintFilterToArray(filters);
   }
 
@@ -159,7 +159,7 @@ function TransformPaintFilterToArray(
 ): FilterInputArray[] {
   return Object.keys(filters)
     .map((key) => filters[key])
-    .filter((f) => f.search !== undefined && f.field !== null && !f.children)
+    .filter(f => (f.search !== undefined && f.field !== null) || f.children)
     .map((filter) => {
       if (filter.children) {
         return {
