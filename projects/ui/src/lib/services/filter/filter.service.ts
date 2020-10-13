@@ -198,7 +198,7 @@ export function TransformFilterToArray(
  */
 function GetFilterPlainWithChildren(filter: FilterInput<any>) {
   if (filter.children) {
-    const children = TransformPaintFilterToArray(filter.children);
+    const children = TransformFilterToArray(filter.children);
     if (children.length) {
       return {
         operator: filter.operator,
