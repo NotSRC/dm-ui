@@ -152,7 +152,12 @@ export abstract class FilterService {
   }
 
   getJsonFilters(): string {
-    return JSON.stringify(this.getFiltersArray(this.filters));
+    const filter = this.getFiltersArray(this.filters);
+    if (filter?.length) {
+      return JSON.stringify(filter);
+    } else {
+      return null;
+    }
   }
 }
 
@@ -168,7 +173,12 @@ export function TransformFiltersToJson(
     | filtersType
     | Array<FilterInputPlain | FilterInputArray | FilterInput<any>>
 ): string {
-  return JSON.stringify(TransformFilterToArray(filters));
+  const filter = TransformFilterToArray(filters);
+  if (filter?.length) {
+    return JSON.stringify(filter);
+  } else {
+    return null;
+  }
 }
 
 /**
@@ -224,9 +234,14 @@ function IsAvailableFilter(f: FilterInput<any>) {
   ) {
     return true;
   }
+  const childLength = Object.keys(f.children)?.length;
   return (
-    (f.search !== undefined && f.search !== null && f.field !== null) ||
-    f.children
+    (f.search !== undefined &&
+      f.search !== null &&
+      f.search !== '' &&
+      !isNaN(f.search) &&
+      f.field !== null) ||
+    childLength
   );
 }
 
