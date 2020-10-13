@@ -28,6 +28,11 @@ export interface FilterInputPlain {
   children?: filtersPlainType;
 }
 
+interface FilterOption {
+  nullable: boolean;
+  parseFunction: Function;
+}
+
 export class FilterInput<T> {
   // tslint:disable-next-line:variable-name
   private _field: string;
@@ -40,7 +45,7 @@ export class FilterInput<T> {
   // tslint:disable-next-line:variable-name
   private _children: filtersType;
   // tslint:disable-next-line:variable-name
-  private _options: { nullable: boolean };
+  private _options: FilterOption;
 
   set field(field) {
     this._field = field;
@@ -51,7 +56,14 @@ export class FilterInput<T> {
   }
 
   set search(search) {
-    this._search = search;
+    if (
+      this.options.parseFunction &&
+      typeof this.options.parseFunction === 'function'
+    ) {
+      this._search = this.options.parseFunction(search);
+    } else {
+      this._search = search;
+    }
   }
 
   get search() {
@@ -100,6 +112,7 @@ export class FilterInput<T> {
     } = {},
     options = {
       nullable: false,
+      parseFunction: null,
     }
   ) {
     this.field = params.field;
@@ -239,7 +252,6 @@ function IsAvailableFilter(f: FilterInput<any>) {
     (f.search !== undefined &&
       f.search !== null &&
       f.search !== '' &&
-      !isNaN(f.search) &&
       f.field !== null) ||
     childLength
   );
