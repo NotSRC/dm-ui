@@ -40,7 +40,7 @@ export class FilterInput<T> {
   // tslint:disable-next-line:variable-name
   private _children: filtersType;
   // tslint:disable-next-line:variable-name
-  private options: { nullable: boolean };
+  private _options: { nullable: boolean };
 
   set field(field) {
     this._field = field;
@@ -82,6 +82,14 @@ export class FilterInput<T> {
     return this._children;
   }
 
+  set options(options) {
+    this._options = options;
+  }
+
+  get options() {
+    return this._options;
+  }
+
   constructor(
     params: {
       field?: string;
@@ -94,11 +102,11 @@ export class FilterInput<T> {
       nullable: false,
     }
   ) {
-    this._field = params.field;
-    this._search = params.search;
-    this._condition = params.condition;
-    this._operator = params.operator;
-    this._children = params.children;
+    this.field = params.field;
+    this.search = params.search;
+    this.condition = params.condition;
+    this.operator = params.operator;
+    this.children = params.children;
     this.options = options;
   }
 }
@@ -133,14 +141,14 @@ export abstract class FilterService {
           children: this.getFiltersArray(filter.children),
         };
       } else {
-        acc[key] = getFilterPlain(filter);
+        acc[key] = GetFilterPlain(filter);
       }
       return acc;
     }, {});
   }
 
   getFiltersArray(filters: filtersType = this.filters): FilterInputArray[] {
-    return TransformPaintFilterToArray(filters);
+    return TransformFilterToArray(filters);
   }
 
   getJsonFilters(): string {
@@ -148,16 +156,28 @@ export abstract class FilterService {
   }
 }
 
+/**
+ * Public function
+ * Get available plain JSON with children from FilterInput and other types
+ * @param filters
+ * @constructor
+ */
 export function TransformFiltersToJson(
   filters:
     | filtersPlainType
     | filtersType
     | Array<FilterInputPlain | FilterInputArray | FilterInput<any>>
 ): string {
-  return JSON.stringify(TransformPaintFilterToArray(filters));
+  return JSON.stringify(TransformFilterToArray(filters));
 }
 
-function TransformPaintFilterToArray(
+/**
+ * Public function
+ * Get available plain with children from FilterInput and other types
+ * @param filters
+ * @constructor
+ */
+export function TransformFilterToArray(
   filters:
     | filtersPlainType
     | filtersType
@@ -165,35 +185,58 @@ function TransformPaintFilterToArray(
 ): FilterInputArray[] {
   return Object.keys(filters)
     .map((key) => filters[key])
-    .filter((f) => {
-      if (
-        f.options?.nullable &&
-        (f.search ||
-          f.search === null ||
-          f.search === false ||
-          f.search === 0) &&
-        f.field !== null
-      ) {
-        return true;
-      }
-      return (
-        (f.search !== undefined && f.search !== null && f.field !== null) ||
-        f.children
-      );
-    })
-    .map((filter) => {
-      if (filter.children) {
-        return {
-          operator: filter.operator,
-          children: TransformPaintFilterToArray(filter.children),
-        };
-      } else {
-        return getFilterPlain(filter);
-      }
-    });
+    .filter(IsAvailableFilter)
+    .map(GetFilterPlainWithChildren)
+    .filter((f) => f);
 }
 
-function getFilterPlain(
+/**
+ * Private function
+ * Get filterInput with children
+ * @param filter
+ * @constructor
+ */
+function GetFilterPlainWithChildren(filter: FilterInput<any>) {
+  if (filter.children) {
+    const children = TransformPaintFilterToArray(filter.children);
+    if (children.length) {
+      return {
+        operator: filter.operator,
+        children,
+      };
+    }
+  } else {
+    return GetFilterPlain(filter);
+  }
+}
+
+/**
+ * Private function
+ * Check if filterInput is available
+ * @param f
+ * @constructor
+ */
+function IsAvailableFilter(f: FilterInput<any>) {
+  if (
+    f.options?.nullable &&
+    (f.search || f.search === null || f.search === false || f.search === 0) &&
+    f.field !== null
+  ) {
+    return true;
+  }
+  return (
+    (f.search !== undefined && f.search !== null && f.field !== null) ||
+    f.children
+  );
+}
+
+/**
+ * Private function
+ * Get plain from FilterInput
+ * @param filter
+ * @constructor
+ */
+function GetFilterPlain(
   filter: FilterInputPlain | FilterInputArray | FilterInput<any>
 ) {
   return {
