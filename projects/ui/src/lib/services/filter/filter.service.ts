@@ -39,6 +39,8 @@ export class FilterInput<T> {
   private _operator: FilterOperators;
   // tslint:disable-next-line:variable-name
   private _children: filtersType;
+  // tslint:disable-next-line:variable-name
+  private options: { nullable: boolean };
 
   set field(field) {
     this._field = field;
@@ -87,13 +89,17 @@ export class FilterInput<T> {
       condition?: FilterConditions;
       operator?: FilterOperators;
       children?: filtersType;
-    } = {}
+    } = {},
+    options = {
+      nullable: false,
+    }
   ) {
     this._field = params.field;
     this._search = params.search;
     this._condition = params.condition;
     this._operator = params.operator;
     this._children = params.children;
+    this.options = options;
   }
 }
 
@@ -159,7 +165,13 @@ function TransformPaintFilterToArray(
 ): FilterInputArray[] {
   return Object.keys(filters)
     .map((key) => filters[key])
-    .filter(f => (f.search !== undefined && f.field !== null) || f.children)
+    .filter((f) => {
+      return (
+        (f.options?.nullable && f.search === null) ||
+        (f.search !== undefined && f.field !== null) ||
+        f.children
+      );
+    })
     .map((filter) => {
       if (filter.children) {
         return {
