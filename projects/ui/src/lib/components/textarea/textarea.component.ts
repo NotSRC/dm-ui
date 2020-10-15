@@ -59,7 +59,7 @@ export class TextareaComponent
         });
         (<HTMLElement>document.activeElement).blur();
       });
-    fromEvent(this.trix.nativeElement, 'click')
+    fromEvent(this.trix.nativeElement, 'blur')
       .pipe(takeUntil(this.subscription))
       .subscribe(() => {
         this.formControl.markAsTouched();
