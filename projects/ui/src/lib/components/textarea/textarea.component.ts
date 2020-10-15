@@ -1,5 +1,23 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, Input, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  forwardRef,
+  Injector,
+  Input,
+  OnDestroy,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  FormControl,
+  NG_VALUE_ACCESSOR,
+  NgControl,
+} from '@angular/forms';
+import { fromEvent, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'dm-textarea',
@@ -14,32 +32,54 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     },
   ],
 })
-export class TextareaComponent implements AfterViewInit, ControlValueAccessor {
-
+export class TextareaComponent
+  implements AfterViewInit, ControlValueAccessor, OnDestroy {
   @Input() parentFormControlName: string;
   @Input() placeholder: string;
-  @ViewChild('trix', {static: false}) private trix: ElementRef;
-  @ViewChild('trixInput', {static: false}) private trixInput: ElementRef;
+  @ViewChild('trix', { static: false }) private trix: ElementRef;
+  @ViewChild('trixInput', { static: false }) private trixInput: ElementRef;
 
+  formControl: AbstractControl = new FormControl();
+  private subscription = new Subject();
   private editor: any;
   length: number = 0;
   value = '';
 
+  constructor(private injector: Injector) {}
+
   ngAfterViewInit() {
-    this.trix.nativeElement.addEventListener('trix-initialize', () => {
-      this.editor = this.trix.nativeElement.editor;
-      this.editor.insertHTML(this.value || null);
-      this.trix.nativeElement.addEventListener('trix-change', (event) => {
-        this.length = event.target.innerText?.length;
-        this.changeValue(event.target.innerHTML);
+    fromEvent(this.trix.nativeElement, 'trix-initialize')
+      .pipe(takeUntil(this.subscription))
+      .subscribe(() => {
+        this.editor = this.trix.nativeElement.editor;
+        this.editor.insertHTML(this.value || null);
+        this.trix.nativeElement.addEventListener('trix-change', (event) => {
+          this.length = event.target.innerText?.length;
+          this.changeValue(event.target.innerHTML);
+        });
+        (<HTMLElement>document.activeElement).blur();
       });
-      (<HTMLElement> document.activeElement).blur();
+    fromEvent(this.trix.nativeElement, 'click')
+      .pipe(takeUntil(this.subscription))
+      .subscribe(() => {
+        this.formControl.markAsTouched();
+      });
+    setTimeout(() => {
+      const ngControl: NgControl = this.injector.get(NgControl, null);
+      if (ngControl && ngControl.control) {
+        this.formControl = ngControl.control as FormControl;
+      }
     });
+  }
+
+  ngOnDestroy() {
+    this.subscription.next();
+    this.subscription.complete();
   }
 
   setEditorValue() {
     this.editor?.setSelectedRange([0, this.length]);
-    this.editor?.deleteInDirection("forward");
+    this.editor?.deleteInDirection('forward');
     this.editor?.insertHTML(this.value || null);
     this.length = this.value?.length;
   }
@@ -60,7 +100,6 @@ export class TextareaComponent implements AfterViewInit, ControlValueAccessor {
   }
 
   writeValue(value: string): void {
-    console.log('value', value);
     this.value = value || '';
     this.setEditorValue();
   }
@@ -69,5 +108,4 @@ export class TextareaComponent implements AfterViewInit, ControlValueAccessor {
     this.value = value;
     this.onChange(value);
   }
-
 }

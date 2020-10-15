@@ -1,4 +1,8 @@
-<div #trixInput class="dm-trix-container">
+<div #trixInput class="dm-trix-container"
+     [class.ng-untouched]="formControl.untouched"
+     [class.ng-touched]="formControl.touched"
+     [class.ng-invalid]="formControl.invalid"
+     [class.ng-valid]="formControl.valid">
   <input [id]="parentFormControlName" type="hidden"/>
   <trix-editor [input]="parentFormControlName" #trix class=“trix-content”></trix-editor>
 </div>
