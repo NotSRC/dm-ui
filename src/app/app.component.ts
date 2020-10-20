@@ -9,6 +9,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class AppComponent {
   title = 'dm-ui';
   form = new FormGroup({
-    title: new FormControl('', [Validators.required]),
+    title: new FormControl('<b>ba</b>', [Validators.required]),
   });
+
+  reset() {
+    this.form.reset();
+  }
 }
