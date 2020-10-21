@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Optional } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 import {
   DefaultDataServiceConfig,
   EntityCollectionDataService,
@@ -7,6 +7,7 @@ import {
 } from '@ngrx/data';
 import { DmDataService } from './dm-data.service';
 
+@Injectable()
 export class DmDataServiceFactory {
   constructor(
     protected http: HttpClient,
