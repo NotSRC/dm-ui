@@ -55,3 +55,4 @@ export * from './lib/store/dm-store.module';
 export * from './lib/store/models/pagination.model';
 export * from './lib/store/models/base-entity.model';
 export * from './lib/store/collection/dm-collection.service';
+export * from './lib/store/collection/dm-collection-service-factory.service';
