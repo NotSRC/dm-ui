@@ -24,6 +24,10 @@ export * from './lib/services/filter/filter.service';
 export * from './lib/services/query/query-builder';
 export * from './lib/services/query/query-setter';
 export * from './lib/services/query/query-storage-saver';
+
+/**
+ * Export file module
+ */
 export * from './lib/file/file-uploader.module';
 export * from './lib/file/services/file.service';
 
@@ -43,3 +47,11 @@ export * from './lib/interfaces/base-result';
  * Export models
  */
 export * from './lib/models/file.model';
+
+/*
+ * Export store
+ */
+export * from './lib/store/dm-store.module';
+export * from './lib/store/models/pagination.model';
+export * from './lib/store/models/base-entity.model';
+export * from './lib/store/collection/dm-collection.service';

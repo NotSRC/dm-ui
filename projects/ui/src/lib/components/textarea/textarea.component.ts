@@ -52,10 +52,8 @@ export class TextareaComponent
       .pipe(takeUntil(this.subscription))
       .subscribe(() => {
         this.editor = this.trix.nativeElement.editor;
-        console.log(this.editor);
         this.editor.insertHTML(this.value || null);
         this.trix.nativeElement.addEventListener('trix-change', (event) => {
-          console.log(event);
           this.length = event.target.innerText?.length;
           this.changeValue(event.target.innerHTML);
         });
