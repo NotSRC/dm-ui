@@ -1,6 +1,7 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import {
   DefaultDataServiceConfig,
+  DefaultDataServiceFactory,
   EntityCollectionCreator,
   EntityCollectionReducerMethodsFactory,
   EntityCollectionServiceFactory,
@@ -10,11 +11,7 @@ import { DmCollectionCreator } from './collection/dm-collection-creator.service'
 import { DmPersistenceResultHandler } from './data-service/dm-result-handler';
 import { DmCollectionReducerMethodsFactory } from './collection/dm-collection-reducer-methods-factory';
 import { DmCollectionServiceFactory } from './collection/dm-collection-service-factory.service';
-
-// {
-//   provide: DefaultDataServiceFactory,
-//   useClass: DmDataServiceFactory,
-// };
+import { DmDataServiceFactory } from './data-service/dm-data-service-factory.service';
 
 @NgModule({})
 export class DmStoreModule {
@@ -27,6 +24,10 @@ export class DmStoreModule {
         {
           provide: DefaultDataServiceConfig,
           useValue: defaultDataServiceConfig,
+        },
+        {
+          provide: DefaultDataServiceFactory,
+          useClass: DmDataServiceFactory,
         },
         {
           provide: EntityCollectionServiceFactory,
