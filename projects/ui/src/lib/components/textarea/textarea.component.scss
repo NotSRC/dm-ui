@@ -30,9 +30,9 @@
   }
 
   &.dm-trix-disabled {
-     * button {
+    .trix-button {
        pointer-events: none;
-       background: rgba(0,0,0,.05);
+       background: rgba(0,0,0,.05) !important;
      }
 
     trix-editor {
