@@ -13,6 +13,7 @@ export class AppComponent {
   });
 
   reset() {
-    this.form.reset();
+    this.form.get('title').disable();
+    // this.form.reset();
   }
 }

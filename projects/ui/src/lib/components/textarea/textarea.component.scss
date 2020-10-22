@@ -4,6 +4,7 @@
 
 .dm-trix-container {
   @import "~trix/dist/trix";
+  position: relative;
 
   .trix-button-group {
     border-color: #d9dcdf !important;
@@ -26,5 +27,17 @@
 
   .trix-button-group--file-tools {
     display: none !important;
+  }
+
+  &.dm-trix-disabled {
+     * button {
+       pointer-events: none;
+       background: rgba(0,0,0,.05);
+     }
+
+    trix-editor {
+      background: rgba(0,0,0,.05);
+      border-color: rgba(0,0,0,.2) !important;
+    }
   }
 }

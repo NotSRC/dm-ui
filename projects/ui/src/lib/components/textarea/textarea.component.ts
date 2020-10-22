@@ -34,8 +34,12 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class TextareaComponent
   implements AfterViewInit, ControlValueAccessor, OnDestroy {
+  disabled = false;
   @Input() parentFormControlName: string;
   @Input() placeholder: string;
+  @Input('disabled') set setDisable(disabled: boolean) {
+    this.disabled = disabled;
+  }
   @ViewChild('trix', { static: false }) private trix: ElementRef;
   @ViewChild('trixInput', { static: false }) private trixInput: ElementRef;
 
@@ -52,6 +56,7 @@ export class TextareaComponent
       .pipe(takeUntil(this.subscription))
       .subscribe(() => {
         this.editor = this.trix.nativeElement.editor;
+        console.log(this.editor);
         this.editor.insertHTML(this.value || null);
         this.trix.nativeElement.addEventListener('trix-change', (event) => {
           this.length = event.target.innerText?.length;
@@ -87,6 +92,10 @@ export class TextareaComponent
   onTouch: any = (_: any) => {
     this.value = _;
   };
+
+  setDisabledState(isDisabled: boolean) {
+    this.disabled = isDisabled;
+  }
 
   registerOnChange(fn: any) {
     this.onChange = fn;
