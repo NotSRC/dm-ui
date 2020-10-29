@@ -4,13 +4,18 @@ import { debounceTime, filter } from 'rxjs/operators';
 import { QueryStorageSaver } from './query-storage-saver';
 
 export class QueryParamsBuilder {
-  private cancelChange = false;
+  private cancelChange = true;
   private onChange = new Subject<{ [key: string]: string }>();
-  public onChange$ = this.onChange
-    .pipe(
-      filter(() => this.cancelChange ? this.cancelChange = false : true),
-      debounceTime(this.changeDebounceTime),
-    );
+  public onChange$ = this.onChange.pipe(
+    debounceTime(this.changeDebounceTime),
+    filter(() => {
+      if (this.cancelChange) {
+        return (this.cancelChange = false);
+      } else {
+        return true;
+      }
+    })
+  );
 
   protected queryParams: CrudListQuery;
 
@@ -23,11 +28,13 @@ export class QueryParamsBuilder {
       limit: this.queryStorageSaver.getItem<number>('limit') || 25,
       filter: this.queryStorageSaver.getItem<string>('filter') || null,
       sortField: this.queryStorageSaver.getItem<string>('sortField') || null,
-      sortDirection: this.queryStorageSaver.getItem<SortDirection>('sortDirection') || null
-    }
+      sortDirection:
+        this.queryStorageSaver.getItem<SortDirection>('sortDirection') || null,
+    };
   }
 
   protected emitChange() {
+    this.cancelChange = false;
     this.onChange.next(this.getAvailableFields());
   }
 
@@ -36,56 +43,67 @@ export class QueryParamsBuilder {
     return this;
   }
 
-  protected saveParam(param: string, value: number|string, saveOnSession = false) {
-  if (saveOnSession) {
-    this.queryStorageSaver.setItem(param, value);
-  }
+  protected saveParam(
+    param: string,
+    value: number | string,
+    saveOnSession = false
+  ) {
+    if (saveOnSession) {
+      this.queryStorageSaver.setItem(param, value);
+    }
   }
 
   getParam<T>(key: keyof CrudListQuery): T {
     return this.queryParams[key] as any;
   }
 
-  page(page: number|string, {saveOnSession} = { saveOnSession: false }) {
+  page(page: number | string, { saveOnSession } = { saveOnSession: false }) {
     this.queryParams.page = parseInt(`${page}`, 10) || 1;
     this.saveParam('page', this.queryParams.page, saveOnSession);
     this.emitChange();
     return this;
   }
 
-  limit(limit: number|string, {saveOnSession} = { saveOnSession: false }) {
+  limit(limit: number | string, { saveOnSession } = { saveOnSession: false }) {
     this.queryParams.limit = parseInt(`${limit}`, 10) || 25;
     this.saveParam('limit', this.queryParams.limit, saveOnSession);
     this.emitChange();
     return this;
   }
 
-  filter(filter: string, {saveOnSession} = { saveOnSession: false }) {
+  filter(filter: string, { saveOnSession } = { saveOnSession: false }) {
     this.queryParams.filter = filter || null;
     this.saveParam('filter', this.queryParams.filter, saveOnSession);
     this.emitChange();
     return this;
   }
 
-  sortField(sortField: string, {saveOnSession} = { saveOnSession: false }) {
+  sortField(sortField: string, { saveOnSession } = { saveOnSession: false }) {
     this.queryParams.sortField = sortField || null;
     this.saveParam('sortField', this.queryParams.sortField, saveOnSession);
     this.emitChange();
     return this;
   }
 
-  sortDirection(sortDirection: SortDirection | 'asc' | 'desc', {saveOnSession} = { saveOnSession: false }) {
+  sortDirection(
+    sortDirection: SortDirection | 'asc' | 'desc',
+    { saveOnSession } = { saveOnSession: false }
+  ) {
     this.queryParams.sortDirection = sortDirection || null;
     if (!sortDirection) {
       this.queryParams.sortField = null;
     }
-    this.saveParam('sortDirection', this.queryParams.sortDirection, saveOnSession);
+    this.saveParam(
+      'sortDirection',
+      this.queryParams.sortDirection,
+      saveOnSession
+    );
     this.emitChange();
     return this;
   }
 
   setFromObject(data: { [key: string]: string }) {
-    Object.keys(data).forEach(key => {
+    Object.keys(data).forEach((key) => {
       if (Object.prototype.hasOwnProperty.call(this.queryParams, key)) {
         this.queryParams[key] = data[key];
       }
