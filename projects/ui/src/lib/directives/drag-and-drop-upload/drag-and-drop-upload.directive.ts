@@ -1,4 +1,13 @@
-import { Directive, ElementRef, EventEmitter, HostBinding, Inject, Input, Output, PLATFORM_ID } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  EventEmitter,
+  HostBinding,
+  Inject,
+  Input,
+  Output,
+  PLATFORM_ID,
+} from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { debounceTime, filter, mergeMap, takeUntil, tap } from 'rxjs/operators';
@@ -42,19 +51,22 @@ const styles = `
 `;
 
 @Directive({
-  selector: '[dmDragAndDropUpload]'
+  selector: '[dmDragAndDropUpload]',
 })
 export class DragAndDropUploadDirective {
-
-
   //Size in Megabyte
   @Input() size = 2000;
   @Input() disabled = false;
   @Input() inputName = 'file';
-  @Input() accept: string[] = ['image/png', 'image/jpeg', 'image/gif', 'image/heic'];
+  @Input() accept: string[] = [
+    'image/png',
+    'image/jpeg',
+    'image/gif',
+    'image/heic',
+  ];
   @Output() uploadFile = new EventEmitter<FormData>();
   @HostBinding('style.position') position = 'relative';
-  private form: HTMLFormElement;
+  private form: HTMLDivElement;
   private input: HTMLInputElement;
   private subscription = new Subject();
 
@@ -63,7 +75,7 @@ export class DragAndDropUploadDirective {
     @Inject(PLATFORM_ID) private platformId
   ) {
     if (isPlatformBrowser(this.platformId)) {
-      this.form = document.createElement('form');
+      this.form = document.createElement('div');
       this.input = document.createElement('input');
       this.el.nativeElement.insertAdjacentHTML('afterbegin', styles);
       this.el.nativeElement.appendChild(this.form);
@@ -72,7 +84,6 @@ export class DragAndDropUploadDirective {
       this.initInput();
       this.initForm();
     }
-
   }
 
   initForm() {
@@ -90,9 +101,8 @@ export class DragAndDropUploadDirective {
   }
 
   initListeners() {
-
     const dragLeave = new Subject<DragEvent>();
-    const leaveFilter = new Subject<{ filter: boolean, event: DragEvent }>();
+    const leaveFilter = new Subject<{ filter: boolean; event: DragEvent }>();
 
     fromEvent(this.input, 'change')
       .pipe(takeUntil(this.subscription))
@@ -107,21 +117,23 @@ export class DragAndDropUploadDirective {
     fromEvent(document, 'dragover')
       .pipe(takeUntil(this.subscription))
       .pipe(filter(() => !this.disabled))
-      .subscribe((e: DragEvent) => leaveFilter.next({filter: false, event: e}));
+      .subscribe((e: DragEvent) =>
+        leaveFilter.next({ filter: false, event: e })
+      );
 
     leaveFilter
       .pipe(takeUntil(this.subscription))
       .pipe(filter(() => !this.disabled))
-      .pipe(tap(val => this.dragEnter(val.event)))
-      .pipe(filter(val => !val.filter))
+      .pipe(tap((val) => this.dragEnter(val.event)))
+      .pipe(filter((val) => !val.filter))
       .pipe(debounceTime(500))
-      .subscribe((val) => leaveFilter.next({...val, filter: true}));
+      .subscribe((val) => leaveFilter.next({ ...val, filter: true }));
 
     dragLeave
       .pipe(takeUntil(this.subscription))
       .pipe(filter(() => !this.disabled))
       .pipe(mergeMap(() => leaveFilter))
-      .pipe(filter(val => val.filter))
+      .pipe(filter((val) => val.filter))
       .pipe(debounceTime(100))
       .subscribe(() => this.dragLeave());
   }
@@ -136,12 +148,13 @@ export class DragAndDropUploadDirective {
   }
 
   fileUpload() {
-    const formData = new FormData(this.form);
-    const file = formData.get(this.inputName) as File;
-    if (this.fileAcceptIsValid(file) && this.fileSizeIsValid(file)) {
+    const formData = new FormData();
+    const file = this.input.files[0] as File;
+    formData.append(this.inputName, file);
+    if (file && this.fileAcceptIsValid(file) && this.fileSizeIsValid(file)) {
       this.uploadFile.emit(formData);
     }
-    this.form.reset();
+    this.input.value = null;
   }
 
   fileAcceptIsValid(file: File) {
@@ -150,12 +163,11 @@ export class DragAndDropUploadDirective {
   }
 
   fileSizeIsValid(file: File) {
-    return (file.size / 1024) / 1024 < this.size;
+    return file.size / 1024 / 1024 < this.size;
   }
 
   ngOnDestroy(): void {
     this.subscription.next();
     this.subscription.complete();
   }
-
 }
