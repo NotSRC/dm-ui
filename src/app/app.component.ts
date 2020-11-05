@@ -16,4 +16,8 @@ export class AppComponent {
     this.form.get('title').disable();
     // this.form.reset();
   }
+
+  uploadFile(event) {
+    console.log(event);
+  }
 }

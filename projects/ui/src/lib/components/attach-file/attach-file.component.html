@@ -1,7 +1,8 @@
-<form #form class="attach-file-form" (click)="resetForm()">
+<div class="attach-file-form" (click)="resetForm()">
   <div class="attach-file-form-content" [class.attach-file-form-disabled]="disabled">
     <ng-content></ng-content>
     <input
+      #inputFile
       type="file"
       [disabled]="disabled"
       [name]="inputName"
@@ -13,4 +14,4 @@
       File size must be less then {{ size }} Mb
     </mat-error>
   </div>
-</form>
+</div>
