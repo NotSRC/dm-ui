@@ -4,20 +4,23 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 type httpOptions = {
-  headers?: HttpHeaders | {
-    [header: string]: string | string[];
-  };
+  headers?:
+    | HttpHeaders
+    | {
+        [header: string]: string | string[];
+      };
   observe?: 'body';
-  params?: HttpParams | {
-    [param: string]: string | string[];
-  };
+  params?:
+    | HttpParams
+    | {
+        [param: string]: string | string[];
+      };
   reportProgress?: boolean;
   responseType?: 'json';
   withCredentials?: boolean;
-}
+};
 
 export abstract class ApiService {
-  protected abstract debug: boolean;
   protected abstract apiUrl: string;
 
   constructor(protected http: HttpClient) {}
@@ -42,4 +45,3 @@ export abstract class ApiService {
     return this.http.get(`${this.apiUrl}/${url}`, options);
   }
 }
-
