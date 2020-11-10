@@ -62,7 +62,7 @@ export class FilterInput<T> {
       this.options?.parseFunction &&
       typeof this.options?.parseFunction === 'function'
     ) {
-      this._search = this.options.parseFunction(search) || null;
+      this._search = this.options.parseFunction(search, this) || null;
     } else {
       this._search = search;
     }

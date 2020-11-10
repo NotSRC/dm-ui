@@ -1,6 +1,6 @@
 {
   "name": "dm-ui",
-  "version": "0.5.19",
+  "version": "0.5.20",
   "private": true,
   "main": "dist/ui/bundles/ui.umd.js",
   "scripts": {
