@@ -32,7 +32,7 @@ export interface FilterInputPlain {
 
 interface FilterOption {
   nullable?: boolean;
-  parseFunction?: Function;
+  parseFunction?: Function[] | Function;
 }
 
 export class FilterInput<T> {
@@ -63,6 +63,14 @@ export class FilterInput<T> {
       typeof this.options?.parseFunction === 'function'
     ) {
       this._search = this.options.parseFunction(search, this) || null;
+    } else if (
+      typeof this.options?.parseFunction === 'object' &&
+      this.options?.parseFunction?.length
+    ) {
+      this._search =
+        this.options.parseFunction?.reduce((acc, func) => {
+          return func(acc, this);
+        }, search) || null;
     } else {
       this._search = search;
     }
@@ -128,7 +136,9 @@ export class FilterInput<T> {
 
 export type filtersPlainType = { [key: string]: FilterInputPlain };
 
-export type filtersType = { [key: string]: FilterInput<any> };
+export type filtersType =
+  | { [key: string]: FilterInput<any> }
+  | FilterInput<any>[];
 
 export abstract class FilterService {
   abstract readonly filters: filtersType;
