@@ -21,7 +21,7 @@ export function arrayFilterParser<T>(search: T[], filter: FilterInput<T>) {
 }
 
 export function escapeRegExpSymbolsParser(str: string = '') {
-  return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+  return str?.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 }
 
 export function replaceInStringParser(string: string, searchValue: string, replaceValue: string) {
