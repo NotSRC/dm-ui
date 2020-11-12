@@ -19,9 +19,9 @@ export class QuerySetter {
     return params;
   }
 
-  removeQueryParams(query: { [key: string]: string }) {
+  removeQueryParams(queryParamsList: string[]) {
     const queryParams = new URLSearchParams();
-    Object.keys(query).forEach((key) => {
+    queryParamsList?.forEach((key) => {
       if (this.excluded?.includes(key)) {
         return;
       }
