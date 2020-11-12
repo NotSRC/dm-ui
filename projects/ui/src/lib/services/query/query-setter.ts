@@ -19,6 +19,17 @@ export class QuerySetter {
     return params;
   }
 
+  removeQueryParams(query: { [key: string]: string }) {
+    const queryParams = new URLSearchParams();
+    Object.keys(query).forEach((key) => {
+      if (this.excluded?.includes(key)) {
+        return;
+      }
+      queryParams.delete(key);
+    });
+    window.history.replaceState({}, '', `${location.pathname}?${queryParams}`);
+  }
+
   setQueryParams(query: { [key: string]: string }) {
     const queryParams = new URLSearchParams();
     Object.keys(query).forEach((key) => {
