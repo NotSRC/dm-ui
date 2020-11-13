@@ -20,7 +20,7 @@ export class QuerySetter {
   }
 
   removeQueryParams(queryParamsList: string[]) {
-    const queryParams = new URLSearchParams();
+    const queryParams = new URLSearchParams(location.search);
     queryParamsList?.forEach((key) => {
       if (this.excluded?.includes(key)) {
         return;
