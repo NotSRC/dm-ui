@@ -198,11 +198,7 @@ export function TransformFiltersToJson(
     | filtersType
     | Array<FilterInputPlain | FilterInputArray | FilterInput<any>>
 ): string {
-  const filter = Object.keys(filters)
-    .map((key) => filters[key])
-    .filter(IsAvailableFilter)
-    .map(GetFilterPlainWithChildren)
-    .filter((f) => f);
+  const filter = TransformFilterToPlain(filters);
   if (filter?.length) {
     return JSON.stringify(filter);
   } else {
@@ -226,6 +222,25 @@ export function TransformFilterToArray(
     .map((key) => filters[key])
     .filter(IsAvailableFilter)
     .map(GetFilterWithChildren)
+    .filter((f) => f);
+}
+
+/**
+ * Public function
+ * Get available plain with children from FilterInput and other types
+ * @param filters
+ * @constructor
+ */
+export function TransformFilterToPlain(
+  filters:
+    | filtersPlainType
+    | filtersType
+    | Array<FilterInputPlain | FilterInputArray | FilterInput<any>>
+): FilterInputArray[] {
+  return Object.keys(filters)
+    .map((key) => filters[key])
+    .filter(IsAvailableFilter)
+    .map(GetFilterPlainWithChildren)
     .filter((f) => f);
 }
 
@@ -257,7 +272,7 @@ function GetFilterWithChildren(filter: FilterInput<any>) {
  */
 function GetFilterPlainWithChildren(filter: FilterInput<any>) {
   if (filter.children) {
-    const children = TransformFilterToArray(filter.children);
+    const children = TransformFilterToPlain(filter.children);
     if (children.length) {
       return {
         operator: filter.operator,
