@@ -221,8 +221,28 @@ export function TransformFilterToArray(
   return Object.keys(filters)
     .map((key) => filters[key])
     .filter(IsAvailableFilter)
-    .map(GetFilterPlainWithChildren)
+    .map(GetFilterWithChildren)
     .filter((f) => f);
+}
+
+/**
+ * Private function
+ * Get filterInput with children
+ * @param filter
+ * @constructor
+ */
+function GetFilterWithChildren(filter: FilterInput<any>) {
+  if (filter.children) {
+    const children = TransformFilterToArray(filter.children);
+    if (children.length) {
+      return {
+        operator: filter.operator,
+        children,
+      };
+    }
+  } else {
+    return GetFilterPlain(filter);
+  }
 }
 
 /**
