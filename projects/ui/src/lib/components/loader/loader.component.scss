@@ -10,17 +10,3 @@
   align-items: center;
   justify-content: center;
 }
-
-:host {
-  mat-progress-spinner {
-    width: 60px !important;
-    height: 60px !important;
-
-    ::ng-deep {
-      svg {
-        width: 60px !important;
-        height: 60px !important;
-      }
-    }
-  }
-}
