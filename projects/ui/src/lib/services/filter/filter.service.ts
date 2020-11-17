@@ -182,12 +182,7 @@ export abstract class FilterService {
   }
 
   getJsonFilters(): string {
-    const filter = this.getFiltersArray(this.filters);
-    if (filter?.length) {
-      return JSON.stringify(filter);
-    } else {
-      return null;
-    }
+    return TransformFiltersToJson(this.filters);
   }
 }
 
