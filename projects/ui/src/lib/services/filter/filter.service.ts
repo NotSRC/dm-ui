@@ -203,7 +203,11 @@ export function TransformFiltersToJson(
     | filtersType
     | Array<FilterInputPlain | FilterInputArray | FilterInput<any>>
 ): string {
-  const filter = TransformFilterToArray(filters);
+  const filter = Object.keys(filters)
+    .map((key) => filters[key])
+    .filter(IsAvailableFilter)
+    .map(GetFilterPlainWithChildren)
+    .filter((f) => f);
   if (filter?.length) {
     return JSON.stringify(filter);
   } else {
