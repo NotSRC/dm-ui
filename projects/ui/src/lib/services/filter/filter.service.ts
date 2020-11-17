@@ -36,25 +36,43 @@ interface FilterOption {
 }
 
 export class FilterInput<T> {
+  constructor(
+    params: {
+      field?: string;
+      search?: T;
+      condition?: FilterConditions;
+      operator?: FilterOperators;
+      children?: filtersType;
+    } = {},
+    options: FilterOption = {
+      nullable: false,
+      parseFunction: null,
+    }
+  ) {
+    this.field = params.field;
+    this.search = params.search;
+    this.condition = params.condition;
+    this.operator = params.operator;
+    this.children = params.children;
+    this.options = options;
+  }
+
   // tslint:disable-next-line:variable-name
   private _field: string;
-  // tslint:disable-next-line:variable-name
-  private _search: T;
-  // tslint:disable-next-line:variable-name
-  private _condition: FilterConditions;
-  // tslint:disable-next-line:variable-name
-  private _operator: FilterOperators;
-  // tslint:disable-next-line:variable-name
-  private _children: filtersType;
-  // tslint:disable-next-line:variable-name
-  private _options: FilterOption;
+
+  get field() {
+    return this._field;
+  }
 
   set field(field) {
     this._field = field;
   }
 
-  get field() {
-    return this._field;
+  // tslint:disable-next-line:variable-name
+  private _search: T;
+
+  get search() {
+    return this._search;
   }
 
   set search(search) {
@@ -76,61 +94,48 @@ export class FilterInput<T> {
     }
   }
 
-  get search() {
-    return this._search;
+  // tslint:disable-next-line:variable-name
+  private _condition: FilterConditions;
+
+  get condition() {
+    return this._condition;
   }
 
   set condition(condition) {
     this._condition = condition;
   }
 
-  get condition() {
-    return this._condition;
+  // tslint:disable-next-line:variable-name
+  private _operator: FilterOperators;
+
+  get operator() {
+    return this._operator;
   }
 
   set operator(operator) {
     this._operator = operator;
   }
 
-  get operator() {
-    return this._operator;
+  // tslint:disable-next-line:variable-name
+  private _children: filtersType;
+
+  get children() {
+    return this._children;
   }
 
   set children(children) {
     this._children = children;
   }
 
-  get children() {
-    return this._children;
-  }
-
-  set options(options) {
-    this._options = options;
-  }
+  // tslint:disable-next-line:variable-name
+  private _options: FilterOption;
 
   get options() {
     return this._options;
   }
 
-  constructor(
-    params: {
-      field?: string;
-      search?: T;
-      condition?: FilterConditions;
-      operator?: FilterOperators;
-      children?: filtersType;
-    } = {},
-    options: FilterOption = {
-      nullable: false,
-      parseFunction: null,
-    }
-  ) {
-    this.field = params.field;
-    this.search = params.search;
-    this.condition = params.condition;
-    this.operator = params.operator;
-    this.children = params.children;
-    this.options = options;
+  set options(options) {
+    this._options = options;
   }
 }
 
@@ -172,7 +177,7 @@ export abstract class FilterService {
     }, {});
   }
 
-  getFiltersArray(filters: filtersType = this.filters): FilterInputArray[] {
+  getFiltersArray(filters: filtersType = this.filters): FilterInput<any>[] {
     return TransformFilterToArray(filters);
   }
 
@@ -217,7 +222,7 @@ export function TransformFilterToArray(
     | filtersPlainType
     | filtersType
     | Array<FilterInputPlain | FilterInputArray | FilterInput<any>>
-): FilterInputArray[] {
+): FilterInput<any>[] {
   return Object.keys(filters)
     .map((key) => filters[key])
     .filter(IsAvailableFilter)
@@ -235,13 +240,13 @@ function GetFilterWithChildren(filter: FilterInput<any>) {
   if (filter.children) {
     const children = TransformFilterToArray(filter.children);
     if (children.length) {
-      return {
+      return new FilterInput({
         operator: filter.operator,
         children,
-      };
+      });
     }
   } else {
-    return GetFilterPlain(filter);
+    return filter;
   }
 }
 
