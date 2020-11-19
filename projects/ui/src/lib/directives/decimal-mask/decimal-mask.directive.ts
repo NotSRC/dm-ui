@@ -1,4 +1,13 @@
-import { Directive, ElementRef, forwardRef, HostListener, Input, OnChanges, Renderer2, } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  forwardRef,
+  HostListener,
+  Input,
+  OnChanges,
+  OnInit,
+  Renderer2,
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import Inputmask from 'inputmask';
 
@@ -12,16 +21,22 @@ import Inputmask from 'inputmask';
     },
   ],
 })
-export class DecimalMaskDirective implements ControlValueAccessor, OnChanges {
+export class DecimalMaskDirective
+  implements ControlValueAccessor, OnChanges, OnInit {
   @Input() min: number = null;
   @Input() max: number = null;
+  @Input() suffix: string = null;
+  @Input() prefix: string = null;
   @Input() digits: number = 2;
 
   value: number | string;
+  private inputMasked: Inputmask;
+
+  constructor(private el: ElementRef, private renderer2: Renderer2) {}
 
   // https://github.com/RobinHerbots/Inputmask/blob/5.x/lib/extensions/inputmask.numeric.extensions.js
   get options() {
-    return {
+    const options: any = {
       alias: 'decimal',
       min: this.min as any,
       max: this.max as any,
@@ -37,15 +52,15 @@ export class DecimalMaskDirective implements ControlValueAccessor, OnChanges {
       enforceDigitsOnBlur: false,
       nullable: true,
     };
-  }
 
-  private inputMasked: Inputmask;
+    if (this.prefix) {
+      options.prefix = this.prefix;
+    }
+    if (this.suffix) {
+      options.suffix = this.suffix;
+    }
 
-  constructor(
-    private el: ElementRef,
-    private renderer2: Renderer2
-  ) {
-
+    return options;
   }
 
   @HostListener('input', ['$event.target'])
@@ -53,6 +68,11 @@ export class DecimalMaskDirective implements ControlValueAccessor, OnChanges {
     const val = parseFloat(target.value);
     const resValue = val || val === 0 ? val : null;
     this.changeValue(resValue);
+  }
+
+  ngOnInit() {
+    this.unmaskInput();
+    this.maskInput();
   }
 
   ngOnChanges(): void {

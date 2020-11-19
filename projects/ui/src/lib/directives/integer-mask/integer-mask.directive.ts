@@ -1,4 +1,12 @@
-import { Directive, ElementRef, forwardRef, HostListener, Input, OnChanges, Renderer2, } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  forwardRef,
+  HostListener,
+  Input,
+  OnChanges,
+  Renderer2,
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import Inputmask from 'inputmask';
 
@@ -12,16 +20,20 @@ import Inputmask from 'inputmask';
     },
   ],
 })
-export class IntegerMaskDirective
-  implements ControlValueAccessor, OnChanges {
+export class IntegerMaskDirective implements ControlValueAccessor, OnChanges {
   @Input() min: number = null;
   @Input() max: number = null;
+  @Input() suffix: string = null;
+  @Input() prefix: string = null;
 
   value: number | string;
+  private inputMasked: Inputmask;
+
+  constructor(private el: ElementRef, private renderer2: Renderer2) {}
 
   // https://github.com/RobinHerbots/Inputmask/blob/5.x/lib/extensions/inputmask.numeric.extensions.js
   get options() {
-    return {
+    const options: any = {
       alias: 'integer',
       min: this.min as any,
       max: this.max as any,
@@ -36,11 +48,13 @@ export class IntegerMaskDirective
       enforceDigitsOnBlur: false,
       nullable: true,
     };
-  }
-
-  private inputMasked: Inputmask;
-
-  constructor(private el: ElementRef, private renderer2: Renderer2) {
+    if (this.prefix) {
+      options.prefix = this.prefix;
+    }
+    if (this.suffix) {
+      options.suffix = this.suffix;
+    }
+    return options;
   }
 
   @HostListener('input', ['$event.target'])
