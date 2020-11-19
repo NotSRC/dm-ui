@@ -28,6 +28,7 @@ export class DecimalMaskDirective
   @Input() suffix: string = null;
   @Input() prefix: string = null;
   @Input() digits: number = 2;
+  @Input() canBeEmpty: boolean = true;
 
   value: number | string;
   private inputMasked: Inputmask;
@@ -42,7 +43,8 @@ export class DecimalMaskDirective
       max: this.max as any,
       digits: this.digits as any,
       rightAlign: false,
-      unmaskAsNumber: false,
+      autoUnmask: true,
+      unmaskAsNumber: true,
       showMaskOnHover: false,
       showMaskOnFocus: false,
       clearMaskOnLostFocus: true,
@@ -65,9 +67,33 @@ export class DecimalMaskDirective
 
   @HostListener('input', ['$event.target'])
   inputListener(target: HTMLInputElement) {
-    const val = parseFloat(target.value);
-    const resValue = val || val === 0 ? val : null;
+    const resValue = this.getInputValue(target.value);
     this.changeValue(resValue);
+  }
+
+  @HostListener('blur', ['$event.target'])
+  blurListener(target: HTMLInputElement) {
+    const resValue = this.getInputValue(target.value);
+    this.changeValue(resValue);
+    if (resValue || resValue === 0) {
+      this.inputMasked.setValue(`${resValue}`);
+    } else {
+      if (this.canBeEmpty) {
+        this.unmaskInput();
+        this.maskInput();
+      }
+    }
+  }
+
+  getInputValue(value) {
+    const val = parseFloat(value);
+    let resValue;
+    if (this.canBeEmpty) {
+      resValue = val || val === 0 ? val : null;
+    } else {
+      resValue = val || val === 0 ? val : this.min;
+    }
+    return resValue;
   }
 
   ngOnInit() {
