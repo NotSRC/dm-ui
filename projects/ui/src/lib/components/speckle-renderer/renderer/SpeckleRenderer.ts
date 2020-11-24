@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as THREE from 'three';
 
 import OrbitControls from 'threejs-orbit-controls';
@@ -16,7 +17,7 @@ import SelectionHelper from './SelectionHelper';
 
 const singletonsStore = new Map();
 
-export default class SpeckleRenderer extends EE {
+export class SpeckleRenderer extends EE {
   static renderObjectToImage(
     { domObject },
     viewerSettings,
@@ -36,7 +37,7 @@ export default class SpeckleRenderer extends EE {
       singletonsStore.set(config.size, instance);
     }
 
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       instance.imageQueue.push({ ...config, resolve });
       if (!instance.imageQueueProcessingInProgress) {
         instance.processImageQueue();
@@ -267,7 +268,7 @@ export default class SpeckleRenderer extends EE {
 
   processPipeline(pipeline = this.rendererSettings.pipeline) {
     if (pipeline) {
-      pipeline.forEach(cb => {
+      pipeline.forEach((cb) => {
         cb(this, this.rendererSettings);
       });
     }
@@ -288,7 +289,7 @@ export default class SpeckleRenderer extends EE {
   }
 
   getViewAsImageData(delay = 0) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       setTimeout(() => {
         this.imageDataResolver = resolve;
       }, delay);
@@ -386,7 +387,7 @@ export default class SpeckleRenderer extends EE {
       if (
         this.hoveredObject &&
         this.selectedObjects.findIndex(
-          x => x.userData._id === this.hoveredObject.userData._id
+          (x) => x.userData._id === this.hoveredObject.userData._id
         ) !== -1
       ) {
         // Inside the selection -> check if it's a single object deselect
@@ -421,7 +422,7 @@ export default class SpeckleRenderer extends EE {
       if (!this.controls.enabled) {
         this.emit(
           'select-objects',
-          this.selectionBox.collection.map(o => o.userData._id)
+          this.selectionBox.collection.map((o) => o.userData._id)
         );
       }
     }
@@ -502,7 +503,7 @@ export default class SpeckleRenderer extends EE {
     objects.forEach((obj, index) => {
       if (
         this.selectedObjects.findIndex(
-          x => x.userData._id === obj.userData._id
+          (x) => x.userData._id === obj.userData._id
         ) === -1
       ) {
         obj.userData.selected = true;
@@ -528,7 +529,7 @@ export default class SpeckleRenderer extends EE {
     let removed = [];
     objects.forEach((obj, index) => {
       let myIndex = this.selectedObjects.findIndex(
-        x => x.userData._id === obj.userData._id
+        (x) => x.userData._id === obj.userData._id
       );
       if (myIndex !== -1) {
         obj.userData.selected = false;
@@ -545,7 +546,7 @@ export default class SpeckleRenderer extends EE {
   }
 
   clearSelection() {
-    this.selectedObjects.forEach(obj => {
+    this.selectedObjects.forEach((obj) => {
       obj.userData.selected = false;
       obj.material.color.copy(obj.material.__preSelectColor);
     });
@@ -608,10 +609,10 @@ export default class SpeckleRenderer extends EE {
   }
 
   updateEdges() {
-    this.processLargeArray(this.edgesGroup.children, obj => {
+    this.processLargeArray(this.edgesGroup.children, (obj) => {
       this.edgesGroup.remove(obj);
     });
-    this.processLargeArray(this.scene.children, obj => {
+    this.processLargeArray(this.scene.children, (obj) => {
       if (obj.type !== 'Mesh') return;
       this.drawEdges(obj, obj.userData._id);
     });
@@ -621,7 +622,7 @@ export default class SpeckleRenderer extends EE {
   unloadObjects({ objIds }) {
     let toRemove = [];
 
-    this.scene.traverse(obj => {
+    this.scene.traverse((obj) => {
       if (obj.userData._id)
         if (objIds.indexOf(obj.userData._id) !== -1) toRemove.push(obj);
     });
@@ -640,7 +641,7 @@ export default class SpeckleRenderer extends EE {
   updateObjectsProperties({ objects }) {
     this.processLargeArray(objects, (obj, index) => {
       let sceneObject = this.scene.children.find(
-        o => o.userData._id === obj._id
+        (o) => o.userData._id === obj._id
       );
       if (!sceneObject) return;
       sceneObject.userData.properties = flatten(obj.properties);
@@ -656,7 +657,7 @@ export default class SpeckleRenderer extends EE {
       propagateLegend = true;
 
     let first = this.scene.children.find(
-      o =>
+      (o) =>
         o.userData &&
         o.userData.properties &&
         o.userData.properties[propertyName]
@@ -759,7 +760,7 @@ export default class SpeckleRenderer extends EE {
     });
 
     let defaultColor = new THREE.Color('#B3B3B3');
-    toReset.forEach(obj => {
+    toReset.forEach((obj) => {
       // if ( !obj.userData.selected ) {
       //   obj.material._oldColor = obj.material.color
       if (obj.material) obj.material.color.copy(defaultColor);
@@ -770,7 +771,7 @@ export default class SpeckleRenderer extends EE {
   }
 
   addColorsToColorTable(colorsHash) {
-    Object.keys(colorsHash).forEach(key => {
+    Object.keys(colorsHash).forEach((key) => {
       this.colorTable[key] = new THREE.Color(colorsHash[key]);
     });
   }
@@ -833,7 +834,7 @@ export default class SpeckleRenderer extends EE {
     );
 
     let defaultColor = new THREE.Color('#B3B3B3');
-    toReset.forEach(obj => {
+    toReset.forEach((obj) => {
       if (obj.material) obj.material.color.copy(defaultColor);
     });
   }
@@ -941,7 +942,7 @@ export default class SpeckleRenderer extends EE {
   // TODO
   showObjects(objIds) {
     if (objIds.length !== 0)
-      this.scene.traverse(obj => {
+      this.scene.traverse((obj) => {
         if (objIds.indexOf(obj.userData._id) !== -1) {
           if (obj.name !== null) {
             if (obj.name == 'displayEdgesGroup') return;
@@ -950,7 +951,7 @@ export default class SpeckleRenderer extends EE {
         }
       });
     else
-      this.scene.traverse(obj => {
+      this.scene.traverse((obj) => {
         if (obj.name !== null) {
           if (obj.name == 'displayEdgesGroup') return;
         }
@@ -960,14 +961,14 @@ export default class SpeckleRenderer extends EE {
 
   hideObjects(objIds) {
     if (objIds.length !== 0)
-      this.scene.traverse(obj => {
+      this.scene.traverse((obj) => {
         if (objIds.indexOf(obj.userData._id) !== -1) obj.visible = false;
       });
-    else this.scene.traverse(obj => (obj.visible = false));
+    else this.scene.traverse((obj) => (obj.visible = false));
   }
   // leaves only the provided objIds visible
   isolateObjects(objIds) {
-    this.scene.children.forEach(obj => {
+    this.scene.children.forEach((obj) => {
       if (!obj.userData._id) return;
       if (objIds.includes(obj.userData._id)) obj.visible = true;
       else obj.visible = false;
@@ -978,8 +979,10 @@ export default class SpeckleRenderer extends EE {
     return; // TODO: performance sucks for large object groups
     if (this.isSettingColors) return;
     this.highlightedObjects = objIds;
-    let objs = this.scene.children.filter(o => objIds.includes(o.userData._id));
-    objs.forEach(obj => {
+    let objs = this.scene.children.filter((o) =>
+      objIds.includes(o.userData._id)
+    );
+    objs.forEach((obj) => {
       obj.userData.hovered = true;
       obj.material.__preHoverColor = obj.material.color.clone();
       obj.material.color.copy(this.hoverColor);
@@ -989,8 +992,10 @@ export default class SpeckleRenderer extends EE {
     return; // TODO: performance sucks for large object groups
     if (!objIds) objIds = this.highlightedObjects;
 
-    let objs = this.scene.children.filter(o => objIds.includes(o.userData._id));
-    objs.forEach(obj => {
+    let objs = this.scene.children.filter((o) =>
+      objIds.includes(o.userData._id)
+    );
+    objs.forEach((obj) => {
       obj.material.color.copy(obj.material.__preHoverColor);
       obj.userData.hovered = false;
       obj = null;
@@ -1000,7 +1005,7 @@ export default class SpeckleRenderer extends EE {
 
   zoomToObject(obj) {
     if (typeof obj === 'string') {
-      obj = this.scene.children.find(o => o.userData._id === obj);
+      obj = this.scene.children.find((o) => o.userData._id === obj);
     }
     if (!obj) return;
     let bsphere = obj.geometry.boundingSphere;
@@ -1256,7 +1261,7 @@ export default class SpeckleRenderer extends EE {
       return this.destroy();
     }
 
-    this.unloadObjects({ objIds: dataObjects.map(obj => obj.properties.id) });
+    this.unloadObjects({ objIds: dataObjects.map((obj) => obj.properties.id) });
     this.processImageQueue();
   }
 

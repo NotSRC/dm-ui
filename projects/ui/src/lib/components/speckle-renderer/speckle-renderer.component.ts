@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -12,7 +13,7 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { SpeckleRenderer } from './renderer/SpeckleRenderer.js';
+import { SpeckleRenderer } from './renderer/SpeckleRenderer';
 import { RendererPipelineMethod } from './renderer/SpeckleRenderer.model';
 import {
   DesignOptionSize,
@@ -140,13 +141,13 @@ export class SpeckleRendererComponent
   // we need to use method to ensure that `this` is available for pipeline methods
   getDefaultRenderPipeline(): RendererPipelineMethod[] {
     return [
-      renderer => {
+      (renderer) => {
         if (this.dataObjects) {
           renderer.loadObjects({ objs: this.dataObjects, zoomExtents: false });
         }
       },
-      renderer => renderer.addColorsToColorTable(UNIT_TYPE_COLORS),
-      renderer =>
+      (renderer) => renderer.addColorsToColorTable(UNIT_TYPE_COLORS),
+      (renderer) =>
         renderer.colorByStringProperty({
           propertyName: 'unit_type',
           propagateLegend: false,
@@ -228,7 +229,7 @@ export class SpeckleRendererComponent
         disableControls: this.disableControls,
         instantPositioning: false,
         pipeline: [
-          renderer => renderer.animate(),
+          (renderer) => renderer.animate(),
           ...this.getDefaultRenderPipeline(),
         ],
       }
@@ -240,7 +241,7 @@ export class SpeckleRendererComponent
       const unListen = this.renderer2.listen(
         this.wrapper.nativeElement,
         'wheel',
-        event => {
+        (event) => {
           event.preventDefault();
           event.returnValue = false;
         }
@@ -265,13 +266,13 @@ export class SpeckleRendererComponent
   private unloadObjects() {
     if (this.localDataObjects) {
       this.renderer?.unloadObjects({
-        objIds: this.localDataObjects.map(obj => obj.properties.id),
+        objIds: this.localDataObjects.map((obj) => obj.properties.id),
       });
     }
   }
 
   private runDefaultPipeline() {
-    this.getDefaultRenderPipeline().forEach(cb =>
+    this.getDefaultRenderPipeline().forEach((cb) =>
       cb(this.renderer, this.renderer.rendererSettings)
     );
   }
@@ -287,7 +288,7 @@ export class SpeckleRendererComponent
   }
 
   private processObjects(objects) {
-    Object.keys(objects).forEach(key => {
+    Object.keys(objects).forEach((key) => {
       const o = objects[key];
       if (typeof o !== 'object') {
         return;

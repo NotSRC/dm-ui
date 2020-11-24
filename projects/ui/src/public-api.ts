@@ -69,7 +69,6 @@ export * from './lib/store/collection/dm-collection-reducer-methods';
 export * from './lib/store/collection/dm-collection-reducer-methods-factory';
 export * from './lib/store/collection/dm-collection-service-factory.service';
 
-
 /*
  * Export constants
  */
