@@ -36,6 +36,10 @@
     "rxjs": "~6.6.0",
     "trix": "1.2.4",
     "tslib": "^2.0.0",
+    "three": "^0.103.0",
+    "threejs-orbit-controls": "^1.0.3",
+    "@tweenjs/tween.js": "^17.3.0",
+    "rainbowvis.js": "^1.0.1",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
