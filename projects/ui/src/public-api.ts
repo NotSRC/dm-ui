@@ -50,6 +50,8 @@ export * from './lib/interfaces/base-result';
  */
 export * from './lib/models/file.model';
 export * from './lib/models/keylist-model';
+export * from './lib/models/renderer.model';
+export * from './lib/components/speckle-renderer/renderer/SpeckleRenderer.model';
 
 /*
  * Export store
@@ -66,3 +68,8 @@ export * from './lib/store/collection/dm-collection-creator.service';
 export * from './lib/store/collection/dm-collection-reducer-methods';
 export * from './lib/store/collection/dm-collection-reducer-methods-factory';
 export * from './lib/store/collection/dm-collection-service-factory.service';
+
+/*
+ * Export constants
+ */
+export * from './lib/constants/unit-type-colors.constant';

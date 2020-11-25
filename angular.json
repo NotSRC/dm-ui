@@ -150,7 +150,9 @@
             }
           },
           "allowedCommonJsDependencies": [
-            "inputmask"
+            "inputmask",
+            "threejs-orbit-controls",
+            "@tweenjs/tween.js"
           ]
         },
         "test": {
