@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -197,10 +196,11 @@ export class SpeckleRendererComponent
       {
         size: this.size,
         dataObjects: this.localDataObjects,
+        // @ts-expect-error
         pipeline: this.getDefaultRenderPipeline(),
       }
     );
-
+    // @ts-expect-error
     this.imageDataReady.emit(data);
     return data;
   }
@@ -228,6 +228,7 @@ export class SpeckleRendererComponent
         selectable: !this.disableControls,
         disableControls: this.disableControls,
         instantPositioning: false,
+        // @ts-expect-error
         pipeline: [
           (renderer) => renderer.animate(),
           ...this.getDefaultRenderPipeline(),
@@ -273,6 +274,7 @@ export class SpeckleRendererComponent
 
   private runDefaultPipeline() {
     this.getDefaultRenderPipeline().forEach((cb) =>
+      // @ts-expect-error
       cb(this.renderer, this.renderer.rendererSettings)
     );
   }

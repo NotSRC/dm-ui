@@ -1,5 +1,29 @@
 // @ts-nocheck
-import * as THREE from 'three';
+import {
+  MeshPhongMaterial,
+  Color,
+  DoubleSide,
+  VertexColors,
+  LineBasicMaterial,
+  PointsMaterial,
+  Geometry,
+  Vector3,
+  Line,
+  Points,
+  Mesh,
+  EllipseCurve,
+  Quaternion,
+  Matrix4,
+  PlaneGeometry,
+  ExtrudeBufferGeometry,
+  Vector2,
+  Path,
+  CurvePath,
+  BoxBufferGeometry,
+  BufferGeometry,
+  Float32BufferAttribute,
+  Shape,
+} from 'three';
 
 class MaterialManager {
   constructor() {
@@ -16,11 +40,11 @@ class MaterialManager {
     this.lineHighlightMat = null;
     this.pointHighlightMat = null;
 
-    this.defaultMeshMat = new THREE.MeshPhongMaterial({
-      color: new THREE.Color('#A9A9A9'),
-      specular: new THREE.Color('#C8FFE7'),
+    this.defaultMeshMat = new MeshPhongMaterial({
+      color: new Color('#A9A9A9'),
+      specular: new Color('#C8FFE7'),
       shininess: 30,
-      side: THREE.DoubleSide,
+      side: DoubleSide,
       transparent: true,
       wireframe: false,
       opacity: 0.84,
@@ -33,15 +57,15 @@ class MaterialManager {
   // TODO: ghost materials
   getMeshGhostMat() {
     if (this.meshGhostMat) return this.meshGhostMat;
-    this.meshGhostMat = new THREE.MeshPhongMaterial({
-      color: new THREE.Color('#E6E6E6'),
-      specular: new THREE.Color('#FFECB3'),
+    this.meshGhostMat = new MeshPhongMaterial({
+      color: new Color('#E6E6E6'),
+      specular: new Color('#FFECB3'),
       shininess: 30,
-      side: THREE.DoubleSide,
+      side: DoubleSide,
       transparent: true,
       wireframe: false,
       opacity: 0.1,
-      vertexColors: THREE.VertexColors,
+      vertexColors: VertexColors,
     });
     return this.meshGhostMat;
   }
@@ -51,15 +75,15 @@ class MaterialManager {
     if (c !== false) color.hex = c;
 
     let myMat = this.defaultMeshMat.clone();
-    myMat.color = new THREE.Color(color.hex);
+    myMat.color = new Color(color.hex);
     return myMat;
   }
 
   getLineMaterial(color) {
     let c = colourNameToHex(color.hex);
     if (c !== false) color.hex = c;
-    return new THREE.LineBasicMaterial({
-      color: new THREE.Color(color.hex),
+    return new LineBasicMaterial({
+      color: new Color(color.hex),
       linewidth: 1,
       opacity: color.a,
       transparent: true,
@@ -69,8 +93,8 @@ class MaterialManager {
   getPointsMaterial(color) {
     let c = colourNameToHex(color.hex);
     if (c !== false) color.hex = c;
-    return new THREE.PointsMaterial({
-      color: new THREE.Color(color.hex),
+    return new PointsMaterial({
+      color: new Color(color.hex),
       sizeAttenuation: false,
       transparent: true,
       size: 5,
@@ -82,7 +106,7 @@ class MaterialManager {
 // the conversion logic; needs cleanup
 let Converter = {
   materialManager: new MaterialManager(),
-  defaultColor: new THREE.Color('#909090'),
+  defaultColor: new Color('#909090'),
 
   // https://stackoverflow.com/a/1568551/3446736
   getSignedVolumeOfTriangle(p1x, p1y, p1z, p2x, p2y, p2z, p3x, p3y, p3z) {
@@ -95,7 +119,7 @@ let Converter = {
     return (1.0 / 6.0) * (-v321 + v231 + v312 - v132 - v213 + v123);
   },
   getMeshVolume(obj) {
-    if (!(obj instanceof THREE.Mesh)) return 0;
+    if (!(obj instanceof Mesh)) return 0;
 
     // TODO: Check for V+F-E = 2 (ie is closed mesh) https://gamedev.stackexchange.com/a/119368
     let buffGeom = obj.geometry;
@@ -125,14 +149,14 @@ let Converter = {
   },
 
   Point(args, cb) {
-    let geometry = new THREE.Geometry();
-    geometry.vertices.push(new THREE.Vector3(...args.obj.value));
+    let geometry = new Geometry();
+    geometry.vertices.push(new Vector3(...args.obj.value));
 
     geometry.vertices.forEach((v, i) => {
       geometry.colors.push(this.defaultColor);
     });
 
-    let point = new THREE.Points(
+    let point = new Points(
       geometry,
       this.materialManager.getPointsMaterial(args.obj.color)
     );
@@ -140,18 +164,18 @@ let Converter = {
   },
 
   Vector(args, cb) {
-    let v = new THREE.Vector3(...args.obj.value);
+    let v = new Vector3(...args.obj.value);
     //if there's an origin in object.properties, render the vector as a line
     if (args.obj.properties) {
       if (args.obj.properties.origin) {
-        origin = new THREE.Vector3(...args.obj.origin);
-        let geometry = new THREE.Geometry();
+        origin = new Vector3(...args.obj.origin);
+        let geometry = new Geometry();
         geometry.vertices.push(v);
         geometry.vertices.push(origin);
         geometry.vertices.forEach((v, i) => {
           geometry.colors.push(this.defaultColor);
         });
-        let line = new THREE.Line(
+        let line = new Line(
           geometry,
           this.materialManager.getLineMaterial(args.obj.color)
         );
@@ -166,37 +190,37 @@ let Converter = {
   Plane(args, cb) {
     //make planeSize a setting in the viewer
     let planeSize = 20;
-    let v1 = new THREE.Vector3(0, 0, 1);
-    let v2 = new THREE.Vector3(...args.obj.Normal.value);
-    let q = new THREE.Quaternion();
+    let v1 = new Vector3(0, 0, 1);
+    let v2 = new Vector3(...args.obj.Normal.value);
+    let q = new Quaternion();
     q.setFromUnitVectors(v1, v2);
-    let geometry = new THREE.PlaneGeometry(planeSize, planeSize);
+    let geometry = new PlaneGeometry(planeSize, planeSize);
 
     geometry.vertices.forEach((v, i) => {
       geometry.colors.push(this.defaultColor);
     });
 
-    let plane = new THREE.Mesh(
+    let plane = new Mesh(
       geometry,
       this.materialManager.getMeshMaterial(args.obj.color)
     );
     plane.geometry.applyMatrix(
-      new THREE.Matrix4().makeRotationFromQuaternion(q)
+      new Matrix4().makeRotationFromQuaternion(q)
     );
     plane.geometry.applyMatrix(
-      new THREE.Matrix4().makeTranslation(...args.obj.Origin.value)
+      new Matrix4().makeTranslation(...args.obj.Origin.value)
     );
     plane.hash = args.obj.hash;
     cb(null, plane);
   },
 
   Line(args, cb) {
-    let geometry = new THREE.Geometry();
+    let geometry = new Geometry();
     geometry.vertices.push(
-      new THREE.Vector3(args.obj.value[0], args.obj.value[1], args.obj.value[2])
+      new Vector3(args.obj.value[0], args.obj.value[1], args.obj.value[2])
     );
     geometry.vertices.push(
-      new THREE.Vector3(args.obj.value[3], args.obj.value[4], args.obj.value[5])
+      new Vector3(args.obj.value[3], args.obj.value[4], args.obj.value[5])
     );
 
     // prepare for potential coloring!
@@ -204,7 +228,7 @@ let Converter = {
       geometry.colors.push(this.defaultColor);
     });
 
-    let line = new THREE.Line(
+    let line = new Line(
       geometry,
       this.materialManager.getLineMaterial(args.obj.color)
     );
@@ -219,11 +243,11 @@ let Converter = {
   Circle(args, cb) {
     let origin = args.obj.center.value;
     let radius = args.obj.radius;
-    let v1 = new THREE.Vector3(0, 0, 1);
-    let v2 = new THREE.Vector3(...args.obj.normal.value);
-    let q = new THREE.Quaternion();
+    let v1 = new Vector3(0, 0, 1);
+    let v2 = new Vector3(...args.obj.normal.value);
+    let q = new Quaternion();
     q.setFromUnitVectors(v1, v2);
-    let curve = new THREE.EllipseCurve(
+    let curve = new EllipseCurve(
       0,
       0,
       radius,
@@ -234,21 +258,21 @@ let Converter = {
       0
     );
     let points = curve.getPoints(50);
-    let geometry = new THREE.Geometry().setFromPoints(points);
+    let geometry = new Geometry().setFromPoints(points);
 
     // prepare for potential coloring!
     geometry.vertices.forEach((v, i) => {
       geometry.colors.push(this.defaultColor);
     });
 
-    let circle = new THREE.Line(
+    let circle = new Line(
       geometry,
       this.materialManager.getLineMaterial(args.obj.color)
     );
     circle.geometry.applyMatrix(
-      new THREE.Matrix4().makeRotationFromQuaternion(q)
+      new Matrix4().makeRotationFromQuaternion(q)
     );
-    circle.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(...origin));
+    circle.geometry.applyMatrix(new Matrix4().makeTranslation(...origin));
     circle.hash = args.obj.hash;
     cb(null, circle);
   },
@@ -257,11 +281,11 @@ let Converter = {
     let radius = args.obj.radius;
     let startAngle = args.obj.startAngle;
     let endAngle = args.obj.endAngle;
-    let v1 = new THREE.Vector3(0, 0, 1);
-    let v2 = new THREE.Vector3(...args.obj.plane.normal.value);
-    let q = new THREE.Quaternion();
+    let v1 = new Vector3(0, 0, 1);
+    let v2 = new Vector3(...args.obj.plane.normal.value);
+    let q = new Quaternion();
     q.setFromUnitVectors(v1, v2);
-    let curve = new THREE.EllipseCurve(
+    let curve = new EllipseCurve(
       0,
       0,
       radius,
@@ -272,20 +296,20 @@ let Converter = {
       0
     );
     let points = curve.getPoints(50);
-    let geometry = new THREE.Geometry().setFromPoints(points);
+    let geometry = new Geometry().setFromPoints(points);
 
     // prepare for potential coloring!
     geometry.vertices.forEach((v, i) => {
       geometry.colors.push(this.defaultColor);
     });
 
-    let arc = new THREE.Line(
+    let arc = new Line(
       geometry,
       this.materialManager.getLineMaterial(args.obj.color)
     );
-    arc.geometry.applyMatrix(new THREE.Matrix4().makeRotationFromQuaternion(q));
+    arc.geometry.applyMatrix(new Matrix4().makeRotationFromQuaternion(q));
     arc.geometry.applyMatrix(
-      new THREE.Matrix4().makeTranslation(...args.obj.plane.origin.value)
+      new Matrix4().makeTranslation(...args.obj.plane.origin.value)
     );
     arc.hash = args.obj.hash;
     cb(null, arc);
@@ -296,11 +320,11 @@ let Converter = {
     let yRadius = args.obj.secondRadius;
     let startAngle = args.obj.startAngle;
     let endAngle = args.obj.endAngle;
-    let v1 = new THREE.Vector3(0, 0, 1);
-    let v2 = new THREE.Vector3(...args.obj.plane.Normal.value);
-    let q = new THREE.Quaternion();
+    let v1 = new Vector3(0, 0, 1);
+    let v2 = new Vector3(...args.obj.plane.Normal.value);
+    let q = new Quaternion();
     q.setFromUnitVectors(v1, v2);
-    let curve = new THREE.EllipseCurve(
+    let curve = new EllipseCurve(
       0,
       0,
       radius,
@@ -311,28 +335,28 @@ let Converter = {
       0
     );
     let points = curve.getPoints(50);
-    let geometry = new THREE.Geometry().setFromPoints(points);
+    let geometry = new Geometry().setFromPoints(points);
 
     // prepare for potential coloring!
     geometry.vertices.forEach((v, i) => {
       geometry.colors.push(this.defaultColor);
     });
 
-    let arc = new THREE.Line(
+    let arc = new Line(
       geometry,
       this.materialManager.getLineMaterial(args.obj.color)
     );
-    arc.geometry.applyMatrix(new THREE.Matrix4().makeRotationFromQuaternion(q));
+    arc.geometry.applyMatrix(new Matrix4().makeRotationFromQuaternion(q));
     arc.geometry.applyMatrix(
-      new THREE.Matrix4().makeTranslation(...args.obj.plane.Origin.value)
+      new Matrix4().makeTranslation(...args.obj.plane.Origin.value)
     );
     arc.hash = args.obj.hash;
     cb(null, arc);
   },
 
   Extrusion(args, cb) {
-    let m = new THREE.Matrix4();
-    let mInverse = new THREE.Matrix4();
+    let m = new Matrix4();
+    let mInverse = new Matrix4();
     let xform = Object.values(args.obj.profileTransformation);
     m.fromArray(xform.slice(0, 16));
     m.transpose();
@@ -348,12 +372,12 @@ let Converter = {
         obj.geometry.applyMatrix(mInverse);
         let values = obj.geometry.vertices;
         for (var i = 0, l = values.length; i < l; ++i) {
-          pts.push(new THREE.Vector2(values[i].x, values[i].y));
+          pts.push(new Vector2(values[i].x, values[i].y));
         }
       }
     );
 
-    let shape = new THREE.Shape(pts);
+    let shape = new Shape(pts);
     for (var i = 1; i < args.obj.profiles.length; i++) {
       let holeProfile = null;
       let holePts = [];
@@ -367,23 +391,23 @@ let Converter = {
 
       holeProfile.geometry.applyMatrix(mInverse);
       holeProfile.geometry.vertices.forEach(function (vertex) {
-        holePts.push(new THREE.Vector2(vertex.x, vertex.y));
+        holePts.push(new Vector2(vertex.x, vertex.y));
       });
-      let holePath = new THREE.Path(holePts);
+      let holePath = new Path(holePts);
       shape.holes.push(holePath);
     }
 
-    let path = new THREE.LineCurve(args.obj.pathStart, args.obj.pathEnd);
-    let extrudePath = new THREE.CurvePath();
+    let path = new LineCurve(args.obj.pathStart, args.obj.pathEnd);
+    let extrudePath = new CurvePath();
     extrudePath.add(path);
     let extrudeSettings = {
       depth: args.obj.length,
       bevelEnabled: false,
     };
-    let geometry = new THREE.ExtrudeBufferGeometry(shape, extrudeSettings);
+    let geometry = new ExtrudeBufferGeometry(shape, extrudeSettings);
 
     geometry.applyMatrix(m);
-    let extrusion = new THREE.Mesh(
+    let extrusion = new Mesh(
       geometry,
       this.materialManager.getMeshMaterial(args.obj.color)
     );
@@ -398,17 +422,17 @@ let Converter = {
     let height = args.obj.ySize.end - args.obj.ySize.start;
     let depth = args.obj.zSize.end - args.obj.zSize.start;
     let origin = args.obj.basePlane.origin.value;
-    let v1 = new THREE.Vector3(0, 0, 1);
-    let v2 = new THREE.Vector3(...args.obj.basePlane.normal.value);
-    let q = new THREE.Quaternion();
+    let v1 = new Vector3(0, 0, 1);
+    let v2 = new Vector3(...args.obj.basePlane.normal.value);
+    let q = new Quaternion();
     q.setFromUnitVectors(v1, v2);
-    let geometry = new THREE.BoxBufferGeometry(width, height, depth);
-    let box = new THREE.Mesh(
+    let geometry = new BoxBufferGeometry(width, height, depth);
+    let box = new Mesh(
       geometry,
       this.materialManager.getMeshMaterial(args.obj.color)
     );
-    box.geometry.applyMatrix(new THREE.Matrix4().makeRotationFromQuaternion(q));
-    box.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(...origin));
+    box.geometry.applyMatrix(new Matrix4().makeRotationFromQuaternion(q));
+    box.geometry.applyMatrix(new Matrix4().makeTranslation(...origin));
     box.geometry.verticesNeedUpdate = true;
 
     box.hash = args.obj.hash;
@@ -436,7 +460,7 @@ let Converter = {
   },
 
   Polyline(args, cb) {
-    let geometry = new THREE.BufferGeometry();
+    let geometry = new BufferGeometry();
 
     if (args.obj.closed)
       args.obj.value.push(
@@ -447,11 +471,11 @@ let Converter = {
 
     geometry.addAttribute(
       'position',
-      new THREE.Float32BufferAttribute(args.obj.value, 3)
+      new Float32BufferAttribute(args.obj.value, 3)
     );
     geometry.computeBoundingSphere();
 
-    let polyline = new THREE.Line(
+    let polyline = new Line(
       geometry,
       this.materialManager.getLineMaterial(args.obj.color)
     );
@@ -487,7 +511,7 @@ let Converter = {
 
   Mesh(args, cb) {
     let obj = args.obj;
-    let geometry = new THREE.BufferGeometry();
+    let geometry = new BufferGeometry();
 
     let vertices = [];
     let indices = [];
@@ -509,12 +533,12 @@ let Converter = {
     geometry.setIndex(indices);
     geometry.addAttribute(
       'position',
-      new THREE.Float32BufferAttribute(obj.vertices, 3)
+      new Float32BufferAttribute(obj.vertices, 3)
     );
     geometry.computeFaceNormals();
     geometry.computeVertexNormals();
 
-    let mesh = new THREE.Mesh(
+    let mesh = new Mesh(
       geometry,
       this.materialManager.getMeshMaterial(args.obj.color)
     );
@@ -546,31 +570,31 @@ let worldXY = {
 };
 
 function planeToPlane(geometry, plane1, plane2) {
-  let qX = new THREE.Quaternion();
-  let qY = new THREE.Quaternion();
-  let qZ = new THREE.Quaternion();
+  let qX = new Quaternion();
+  let qY = new Quaternion();
+  let qZ = new Quaternion();
   // console.log("plane1:", plane1)
   // console.log("plane2:", plane2)
   qX.setFromUnitVectors(
-    new THREE.Vector3(...plane1.xdir.value),
-    new THREE.Vector3(...plane2.xdir.value)
+    new Vector3(...plane1.xdir.value),
+    new Vector3(...plane2.xdir.value)
   );
   qY.setFromUnitVectors(
-    new THREE.Vector3(...plane1.ydir.value),
-    new THREE.Vector3(...plane2.ydir.value)
+    new Vector3(...plane1.ydir.value),
+    new Vector3(...plane2.ydir.value)
   );
   qZ.setFromUnitVectors(
-    new THREE.Vector3(...plane1.normal.value),
-    new THREE.Vector3(...plane2.normal.value)
+    new Vector3(...plane1.normal.value),
+    new Vector3(...plane2.normal.value)
   );
   let translateVector = [
     plane2.origin.value[0] - plane1.origin.value[0],
     plane2.origin.value[1] - plane1.origin.value[1],
     plane2.origin.value[2] - plane1.origin.value[2],
   ];
-  geometry.applyMatrix(new THREE.Matrix4().makeRotationFromQuaternion(qX));
-  // geometry.applyMatrix( new THREE.Matrix4( ).makeRotationFromQuaternion( qY ) )
-  // geometry.applyMatrix( new THREE.Matrix4( ).makeRotationFromQuaternion( qZ ) )
+  geometry.applyMatrix(new Matrix4().makeRotationFromQuaternion(qX));
+  // geometry.applyMatrix( new Matrix4( ).makeRotationFromQuaternion( qY ) )
+  // geometry.applyMatrix( new Matrix4( ).makeRotationFromQuaternion( qZ ) )
   geometry.translate(...translateVector);
 }
 

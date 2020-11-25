@@ -33,9 +33,6 @@
             "allowedCommonJsDependencies": [
               "inputmask",
               "trix"
-            ],
-            "scripts": [
-              "src/lib/components/speckle-renderer/renderer/SpeckleRenderer.js"
             ]
           },
           "configurations": {
@@ -156,9 +153,6 @@
             "inputmask",
             "threejs-orbit-controls",
             "@tweenjs/tween.js"
-          ],
-          "scripts": [
-            "src/lib/components/speckle-renderer/renderer/SpeckleRenderer.js"
           ]
         },
         "test": {

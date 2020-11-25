@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SearchComponent } from './search/search.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoaderComponent } from './loader/loader.component';
 import { TextareaComponent } from './textarea/textarea.component';
@@ -25,6 +26,7 @@ const COMPONENTS_LIST = [
     CommonModule,
     MatIconModule,
     MatInputModule,
+    MatButtonModule,
     MatProgressSpinnerModule
   ]
 })
