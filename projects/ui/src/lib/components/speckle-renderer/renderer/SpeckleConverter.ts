@@ -104,7 +104,7 @@ class MaterialManager {
 }
 
 // the conversion logic; needs cleanup
-let Converter = {
+const Converter = {
   materialManager: new MaterialManager(),
   defaultColor: new Color('#909090'),
 

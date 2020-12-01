@@ -17,8 +17,11 @@ import { RendererPipelineMethod } from './renderer/SpeckleRenderer.model';
 import {
   DesignOptionSize,
   ViewDescriptorBean,
+  ViewMode,
+  RefinedMetadataGroup,
+  ObjectDisplayDescriptor,
+  ViewModeMetadata,
 } from '../../models/renderer.model';
-import { UNIT_TYPE_COLORS } from '../../constants/unit-type-colors.constant';
 
 @Component({
   selector: 'dm-speckle-renderer',
@@ -27,18 +30,22 @@ import { UNIT_TYPE_COLORS } from '../../constants/unit-type-colors.constant';
 })
 export class SpeckleRendererComponent
   implements OnInit, OnDestroy, AfterViewInit {
+
   mode3D = false;
-  @ViewChild('rendererWrapper', { static: true }) wrapper: ElementRef;
-  @Input()
-  renderToImage = false;
-  @Output() imageDataReady = new EventEmitter<string>();
+
   private renderer: SpeckleRenderer;
+
   private localSize: DesignOptionSize;
   private localDataObjects;
   private localImageData: string = null;
   private localDisableControls = false;
   private localViewType: ViewDescriptorBean;
+  private localViewMode: ViewMode;
+  private localViewModeMetadata: ViewModeMetadata;
+  private refinedMetadataGroups: RefinedMetadataGroup[] = null;
+  private displayModeTable: { [key: string]: ObjectDisplayDescriptor } = null;
   private listeners: Array<() => void> = [];
+
   private VIEWER_DEFAULTS = {
     showEdges: false,
     edgesThreshold: 45,
@@ -54,12 +61,16 @@ export class SpeckleRendererComponent
     private readonly ref: ChangeDetectorRef
   ) {}
 
+  @ViewChild('rendererWrapper', { static: true }) wrapper: ElementRef;
+
+  @Output() imageDataReady = new EventEmitter<string>();
+
+  @Input() renderToImage = false;
   @Input()
-  public get viewType(): ViewDescriptorBean {
+  get viewType(): ViewDescriptorBean {
     return this.localViewType;
   }
-
-  public set viewType(value: ViewDescriptorBean) {
+  set viewType(value: ViewDescriptorBean) {
     if (value) {
       const viewWasChanged = this.localViewType && this.localViewType !== value;
       this.localViewType = value;
@@ -73,10 +84,40 @@ export class SpeckleRendererComponent
   }
 
   @Input()
+  get viewModeMetadata(): ViewModeMetadata {
+    return this.localViewModeMetadata;
+  }
+  set viewModeMetadata(value: ViewModeMetadata) {
+    if (value) {
+      const viewWasChanged = this.localViewMode
+        && JSON.stringify(this.localViewModeMetadata) !== JSON.stringify(value);
+      this.localViewModeMetadata = value;
+      if (viewWasChanged) {
+        this.refineViewModeMetadata();
+        this.runDefaultPipeline(true);
+      }
+    }
+  }
+
+  @Input()
+  get viewMode(): ViewMode {
+    return this.localViewMode;
+  }
+  set viewMode(value: ViewMode) {
+    if (value) {
+      const viewWasChanged = this.localViewMode && this.localViewMode !== value;
+      this.localViewMode = value;
+      if (viewWasChanged) {
+        this.refineViewModeMetadata();
+        this.runDefaultPipeline(true);
+      }
+    }
+  }
+
+  @Input()
   get imageData(): string {
     return this.localImageData;
   }
-
   set imageData(value: string) {
     if (value && value !== this.localImageData) {
       this.localImageData = value;
@@ -87,9 +128,6 @@ export class SpeckleRendererComponent
     }
   }
 
-  get dataObjects() {
-    return this.localDataObjects;
-  }
 
   @Input()
   set dataObjects(value) {
@@ -105,12 +143,14 @@ export class SpeckleRendererComponent
       this.runDefaultPipeline();
     }
   }
+  get dataObjects() {
+    return this.localDataObjects;
+  }
 
   @Input()
   get disableControls() {
     return this.localDisableControls;
   }
-
   set disableControls(value) {
     const valueWasChanged =
       this.localDisableControls !== value &&
@@ -125,7 +165,6 @@ export class SpeckleRendererComponent
   get size(): DesignOptionSize {
     return this.localSize;
   }
-
   set size(value: DesignOptionSize) {
     if (value) {
       const sizeWasChanged = this.localSize && this.localSize !== value;
@@ -138,19 +177,23 @@ export class SpeckleRendererComponent
   }
 
   // we need to use method to ensure that `this` is available for pipeline methods
-  getDefaultRenderPipeline(): RendererPipelineMethod[] {
+  getDefaultRenderPipeline(noReload = false): RendererPipelineMethod[] {
     return [
       (renderer) => {
-        if (this.dataObjects) {
+        if (this.dataObjects && !noReload) {
           renderer.loadObjects({ objs: this.dataObjects, zoomExtents: false });
         }
       },
-      (renderer) => renderer.addColorsToColorTable(UNIT_TYPE_COLORS),
-      (renderer) =>
-        renderer.colorByStringProperty({
-          propertyName: 'unit_type',
-          propagateLegend: false,
-        }),
+      (renderer) => {
+        if (this.displayModeTable) {
+          renderer.registerColorAndOpacity(this.displayModeTable);
+        }
+      },
+      (renderer) => {
+        if (this.refinedMetadataGroups) {
+          this.refinedMetadataGroups.forEach(group => renderer.applyColorAndOpacityByStringProperty(group.field));
+        }
+      },
       (renderer, settings = {}) => {
         if (this.viewType && this.viewType.cameraDescriptor) {
           renderer.setCameraByDescriptor(
@@ -196,11 +239,9 @@ export class SpeckleRendererComponent
       {
         size: this.size,
         dataObjects: this.localDataObjects,
-        // @ts-expect-error
         pipeline: this.getDefaultRenderPipeline(),
       }
     );
-    // @ts-expect-error
     this.imageDataReady.emit(data);
     return data;
   }
@@ -220,15 +261,15 @@ export class SpeckleRendererComponent
       return this.convertToImage();
     }
 
+    this.refineViewModeMetadata();
     this.renderer = new SpeckleRenderer(
       { domObject: this.wrapper.nativeElement },
       this.VIEWER_DEFAULTS,
       {
         allowZoom: this.disableControls,
-        selectable: !this.disableControls,
+        selectable: false,
         disableControls: this.disableControls,
         instantPositioning: false,
-        // @ts-expect-error
         pipeline: [
           (renderer) => renderer.animate(),
           ...this.getDefaultRenderPipeline(),
@@ -272,9 +313,8 @@ export class SpeckleRendererComponent
     }
   }
 
-  private runDefaultPipeline() {
-    this.getDefaultRenderPipeline().forEach((cb) =>
-      // @ts-expect-error
+  private runDefaultPipeline(noReload = false) {
+    this.getDefaultRenderPipeline(noReload).forEach((cb) =>
       cb(this.renderer, this.renderer.rendererSettings)
     );
   }
@@ -295,13 +335,13 @@ export class SpeckleRendererComponent
       if (typeof o !== 'object') {
         return;
       }
-      o.properties = o.properties || {};
+      o.properties = o.properties || o.parameters || {};
       o.properties.id = o._id ? o._id : 'no id';
       o.properties.hash = o.hash ? o.hash : 'no hash';
       o.properties.speckle_type = o.type;
       o.properties.unit_type = o.unit_type;
       o.properties.layer_name = 'no layer';
-      o.color = { hex: '#909090', a: 0.65 };
+      o.color = { hex: '#9090FF', a: 0.65 };
     });
   }
 
@@ -311,5 +351,30 @@ export class SpeckleRendererComponent
       this.renderer.destroy();
       this.mode3D = false;
     }
+  }
+
+  private refineViewModeMetadata() {
+    if (!this.viewMode || !this.viewModeMetadata) { return; }
+
+    this.refinedMetadataGroups = Object.keys(this.viewModeMetadata.groups)
+      .map(key => {
+        const filterExpression: string = this.viewModeMetadata.groups[key].filter;
+        const filterAsArray = /^\['([a-z|A-Z|0-9]{1,})'\].*\['([a-z|A-Z|0-9]{1,})'\].*'([a-z, A-Z,0-9]{1,})'/gi.exec(filterExpression);
+        return filterAsArray && {
+          field:  filterAsArray[2],
+          value: filterAsArray[3],
+          modeSelector: key
+        };
+      }).filter(x => !!x);
+
+    const currentMode = this.viewModeMetadata.modes[this.viewMode];
+    const modes = this.refinedMetadataGroups
+      .reduce((acc, descriptor: RefinedMetadataGroup) => {
+        acc[descriptor.value] = currentMode[descriptor.modeSelector];
+        return acc;
+      }, {});
+
+    modes['all else'] = currentMode.other;
+    this.displayModeTable = modes;
   }
 }

@@ -8,7 +8,7 @@
 import * as THREE from 'three';
 
 export default class SelectionBox {
-  constructor(camera, scene, deep) {
+  constructor(camera, scene, deep?) {
     this.startPoint = new THREE.Vector3();
     this.endPoint = new THREE.Vector3();
     this.collection = [];
