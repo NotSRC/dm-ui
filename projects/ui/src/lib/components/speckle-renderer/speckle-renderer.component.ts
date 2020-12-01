@@ -340,7 +340,7 @@ export class SpeckleRendererComponent
       if (typeof o !== 'object') {
         return;
       }
-      o.properties = o.properties || o.parameters || {};
+      o.properties = o.properties || {};
       o.properties.id = o._id ? o._id : 'no id';
       o.properties.hash = o.hash ? o.hash : 'no hash';
       o.properties.speckle_type = o.type;
@@ -364,10 +364,10 @@ export class SpeckleRendererComponent
     this.refinedMetadataGroups = Object.keys(this.viewModeMetadata.groups)
       .map(key => {
         const filterExpression: string = this.viewModeMetadata.groups[key].filter;
-        const filterAsArray = /^\['([a-z|A-Z|0-9]{1,})'\].*\['([a-z|A-Z|0-9]{1,})'\].*'([a-z, A-Z,0-9]{1,})'/gi.exec(filterExpression);
+        const filterAsArray = /^\['([a-z|A-Z|0-9]{1,})'\].*'([a-z, A-Z,0-9]{1,})'/gi.exec(filterExpression);
         return filterAsArray && {
-          field:  filterAsArray[2],
-          value: filterAsArray[3],
+          field:  filterAsArray[1],
+          value: filterAsArray[2],
           modeSelector: key
         };
       }).filter(x => !!x);
