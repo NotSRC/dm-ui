@@ -1,1 +1,18 @@
 <input type="text" dmDecimalMask [min]="0.1" [canBeEmpty]="false">
+<div>
+  <mat-radio-group [(ngModel)]="viewMode" aria-label="Select view mode">
+    <mat-radio-button value="program">Program</mat-radio-button>
+    <mat-radio-button value="building">Building</mat-radio-button>
+  </mat-radio-group>
+</div>
+
+<div class="design-option__content">
+  <dm-speckle-renderer
+    size="big"
+    [dataObjects]="speckleObjects"
+    [viewType]="cameraDscr"
+    [viewModeMetadata]="viewModeMetadata"
+    [viewMode]="viewMode"
+  >
+  </dm-speckle-renderer>
+</div>

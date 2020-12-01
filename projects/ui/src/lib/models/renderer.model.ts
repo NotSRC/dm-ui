@@ -17,3 +17,35 @@ export interface Coordinates3D {
   y: number;
   z: number;
 }
+
+
+export type ViewMode = 'program' | 'building';
+
+export interface RefinedMetadataGroup {
+  field: string;
+  value: string;
+  modeSelector: string;
+}
+
+export interface MetadataGroup {
+  filter: string;
+}
+
+export interface MetadataGroups {
+  [key: string]: MetadataGroup;
+}
+
+export interface ObjectDisplayDescriptor {
+  color: number[];
+  alpha: number;
+}
+
+export interface ViewModeMetadata {
+  groups: MetadataGroups;
+  modes: {
+    [key in ViewMode]: {
+      [key: string]: ObjectDisplayDescriptor
+    }
+  };
+}
+

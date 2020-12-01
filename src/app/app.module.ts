@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { DmComponentsModule, DmDirectivesModule, DmPipesModule } from '../../projects/ui/src/public-api';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     DmDirectivesModule,
     DmPipesModule,
     FormsModule,
+    MatRadioModule,
     ReactiveFormsModule
   ],
   providers: [],
