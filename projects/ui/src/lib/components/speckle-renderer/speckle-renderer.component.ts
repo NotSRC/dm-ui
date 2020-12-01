@@ -22,6 +22,7 @@ import {
   ObjectDisplayDescriptor,
   ViewModeMetadata,
 } from '../../models/renderer.model';
+import { MatButtonToggleChange } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'dm-speckle-renderer',
@@ -250,6 +251,10 @@ export class SpeckleRendererComponent
     if (this.renderer && this.mode3D) {
       this.renderer.zoom(zoomIn ? 0.2 : -0.2);
     }
+  }
+
+  handleViewModeChange(e: MatButtonToggleChange) {
+    this.viewMode = e.value;
   }
 
   ngOnDestroy() {
