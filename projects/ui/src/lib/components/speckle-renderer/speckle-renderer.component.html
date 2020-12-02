@@ -21,4 +21,27 @@
       <mat-icon>remove_circle_outline</mat-icon>
     </button>
   </div>
+
+  <div *ngIf="!disableControls && !renderToImage" class="mode-toggle-button">
+    <mat-button-toggle-group
+      appearance="legacy"
+      name="viewMode"
+      aria-label="View Mode"
+      [value]="viewMode"
+      (change)="handleViewModeChange($event)"
+    >
+      <mat-button-toggle value="program">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 4.40625L15.594 4.59425L5.594 9.09425L5 9.34425V22.0303L5.5 22.3123L15.5 27.8743L16 28.1553L16.5 27.8743L26.5 22.3113L27 22.0312V9.34325L26.406 9.09325L16.406 4.59325L16 4.40625ZM16 6.59425L23.688 10.0312L16 13.8752L8.312 10.0312L16 6.59425ZM7 11.6252L15 15.6252V25.2812L7 20.8442V11.6252ZM25 11.6252V20.8442L17 25.2812V15.6252L25 11.6252Z" fill="#878787"/>
+        </svg>
+      </mat-button-toggle>
+      <mat-button-toggle value="building">
+      <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 15.375L4.375 8.8125L15 2.25L25.625 8.8125L15 15.375Z" fill="black"/>
+        <path opacity="0.25" d="M15 27.75V15.375L25.625 8.8125V21.1875L15 27.75Z" fill="black"/>
+        <path opacity="0.5" d="M15 27.75L4.375 21.1875V8.8125L15 15.375V27.75Z" fill="black"/>
+      </svg>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
 </div>

@@ -192,7 +192,7 @@ export class SpeckleRenderer extends EE {
     this.controls.screenSpacePanning = true;
 
     // this.controls.minPolarAngle = 0;
-    // this.controls.maxPolarAngle = Math.PI / 2;
+    this.controls.maxPolarAngle = Math.PI / 2;
 
     this.edgesGroup.visible = false;
     this.scene.add(this.edgesGroup);

@@ -1,19 +1,19 @@
 export const SAMPLE_METADATA = {
   groups: {
     windows: {
-      filter: "['parameters']['Category'] == 'Windows'"
+      filter: "['Category'] == 'Windows'"
     },
     unit_0B: {
-      filter: "['parameters']['Occupancy'] == 'Studio'"
+      filter: "['Occupancy'] == 'Studio'"
     },
     unit_1B: {
-      filter: "['parameters']['Occupancy'] == '1 Bedroom'"
+      filter: "['Occupancy'] == '1 Bedroom'"
     },
     unit_2B: {
-      filter: "['parameters']['Occupancy'] == '2 Bedroom'"
+      filter: "['Occupancy'] == '2 Bedroom'"
     },
     circulation: {
-      filter: "['parameters']['Occupancy'] == 'Circulation'"
+      filter: "['Occupancy'] == 'Circulation'"
     },
     other: {
       filter: "all else"
@@ -126,7 +126,7 @@ export const SAMPLE_METADATA = {
 export const SAMPLE_RESOURCE_OBJECTS = [
   {
     type: "Polyline",
-    parameters: null,
+    properties: { Foo: 'bar' },
     vertices: [
       609.1661155931652,
       473.67509891744703,
@@ -178,7 +178,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "1 Bedroom" },
+    properties: { Occupancy: "1 Bedroom" },
     vertices: [
       584.1173684775318,
       436.2910233836214,
@@ -288,7 +288,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       564.0158163015368,
       406.425865300556,
@@ -398,7 +398,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       580.7671097815327,
       431.31349703644383,
@@ -508,7 +508,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "1 Bedroom" },
+    properties: { Occupancy: "1 Bedroom" },
     vertices: [
       596.5611840983399,
       427.9153768099649,
@@ -618,7 +618,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       576.4596319223449,
       398.0502187268995,
@@ -728,7 +728,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       593.2109254023408,
       422.93785046278737,
@@ -838,7 +838,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Studio" },
+    properties: { Occupancy: "Studio" },
     vertices: [
       609.0049997191479,
       419.5397302363085,
@@ -948,7 +948,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Studio" },
+    properties: { Occupancy: "Studio" },
     vertices: [
       588.9034475431529,
       389.6745721532431,
@@ -1058,7 +1058,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       605.6547410231487,
       414.56220388913096,
@@ -1168,7 +1168,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "2 Bedroom" },
+    properties: { Occupancy: "2 Bedroom" },
     vertices: [
       546.7859216151077,
       461.41796310459074,
@@ -1278,7 +1278,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Studio" },
+    properties: { Occupancy: "Studio" },
     vertices: [
       526.6843694391126,
       431.55280502152533,
@@ -1388,7 +1388,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       543.4356629191085,
       456.4404367574132,
@@ -1498,7 +1498,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "2 Bedroom" },
+    properties: { Occupancy: "2 Bedroom" },
     vertices: [
       559.2297372359158,
       453.0423165309343,
@@ -1608,7 +1608,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "1 Bedroom" },
+    properties: { Occupancy: "1 Bedroom" },
     vertices: [
       539.1281850599207,
       423.17715844786886,
@@ -1718,7 +1718,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       555.8794785399166,
       448.0647901837567,
@@ -1828,7 +1828,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "2 Bedroom" },
+    properties: { Occupancy: "2 Bedroom" },
     vertices: [
       571.6735528567237,
       444.66666995727786,
@@ -1938,7 +1938,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "1 Bedroom" },
+    properties: { Occupancy: "1 Bedroom" },
     vertices: [
       551.5720006807287,
       414.80151187421245,
@@ -2048,7 +2048,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       568.3232941607246,
       439.6891436101003,
@@ -2158,7 +2158,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "2 Bedroom" },
+    properties: { Occupancy: "2 Bedroom" },
     vertices: [
       584.1173693955498,
       436.291024258353,
@@ -2268,7 +2268,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       564.0158169755247,
       406.4258658127286,
@@ -2378,7 +2378,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       580.7671106588789,
       431.3134978507489,
@@ -2488,7 +2488,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "2 Bedroom" },
+    properties: { Occupancy: "2 Bedroom" },
     vertices: [
       596.5611848652916,
       427.91537778637576,
@@ -2598,7 +2598,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Studio" },
+    properties: { Occupancy: "Studio" },
     vertices: [
       576.4596324452665,
       398.05021934075137,
@@ -2708,7 +2708,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       593.2109261286207,
       422.93785137877165,
@@ -2818,7 +2818,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "2 Bedroom" },
+    properties: { Occupancy: "2 Bedroom" },
     vertices: [
       609.0050003350334,
       419.5397313143985,
@@ -2928,7 +2928,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Studio" },
+    properties: { Occupancy: "Studio" },
     vertices: [
       588.9034479150083,
       389.67457286877413,
@@ -3038,7 +3038,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       605.6547415983625,
       414.5622049067944,
@@ -3148,7 +3148,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Studio" },
+    properties: { Occupancy: "Studio" },
     vertices: [
       546.7859225331256,
       461.41796397932234,
@@ -3258,7 +3258,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Studio" },
+    properties: { Occupancy: "Studio" },
     vertices: [
       526.6843701131005,
       431.55280553369795,
@@ -3368,7 +3368,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       543.4356637964547,
       456.44043757171823,
@@ -3478,7 +3478,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "1 Bedroom" },
+    properties: { Occupancy: "1 Bedroom" },
     vertices: [
       559.2297380028674,
       453.0423175073451,
@@ -3588,7 +3588,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "1 Bedroom" },
+    properties: { Occupancy: "1 Bedroom" },
     vertices: [
       539.1281855828423,
       423.1771590617207,
@@ -3698,7 +3698,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       555.8794792661965,
       448.064791099741,
@@ -3808,7 +3808,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "1 Bedroom" },
+    properties: { Occupancy: "1 Bedroom" },
     vertices: [
       571.6735534726092,
       444.66667103536787,
@@ -3918,7 +3918,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "1 Bedroom" },
+    properties: { Occupancy: "1 Bedroom" },
     vertices: [
       551.5720010525841,
       414.8015125897435,
@@ -4028,7 +4028,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       568.3232947359384,
       439.68914462776377,
@@ -4138,7 +4138,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "2 Bedroom" },
+    properties: { Occupancy: "2 Bedroom" },
     vertices: [
       584.1173693955498,
       436.291024258353,
@@ -4248,7 +4248,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       564.0158169755247,
       406.4258658127286,
@@ -4358,7 +4358,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       580.7671106588789,
       431.3134978507489,
@@ -4468,7 +4468,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "2 Bedroom" },
+    properties: { Occupancy: "2 Bedroom" },
     vertices: [
       596.5611848652916,
       427.91537778637576,
@@ -4578,7 +4578,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "1 Bedroom" },
+    properties: { Occupancy: "1 Bedroom" },
     vertices: [
       576.4596324452665,
       398.05021934075137,
@@ -4688,7 +4688,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       593.2109261286207,
       422.93785137877165,
@@ -4798,7 +4798,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "2 Bedroom" },
+    properties: { Occupancy: "2 Bedroom" },
     vertices: [
       609.0050003350334,
       419.5397313143985,
@@ -4908,7 +4908,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "1 Bedroom" },
+    properties: { Occupancy: "1 Bedroom" },
     vertices: [
       588.9034479150083,
       389.67457286877413,
@@ -5018,7 +5018,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       605.6547415983625,
       414.5622049067944,
@@ -5128,7 +5128,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "2 Bedroom" },
+    properties: { Occupancy: "2 Bedroom" },
     vertices: [
       546.7859225331256,
       461.41796397932234,
@@ -5238,7 +5238,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Studio" },
+    properties: { Occupancy: "Studio" },
     vertices: [
       526.6843701131005,
       431.55280553369795,
@@ -5348,7 +5348,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       543.4356637964547,
       456.44043757171823,
@@ -5458,7 +5458,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "2 Bedroom" },
+    properties: { Occupancy: "2 Bedroom" },
     vertices: [
       559.2297380028674,
       453.0423175073451,
@@ -5568,7 +5568,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Studio" },
+    properties: { Occupancy: "Studio" },
     vertices: [
       539.1281855828423,
       423.1771590617207,
@@ -5678,7 +5678,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       555.8794792661965,
       448.064791099741,
@@ -5788,7 +5788,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "2 Bedroom" },
+    properties: { Occupancy: "2 Bedroom" },
     vertices: [
       571.6735534726092,
       444.66667103536787,
@@ -5898,7 +5898,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Studio" },
+    properties: { Occupancy: "Studio" },
     vertices: [
       551.5720010525841,
       414.8015125897435,
@@ -6008,7 +6008,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       568.3232947359384,
       439.68914462776377,
@@ -6118,7 +6118,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Studio" },
+    properties: { Occupancy: "Studio" },
     vertices: [
       584.1173693955498,
       436.291024258353,
@@ -6228,7 +6228,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       564.0158169755247,
       406.4258658127286,
@@ -6338,7 +6338,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       580.7671106588789,
       431.3134978507489,
@@ -6448,7 +6448,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "1 Bedroom" },
+    properties: { Occupancy: "1 Bedroom" },
     vertices: [
       596.5611848652916,
       427.91537778637576,
@@ -6558,7 +6558,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "1 Bedroom" },
+    properties: { Occupancy: "1 Bedroom" },
     vertices: [
       576.4596324452665,
       398.05021934075137,
@@ -6668,7 +6668,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       593.2109261286207,
       422.93785137877165,
@@ -6778,7 +6778,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "1 Bedroom" },
+    properties: { Occupancy: "1 Bedroom" },
     vertices: [
       609.0050003350334,
       419.5397313143985,
@@ -6888,7 +6888,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "1 Bedroom" },
+    properties: { Occupancy: "1 Bedroom" },
     vertices: [
       588.9034479150083,
       389.67457286877413,
@@ -6998,7 +6998,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       605.6547415983625,
       414.5622049067944,
@@ -7108,7 +7108,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "2 Bedroom" },
+    properties: { Occupancy: "2 Bedroom" },
     vertices: [
       546.7859225331256,
       461.41796397932234,
@@ -7218,7 +7218,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Studio" },
+    properties: { Occupancy: "Studio" },
     vertices: [
       526.6843701131005,
       431.55280553369795,
@@ -7328,7 +7328,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       543.4356637964547,
       456.44043757171823,
@@ -7438,7 +7438,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "2 Bedroom" },
+    properties: { Occupancy: "2 Bedroom" },
     vertices: [
       559.2297380028674,
       453.0423175073451,
@@ -7548,7 +7548,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "1 Bedroom" },
+    properties: { Occupancy: "1 Bedroom" },
     vertices: [
       539.1281855828423,
       423.1771590617207,
@@ -7658,7 +7658,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       555.8794792661965,
       448.064791099741,
@@ -7768,7 +7768,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "2 Bedroom" },
+    properties: { Occupancy: "2 Bedroom" },
     vertices: [
       571.6735534726092,
       444.66667103536787,
@@ -7878,7 +7878,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "1 Bedroom" },
+    properties: { Occupancy: "1 Bedroom" },
     vertices: [
       551.5720010525841,
       414.8015125897435,
@@ -7988,7 +7988,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
   },
   {
     type: "Mesh",
-    parameters: { Occupancy: "Circulation" },
+    properties: { Occupancy: "Circulation" },
     vertices: [
       568.3232947359384,
       439.68914462776377,
