@@ -221,7 +221,9 @@ export class SpeckleRendererComponent
     }
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.viewMode = this.viewMode || 'building';
+  }
 
   ngAfterViewInit() {
     this.initRenderer();
