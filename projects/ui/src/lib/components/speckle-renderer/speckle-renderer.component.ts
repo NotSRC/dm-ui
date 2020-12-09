@@ -95,7 +95,7 @@ export class SpeckleRendererComponent
       this.localViewModeMetadata = value;
       if (viewWasChanged) {
         this.refineViewModeMetadata();
-        this.runDefaultPipeline(true);
+        this.runBasicPipeline(true);
       }
     }
   }
@@ -110,7 +110,7 @@ export class SpeckleRendererComponent
       this.localViewMode = value;
       if (viewWasChanged) {
         this.refineViewModeMetadata();
-        this.runDefaultPipeline(true);
+        this.runBasicPipeline(true);
       }
     }
   }
@@ -178,7 +178,7 @@ export class SpeckleRendererComponent
   }
 
   // we need to use method to ensure that `this` is available for pipeline methods
-  getDefaultRenderPipeline(noReload = false): RendererPipelineMethod[] {
+  getBasicRenderPipeline(noReload = false): RendererPipelineMethod[] {
     return [
       (renderer) => {
         if (this.dataObjects && !noReload) {
@@ -192,9 +192,15 @@ export class SpeckleRendererComponent
       },
       (renderer) => {
         if (this.refinedMetadataGroups) {
-          this.refinedMetadataGroups.forEach(group => renderer.applyColorAndOpacityByStringProperty(group.field));
+          this.refinedMetadataGroups
+            .forEach(group => renderer.applyColorAndOpacityByStringProperty(group.field));
         }
-      },
+      }
+    ];
+  }
+
+  getCameraPipeline(): RendererPipelineMethod[] {
+    return [
       (renderer, settings = {}) => {
         if (this.viewType && this.viewType.cameraDescriptor) {
           renderer.setCameraByDescriptor(
@@ -242,7 +248,7 @@ export class SpeckleRendererComponent
       {
         size: this.size,
         dataObjects: this.localDataObjects,
-        pipeline: this.getDefaultRenderPipeline(),
+        pipeline: [...this.getBasicRenderPipeline(), ...this.getCameraPipeline()],
       }
     );
     this.imageDataReady.emit(data);
@@ -279,7 +285,8 @@ export class SpeckleRendererComponent
         instantPositioning: false,
         pipeline: [
           (renderer) => renderer.animate(),
-          ...this.getDefaultRenderPipeline(),
+          ...this.getBasicRenderPipeline(),
+          ...this.getCameraPipeline()
         ],
       }
     );
@@ -320,8 +327,14 @@ export class SpeckleRendererComponent
     }
   }
 
+  private runBasicPipeline(noReload = false) {
+    this.getBasicRenderPipeline(noReload).forEach((cb) =>
+      cb(this.renderer, this.renderer.rendererSettings)
+    );
+  }
+
   private runDefaultPipeline(noReload = false) {
-    this.getDefaultRenderPipeline(noReload).forEach((cb) =>
+    [...this.getBasicRenderPipeline(noReload), ...this.getCameraPipeline()].forEach((cb) =>
       cb(this.renderer, this.renderer.rendererSettings)
     );
   }
