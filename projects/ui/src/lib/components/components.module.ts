@@ -1,6 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SearchComponent } from './search/search.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,11 +11,10 @@ import { SpeckleRendererComponent } from './speckle-renderer/speckle-renderer.co
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 const COMPONENTS_LIST = [
-  SearchComponent,
   LoaderComponent,
   TextareaComponent,
   AttachFileComponent,
-  SpeckleRendererComponent
+  SpeckleRendererComponent,
 ];
 
 @NgModule({
@@ -29,7 +27,7 @@ const COMPONENTS_LIST = [
     MatInputModule,
     MatButtonModule,
     MatProgressSpinnerModule,
-    MatButtonToggleModule
-  ]
+    MatButtonToggleModule,
+  ],
 })
-export class DmComponentsModule { }
+export class DmComponentsModule {}
