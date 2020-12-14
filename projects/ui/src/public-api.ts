@@ -36,7 +36,6 @@ export * from './lib/file/services/file.service';
  * Export components
  */
 export * from './lib/components/components.module';
-export * from './lib/components/search/search.component';
 export * from './lib/components/speckle-renderer/speckle-renderer.component';
 
 /*
