@@ -23,6 +23,7 @@ import {
   ViewModeMetadata,
 } from '../../models/renderer.model';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
+import merge from 'lodash.merge';
 
 @Component({
   selector: 'dm-speckle-renderer',
@@ -42,10 +43,19 @@ export class SpeckleRendererComponent
   private localDisableControls = false;
   private localViewType: ViewDescriptorBean;
   private localViewMode: ViewMode;
-  private localViewModeMetadata: ViewModeMetadata;
+  private localViewModeMetadata: ViewModeMetadata[];
   private refinedMetadataGroups: RefinedMetadataGroup[] = null;
   private displayModeTable: { [key: string]: ObjectDisplayDescriptor } = null;
   private listeners: Array<() => void> = [];
+
+  private DEFAULT_DISPLAY_DESCRIPTOR: ObjectDisplayDescriptor = {
+    color: [
+      200,
+      200,
+      200
+    ],
+    alpha: 0.5
+  };
 
   private VIEWER_DEFAULTS = {
     showEdges: false,
@@ -85,10 +95,10 @@ export class SpeckleRendererComponent
   }
 
   @Input()
-  get viewModeMetadata(): ViewModeMetadata {
+  get viewModeMetadata(): ViewModeMetadata[] {
     return this.localViewModeMetadata;
   }
-  set viewModeMetadata(value: ViewModeMetadata) {
+  set viewModeMetadata(value: ViewModeMetadata[]) {
     if (value) {
       const viewWasChanged = this.localViewMode
         && JSON.stringify(this.localViewModeMetadata) !== JSON.stringify(value);
@@ -376,25 +386,32 @@ export class SpeckleRendererComponent
   private refineViewModeMetadata() {
     if (!this.viewMode || !this.viewModeMetadata) { return; }
 
-    this.refinedMetadataGroups = Object.keys(this.viewModeMetadata.groups)
-      .map(key => {
-        const filterExpression: string = this.viewModeMetadata.groups[key].filter;
-        const filterAsArray = /^\['([a-z|A-Z|0-9]{1,})'\].*'([a-z, A-Z,0-9]{1,})'/gi.exec(filterExpression);
-        return filterAsArray && {
-          field:  filterAsArray[1],
-          value: filterAsArray[2],
-          modeSelector: key
-        };
-      }).filter(x => !!x);
+    const mergedViewModesMetadata: ViewModeMetadata = merge(...this.viewModeMetadata);
 
-    const currentMode = this.viewModeMetadata.modes[this.viewMode];
+    this.refinedMetadataGroups = Object.keys(mergedViewModesMetadata.groups)
+      .reduce((acc, key) => {
+        const currentGroup = mergedViewModesMetadata.groups[key];
+        const refinedGroup = currentGroup.map(element => {
+          const filterExpression: string = element.filter;
+          const filterAsArray = /^\['([a-z|A-Z|0-9]{1,})'\].*'([a-z, A-Z,0-9]{1,})'/gi.exec(filterExpression);
+          return filterAsArray && {
+            field:  filterAsArray[1],
+            value: filterAsArray[2],
+            modeSelector: key
+          };
+        }).filter(x => !!x);
+        acc.push(...refinedGroup);
+        return acc;
+      }, []);
+
+    const currentMode = mergedViewModesMetadata.modes[this.viewMode];
     const modes = this.refinedMetadataGroups
       .reduce((acc, descriptor: RefinedMetadataGroup) => {
         acc[descriptor.value] = currentMode[descriptor.modeSelector];
         return acc;
       }, {});
 
-    modes['all else'] = currentMode.other;
+    modes['all else'] = currentMode.other || this.DEFAULT_DISPLAY_DESCRIPTOR;
     this.displayModeTable = modes;
   }
 }

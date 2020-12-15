@@ -16,7 +16,7 @@ export class AppComponent {
   viewMode: 'program' | 'building'  = 'building';
   speckleObjects = SAMPLE_RESOURCE_OBJECTS;
   cameraDscr: ViewDescriptorBean = SAMPLE_RESPONSE.building_data.camera;
-  viewModeMetadata: ViewModeMetadata = SAMPLE_METADATA;
+  viewModeMetadata: ViewModeMetadata[] = [SAMPLE_METADATA];
 
   reset() {
     this.form.get('title').disable();
