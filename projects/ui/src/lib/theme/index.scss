@@ -29,6 +29,8 @@ $app-theme: mat-light-theme(
     )
 );
 
+@include angular-material-theme($app-theme);
+
 @import "components/index";
 @import "pages/index";
 @import "layout";
@@ -36,5 +38,3 @@ $app-theme: mat-light-theme(
 @import "helpers";
 @import "typography";
 @import "variables";
-
-@include angular-material-theme($app-theme);
