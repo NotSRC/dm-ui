@@ -1,23 +1,23 @@
 export const SAMPLE_METADATA = {
   groups: {
-    windows: {
+    windows: [{
       filter: "['Category'] == 'Windows'"
-    },
-    unit_0B: {
+    }],
+    unit_0B: [{
       filter: "['Occupancy'] == 'Studio'"
-    },
-    unit_1B: {
+    }],
+    unit_1B: [{
       filter: "['Occupancy'] == '1 Bedroom'"
-    },
-    unit_2B: {
+    }],
+    unit_2B: [{
       filter: "['Occupancy'] == '2 Bedroom'"
-    },
-    circulation: {
+    }],
+    circulation: [{
       filter: "['Occupancy'] == 'Circulation'"
-    },
-    other: {
+    }],
+    other: [{
       filter: "all else"
-    }
+    }]
   },
   modes: {
     building: {
@@ -67,7 +67,7 @@ export const SAMPLE_METADATA = {
           200,
           200
         ],
-        alpha: 0.9
+        alpha: 0.5
       }
     },
     program: {
@@ -117,7 +117,7 @@ export const SAMPLE_METADATA = {
           200,
           200
         ],
-        alpha: 0.1
+        alpha: 0.5
       }
     }
   }
@@ -125,9 +125,12 @@ export const SAMPLE_METADATA = {
 
 export const SAMPLE_RESOURCE_OBJECTS = [
   {
-    type: "Polyline",
-    properties: { Foo: 'bar' },
-    vertices: [
+    "type": "Polyline",
+    "_id": "a600d7dcf4484156bd206f47c6c4f725",
+    "properties": null,
+    "vertices": null,
+    "faces": null,
+    "value": [
       609.1661155931652,
       473.67509891744703,
       0,
@@ -174,7 +177,7 @@ export const SAMPLE_RESOURCE_OBJECTS = [
       516.2361056561349,
       0
     ],
-    faces: null
+    "closed": true
   },
   {
     type: "Mesh",
