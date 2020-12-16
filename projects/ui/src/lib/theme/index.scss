@@ -29,19 +29,11 @@ $app-theme: mat-light-theme(
     )
 );
 
+@include angular-material-theme($app-theme);
+
 @import "components/index";
 @import "pages/index";
 @import "layout";
 @import "mixins";
 @import "helpers";
 @import "variables";
-
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-
-
-@mixin ibuilt-theme-core() {
-  @include angular-material-theme($app-theme);
-  @include ibuilt-button-toggle-theme($app-theme);
-}
