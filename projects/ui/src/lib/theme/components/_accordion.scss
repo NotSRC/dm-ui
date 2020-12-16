@@ -1,0 +1,44 @@
+.mat-expansion-panel {
+  &:not([class*=mat-elevation-z]) {
+    box-shadow: none !important;
+    border-radius: 0;
+  }
+  .mat-expansion-panel-body {
+    padding-bottom: 10px;
+    padding-top: 15px;
+    padding-right: 0;
+  }
+}
+
+.mat-expansion-panel-header {
+  padding-right: 0 !important;
+  padding-left: 20px !important;
+  background: transparent;
+  border-bottom: 1px solid var(--theme-border-color) !important;;
+  border-radius: 0;
+
+  &.mat-expanded {
+    height: 48px !important;
+    background: var(--theme-primary-lighten) !important;
+  }
+
+  &[aria-disabled="true"] {
+    background: transparent !important;
+    border-bottom: none;
+    padding-left: 47px !important;
+  }
+
+  .mat-expansion-indicator {
+    margin-right: 15px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:after {
+      border-width: 0 2px 2px 0;
+      padding: 5px;
+      position: relative;
+      top: -4px;
+    }
+  }
+}

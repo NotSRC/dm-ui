@@ -1,0 +1,26 @@
+.mat-button-toggle {
+  border: 1px solid var(--theme-border-color) !important;
+  margin-left: -1px;
+  position: relative;
+  z-index: 0;
+}
+
+.mat-button-toggle-checked {
+
+  border-color: var(--theme-black) !important;
+  z-index: 1;
+
+  &.mat-button-toggle-appearance-standard {
+    background-color: var(--theme-primary);
+    color: var(--theme-black);
+  }
+}
+
+.mat-button-toggle-group {
+  border: none !important;
+  overflow: visible !important;
+}
+
+.mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+  line-height: 36px;
+}

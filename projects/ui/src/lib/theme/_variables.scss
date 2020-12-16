@@ -1,0 +1,57 @@
+@include mat-core();
+
+$primary: mat-color($app-primary);
+$success: mat-color($app-success);
+$accent: mat-color($app-accent);
+$error: mat-color($app-error);
+$warn: mat-color($app-warn);
+
+
+body {
+  --theme-primary: #{$primary};
+  --theme-success: #{$success};
+  --theme-accent: #{$accent};
+  --theme-error: #{$error};
+  --theme-warning: #{$warn};
+
+  /**
+   * Lighten colors
+   */
+  --theme-primary-lighten: #{mat-color($app-primary, 100)};
+  --theme-success-lighten: #{mat-color($app-success, 100)};
+  --theme-accent-lighten: #{mat-color($app-accent, 100)};
+  --theme-error-lighten: #{mat-color($app-error, 100)};
+  --theme-warning-lighten: #{mat-color($app-warn, 100)};
+
+  /**
+   * Darken colors
+   */
+  --theme-primary-darken: #{mat-color($app-primary, 900)};
+  --theme-success-darken: #{mat-color($app-success, 900)};
+  --theme-accent-darken: #{mat-color($app-accent, 900)};
+  --theme-error-darken: #{mat-color($app-error, 900)};
+  --theme-warning-darken: #{mat-color($app-warn, 900)};
+
+  /**
+   * Contrast colors
+   */
+  --theme-white: #fff;
+  --theme-black: #000;
+  --theme-blueprint: #08538B;
+  --theme-steelblue: #204B5C;
+
+  /**
+   * Text colors
+   */
+  --text-secondary: rgba(0, 0, 0, 0.6);
+
+  /**
+   * Background colors
+   */
+  --light-background-color: #F1F1F1;
+
+
+  --theme-border-color: rgba(0, 0, 0, 0.12);
+  --theme-control-border-color: rgba(0, 0, 0, 0.42);
+}
+
