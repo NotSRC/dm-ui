@@ -32,7 +32,7 @@ export interface MetadataGroup {
 }
 
 export interface MetadataGroups {
-  [key: string]: MetadataGroup;
+  [key: string]: MetadataGroup[];
 }
 
 export interface ObjectDisplayDescriptor {
