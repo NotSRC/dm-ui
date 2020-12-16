@@ -1,0 +1,49 @@
+.fc-header-toolbar {
+  .fc-toolbar-chunk:first-child {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.fc .fc-button {
+  line-height: 36px !important;
+  padding: 0 12px !important;
+  border-radius: 0 !important;
+  color: var(--text-secondary) !important;
+  background: var(--theme-white) !important;
+  border-color: var(--theme-border-color) !important;
+  z-index: 0 !important;
+
+  &:hover {
+    background-color: var(--theme-primary-lighten) !important;
+  }
+
+  &:active {
+    background-color: var(--theme-primary) !important;
+    color: var(--theme-black) !important;
+  }
+
+  &:focus {
+    box-shadow: none !important;
+  }
+
+  &.fc-button-active {
+    background: var(--theme-primary) !important;
+    color: var(--theme-black) !important;
+    border-color: var(--theme-black) !important;
+    z-index: 1 !important;
+  }
+
+  &:disabled {
+    background: var(--light-background-color) !important;
+  }
+}
+
+.fc .fc-daygrid-body {
+  display: flex;
+  height: 100%;
+
+  .fc-scrollgrid-sync-table {
+    height: 100% !important;
+  }
+}

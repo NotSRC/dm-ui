@@ -1,0 +1,14 @@
+.auth-container {
+  background: var(--theme-primary);
+  mat-card {
+    display: block;
+    width: 410px;
+    padding: 40px;
+  }
+
+  dm-logo {
+    display: block;
+    max-width: 120px;
+    margin: 0 auto;
+  }
+}

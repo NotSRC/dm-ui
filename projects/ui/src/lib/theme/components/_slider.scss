@@ -1,0 +1,50 @@
+.ng5-slider {
+  &.animate {
+    .ng5-slider-pointer {
+      transition: all linear .1s;
+    }
+    .ng5-slider-bubble {
+      transition: all linear .15s;
+    }
+  }
+  .ng5-slider-pointer {
+    background-color: var(--theme-primary) !important;
+    width: 11px !important;
+    height: 11px !important;
+    top: -4px !important;
+    outline: none !important;
+
+    &:after {
+      display: none;
+    }
+  }
+
+  .ng5-slider-bar-wrapper {
+    height: auto;
+    padding: 0;
+    margin: 0;
+  }
+
+  .ng5-slider-bar {
+    background: var(--theme-primary-lighten) !important;
+  }
+
+  .ng5-slider-selection {
+    background: var(--theme-primary) !important;
+  }
+
+
+  .ng5-slider-bar {
+    height: 3px !important;
+  }
+
+  &[disabled] {
+    .ng5-slider-selection {
+      background: var(--theme-primary-lighten) !important;
+    }
+
+    .ng5-slider-pointer {
+      background: var(--theme-primary-lighten) !important;
+    }
+  }
+}
