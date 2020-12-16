@@ -1,6 +1,6 @@
 {
   "name": "dm-ui",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "private": true,
   "main": "dist/ui/bundles/ui.umd.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "start": "ng serve --port=4300",
     "build": "ng build",
     "build:lib": "ng build ui",
-    "build-lib-styles": "sass './projects/ui/src/lib/theme/index.scss' './dist/ui/styles/ibuild.css'",
+    "build-lib-styles": "sass './projects/ui/src/lib/theme/index.scss' './dist/ui/styles/ibuilt.css'",
     "prepare": "npm run build:lib && npm run build-lib-styles",
     "test": "ng test",
     "lint": "ng lint",
