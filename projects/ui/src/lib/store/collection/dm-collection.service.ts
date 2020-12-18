@@ -12,15 +12,24 @@ import { BaseEntityModel } from '../models/base-entity.model';
 export class DmCollectionService<
   T extends BaseEntityModel
 > extends EntityCollectionServiceBase<T> {
-  public pagination$: Observable<Pagination> = this.store.select(
-    createSelector(this.selectors.selectCollection, (collection: any) => {
+  private paginationSelector = createSelector(
+    this.selectors.selectCollection,
+    (collection: any) => {
       return collection.pagination;
-    })
+    }
+  );
+  public pagination$: Observable<Pagination> = this.store.select(
+    this.paginationSelector
   );
 
   getFromCacheById(id: string) {
     return this.entities$.pipe(
       map((res) => res?.find((entity) => entity._id === id))
     );
+  }
+
+  clearCache() {
+    this.paginationSelector.setResult(null);
+    super.clearCache();
   }
 }
