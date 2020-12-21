@@ -29,7 +29,12 @@ export class DmCollectionService<
   }
 
   clearCache() {
-    this.paginationSelector.clearResult();
+    this.paginationSelector.setResult({
+      limit: null,
+      page: null,
+      pages: null,
+      total: null,
+    });
     super.clearCache();
   }
 }

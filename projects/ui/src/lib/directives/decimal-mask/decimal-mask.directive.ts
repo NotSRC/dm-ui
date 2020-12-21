@@ -137,9 +137,7 @@ export class DecimalMaskDirective
   writeValue(value: string): void {
     this.value = value || '';
     this.renderer2.setValue(this.el.nativeElement, value);
-    if (!!value) {
-      this.inputMasked.setValue(value);
-    }
+    this.inputMasked.setValue(value || '');
   }
 
   changeValue(value: number) {
