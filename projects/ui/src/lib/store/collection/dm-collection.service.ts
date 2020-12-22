@@ -12,9 +12,11 @@ import { BaseEntityModel } from '../models/base-entity.model';
 export class DmCollectionService<
   T extends BaseEntityModel
 > extends EntityCollectionServiceBase<T> {
+  private pagination: Pagination;
   private paginationSelector = createSelector(
     this.selectors.selectCollection,
     (collection: any) => {
+      this.pagination = collection.pagination;
       return collection.pagination;
     }
   );
@@ -29,8 +31,10 @@ export class DmCollectionService<
   }
 
   clearCache() {
-    this.paginationSelector.setResult({});
-    this.paginationSelector.release();
+    delete this.pagination.page;
+    delete this.pagination.pages;
+    delete this.pagination.limit;
+    delete this.pagination.total;
     super.clearCache();
   }
 }
