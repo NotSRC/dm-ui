@@ -14,7 +14,6 @@ export class DmCollectionService<
   private pagination = new BehaviorSubject<Pagination>({});
   private paginationSelector = this.store.select(
     createSelector(this.selectors.selectCollection, (collection: any) => {
-      this.pagination.next(collection.pagination);
       return collection.pagination as Pagination;
     })
   );
