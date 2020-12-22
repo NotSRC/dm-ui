@@ -30,6 +30,7 @@ export class DmCollectionService<
 
   clearCache() {
     this.paginationSelector.clearResult();
+    this.paginationSelector.release();
     super.clearCache();
   }
 }
