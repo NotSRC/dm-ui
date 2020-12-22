@@ -1,16 +1,13 @@
-import { Injectable } from '@angular/core';
 import { EntityCollectionServiceBase } from '@ngrx/data';
 import { BehaviorSubject } from 'rxjs';
 import { createSelector } from '@ngrx/store';
 import { Pagination } from '../models/pagination.model';
 import { map } from 'rxjs/operators';
 import { BaseEntityModel } from '../models/base-entity.model';
-import { UntilDestroy } from '@ngneat/until-destroy';
+import { EntityCollectionServiceElementsFactory } from '@ngrx/data/src/entity-services/entity-collection-service-elements-factory';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 @UntilDestroy()
-@Injectable({
-  providedIn: 'root',
-})
 export class DmCollectionService<
   T extends BaseEntityModel
 > extends EntityCollectionServiceBase<T> {
@@ -22,6 +19,16 @@ export class DmCollectionService<
     })
   );
   public pagination$ = this.pagination.asObservable();
+
+  constructor(
+    entityName: string,
+    serviceElementsFactory: EntityCollectionServiceElementsFactory
+  ) {
+    super(entityName, serviceElementsFactory);
+    this.paginationSelector.pipe(untilDestroyed(this)).subscribe((val) => {
+      this.pagination.next(val);
+    });
+  }
 
   getFromCacheById(id: string) {
     return this.entities$.pipe(
