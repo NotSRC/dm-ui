@@ -292,7 +292,7 @@ export class SpeckleRendererComponent
         allowZoom: this.disableControls,
         selectable: false,
         disableControls: this.disableControls,
-        instantPositioning: false,
+        instantPositioning: true,
         pipeline: [
           (renderer) => renderer.animate(),
           ...this.getBasicRenderPipeline(),
