@@ -42,7 +42,7 @@ export class SpeckleRendererComponent
   private localImageData: string = null;
   private localDisableControls = false;
   private localViewType: ViewDescriptorBean;
-  private localViewMode: ViewMode;
+  private localViewMode: ViewMode = 'building';
   private localViewModeMetadata: ViewModeMetadata[];
   private refinedMetadataGroups: RefinedMetadataGroup[] = null;
   private displayModeTable: { [key: string]: ObjectDisplayDescriptor } = null;
@@ -85,10 +85,7 @@ export class SpeckleRendererComponent
     if (value) {
       const viewWasChanged = this.localViewType && this.localViewType !== value;
       this.localViewType = value;
-
-      if (viewWasChanged && this.renderToImage) {
-        this.reInitRenderer();
-      } else if (this.mode3D) {
+      if (viewWasChanged && !this.renderToImage) {
         this.setCamera();
       }
     }
@@ -105,7 +102,9 @@ export class SpeckleRendererComponent
       this.localViewModeMetadata = value;
       if (viewWasChanged) {
         this.refineViewModeMetadata();
-        this.runBasicPipeline(true);
+        if (!this.renderToImage) {
+          this.runBasicPipeline(true);
+        }
       }
     }
   }
@@ -118,7 +117,7 @@ export class SpeckleRendererComponent
     if (value) {
       const viewWasChanged = this.localViewMode && this.localViewMode !== value;
       this.localViewMode = value;
-      if (viewWasChanged) {
+      if (viewWasChanged && !this.renderToImage) {
         this.refineViewModeMetadata();
         this.runBasicPipeline(true);
       }
@@ -238,7 +237,6 @@ export class SpeckleRendererComponent
   }
 
   ngOnInit() {
-    this.viewMode = this.viewMode || 'building';
   }
 
   ngAfterViewInit() {
