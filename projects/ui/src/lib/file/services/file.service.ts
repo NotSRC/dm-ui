@@ -2,20 +2,16 @@ import { Injectable } from '@angular/core';
 import { FileApiService } from './file-api.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FileService {
+  constructor(private fileApiService: FileApiService) {}
 
-  constructor(
-    private fileApiService: FileApiService
-  ) {
-  }
-
-  storeImageDate(fileId: string, imageData: string) {
-    return this.fileApiService.post('v1/image',
-      {imageData},
-      {params: {fileId}}
-    );
+  uploadBase64Image(fileId: string, base64Image: string) {
+    return this.fileApiService.post('v1/files/base64-upload', {
+      base64Image,
+      fileId,
+    });
   }
 
   uploadOne(form: FormData, options) {
