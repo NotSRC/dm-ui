@@ -32,7 +32,6 @@ import merge from 'lodash.merge';
 })
 export class SpeckleRendererComponent
   implements OnInit, OnDestroy, AfterViewInit {
-
   mode3D = false;
 
   private renderer: SpeckleRenderer;
@@ -49,12 +48,8 @@ export class SpeckleRendererComponent
   private listeners: Array<() => void> = [];
 
   private DEFAULT_DISPLAY_DESCRIPTOR: ObjectDisplayDescriptor = {
-    color: [
-      200,
-      200,
-      200
-    ],
-    alpha: 0.5
+    color: [200, 200, 200],
+    alpha: 0.5,
   };
 
   private VIEWER_DEFAULTS = {
@@ -97,8 +92,9 @@ export class SpeckleRendererComponent
   }
   set viewModeMetadata(value: ViewModeMetadata[]) {
     if (value) {
-      const viewWasChanged = this.localViewMode
-        && JSON.stringify(this.localViewModeMetadata) !== JSON.stringify(value);
+      const viewWasChanged =
+        this.localViewMode &&
+        JSON.stringify(this.localViewModeMetadata) !== JSON.stringify(value);
       this.localViewModeMetadata = value;
       if (viewWasChanged) {
         this.refineViewModeMetadata();
@@ -137,7 +133,6 @@ export class SpeckleRendererComponent
       }
     }
   }
-
 
   @Input()
   set dataObjects(value) {
@@ -201,10 +196,11 @@ export class SpeckleRendererComponent
       },
       (renderer) => {
         if (this.refinedMetadataGroups) {
-          this.refinedMetadataGroups
-            .forEach(group => renderer.applyColorAndOpacityByStringProperty(group.field));
+          this.refinedMetadataGroups.forEach((group) =>
+            renderer.applyColorAndOpacityByStringProperty(group.field)
+          );
         }
-      }
+      },
     ];
   }
 
@@ -236,8 +232,7 @@ export class SpeckleRendererComponent
     }
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
     this.initRenderer();
@@ -256,7 +251,10 @@ export class SpeckleRendererComponent
       {
         size: this.size,
         dataObjects: this.localDataObjects,
-        pipeline: [...this.getBasicRenderPipeline(), ...this.getCameraPipeline()],
+        pipeline: [
+          ...this.getBasicRenderPipeline(),
+          ...this.getCameraPipeline(),
+        ],
       }
     );
     this.imageDataReady.emit(data);
@@ -294,7 +292,7 @@ export class SpeckleRendererComponent
         pipeline: [
           (renderer) => renderer.animate(),
           ...this.getBasicRenderPipeline(),
-          ...this.getCameraPipeline()
+          ...this.getCameraPipeline(),
         ],
       }
     );
@@ -337,14 +335,15 @@ export class SpeckleRendererComponent
 
   private runBasicPipeline(noReload = false) {
     this.getBasicRenderPipeline(noReload).forEach((cb) =>
-      cb(this.renderer, this.renderer.rendererSettings)
+      cb(this.renderer, this.renderer?.rendererSettings)
     );
   }
 
   private runDefaultPipeline(noReload = false) {
-    [...this.getBasicRenderPipeline(noReload), ...this.getCameraPipeline()].forEach((cb) =>
-      cb(this.renderer, this.renderer.rendererSettings)
-    );
+    [
+      ...this.getBasicRenderPipeline(noReload),
+      ...this.getCameraPipeline(),
+    ].forEach((cb) => cb(this.renderer, this.renderer.rendererSettings));
   }
 
   private setCamera(delay = 600) {
@@ -382,32 +381,45 @@ export class SpeckleRendererComponent
   }
 
   private refineViewModeMetadata() {
-    if (!this.viewMode || !this.viewModeMetadata) { return; }
+    if (!this.viewMode || !this.viewModeMetadata) {
+      return;
+    }
 
-    const mergedViewModesMetadata: ViewModeMetadata = merge(...this.viewModeMetadata);
+    const mergedViewModesMetadata: ViewModeMetadata = merge(
+      ...this.viewModeMetadata
+    );
 
-    this.refinedMetadataGroups = Object.keys(mergedViewModesMetadata.groups)
-      .reduce((acc, key) => {
-        const currentGroup = mergedViewModesMetadata.groups[key];
-        const refinedGroup = currentGroup.map(element => {
+    this.refinedMetadataGroups = Object.keys(
+      mergedViewModesMetadata.groups
+    ).reduce((acc, key) => {
+      const currentGroup = mergedViewModesMetadata.groups[key];
+      const refinedGroup = currentGroup
+        .map((element) => {
           const filterExpression: string = element.filter;
-          const filterAsArray = /^\['([a-z|A-Z|0-9]{1,})'\].*'([a-z, A-Z,0-9]{1,})'/gi.exec(filterExpression);
-          return filterAsArray && {
-            field:  filterAsArray[1],
-            value: filterAsArray[2],
-            modeSelector: key
-          };
-        }).filter(x => !!x);
-        acc.push(...refinedGroup);
-        return acc;
-      }, []);
+          const filterAsArray = /^\['([a-z|A-Z|0-9]{1,})'\].*'([a-z, A-Z,0-9]{1,})'/gi.exec(
+            filterExpression
+          );
+          return (
+            filterAsArray && {
+              field: filterAsArray[1],
+              value: filterAsArray[2],
+              modeSelector: key,
+            }
+          );
+        })
+        .filter((x) => !!x);
+      acc.push(...refinedGroup);
+      return acc;
+    }, []);
 
     const currentMode = mergedViewModesMetadata.modes[this.viewMode];
-    const modes = this.refinedMetadataGroups
-      .reduce((acc, descriptor: RefinedMetadataGroup) => {
+    const modes = this.refinedMetadataGroups.reduce(
+      (acc, descriptor: RefinedMetadataGroup) => {
         acc[descriptor.value] = currentMode[descriptor.modeSelector];
         return acc;
-      }, {});
+      },
+      {}
+    );
 
     modes['all else'] = currentMode.other || this.DEFAULT_DISPLAY_DESCRIPTOR;
     this.displayModeTable = modes;
