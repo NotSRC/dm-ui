@@ -191,13 +191,13 @@ export class SpeckleRendererComponent
       },
       (renderer) => {
         if (this.displayModeTable) {
-          renderer.registerColorAndOpacity(this.displayModeTable);
+          renderer?.registerColorAndOpacity(this.displayModeTable);
         }
       },
       (renderer) => {
         if (this.refinedMetadataGroups) {
           this.refinedMetadataGroups.forEach((group) =>
-            renderer.applyColorAndOpacityByStringProperty(group.field)
+            renderer?.applyColorAndOpacityByStringProperty(group.field)
           );
         }
       },
@@ -334,9 +334,11 @@ export class SpeckleRendererComponent
   }
 
   private runBasicPipeline(noReload = false) {
-    this.getBasicRenderPipeline(noReload).forEach((cb) =>
-      cb(this.renderer, this.renderer?.rendererSettings)
-    );
+    if (this.renderer) {
+      this.getBasicRenderPipeline(noReload).forEach((cb) =>
+        cb(this.renderer, this.renderer.rendererSettings)
+      );
+    }
   }
 
   private runDefaultPipeline(noReload = false) {
