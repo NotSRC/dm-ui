@@ -25,6 +25,7 @@ export class IntegerMaskDirective implements ControlValueAccessor, OnChanges {
   @Input() max: number = null;
   @Input() suffix: string = null;
   @Input() prefix: string = null;
+  @Input() separator: string = '';
 
   value: number | string;
   private inputMasked: Inputmask;
@@ -37,6 +38,7 @@ export class IntegerMaskDirective implements ControlValueAccessor, OnChanges {
       alias: 'integer',
       min: this.min as any,
       max: this.max as any,
+      groupSeparator: this.separator || '',
       rightAlign: false,
       unmaskAsNumber: false,
       showMaskOnHover: false,

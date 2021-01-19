@@ -29,6 +29,7 @@ export class DecimalMaskDirective
   @Input() prefix: string = null;
   @Input() digits: number = 2;
   @Input() canBeEmpty: boolean = true;
+  @Input() separator: string = '';
 
   value: number | string;
   private inputMasked: Inputmask;
@@ -42,6 +43,7 @@ export class DecimalMaskDirective
       min: this.min as any,
       max: this.max as any,
       digits: this.digits as any,
+      groupSeparator: this.separator || '',
       rightAlign: false,
       autoUnmask: true,
       unmaskAsNumber: true,

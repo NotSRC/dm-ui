@@ -1,7 +1,14 @@
-import { ViewDescriptorBean, ViewModeMetadata } from './../../projects/ui/src/lib/models/renderer.model';
+import {
+  ViewDescriptorBean,
+  ViewModeMetadata,
+} from './../../projects/ui/src/lib/models/renderer.model';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { SAMPLE_RESOURCE_OBJECTS, SAMPLE_RESPONSE, SAMPLE_METADATA } from 'src/mocks/speckle-objects.mock';
+import {
+  SAMPLE_RESOURCE_OBJECTS,
+  SAMPLE_RESPONSE,
+  SAMPLE_METADATA,
+} from 'src/mocks/speckle-objects.mock';
 
 @Component({
   selector: 'app-root',
@@ -11,9 +18,10 @@ import { SAMPLE_RESOURCE_OBJECTS, SAMPLE_RESPONSE, SAMPLE_METADATA } from 'src/m
 export class AppComponent {
   title = 'dm-ui';
   form = new FormGroup({
+    number: new FormControl(0),
     title: new FormControl('<b>ba</b>', [Validators.required]),
   });
-  viewMode: 'program' | 'building'  = 'building';
+  viewMode: 'program' | 'building' = 'building';
   speckleObjects = SAMPLE_RESOURCE_OBJECTS;
   cameraDscr: ViewDescriptorBean = SAMPLE_RESPONSE.building_data.camera;
   viewModeMetadata: ViewModeMetadata[] = [SAMPLE_METADATA];
