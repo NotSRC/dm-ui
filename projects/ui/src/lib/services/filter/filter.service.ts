@@ -150,14 +150,17 @@ export abstract class FilterService {
 
   setFiltersFromPlain(plain: filtersPlainType, filterSrc = this.filters) {
     Object.keys(plain || {}).forEach((key) => {
-      if (Object.prototype.hasOwnProperty.call(filterSrc, key)) {
-        filterSrc[key].search = plain[key].search;
-        if (plain[key].children) {
-          this.setFiltersFromPlain(
-            plain[key].children,
-            filterSrc[key].children
-          );
-        }
+      if (!Object.prototype.hasOwnProperty.call(filterSrc, key)) {
+        filterSrc[key] = new FilterInput({
+          field: plain[key].field,
+          condition: plain[key].condition,
+          operator: plain[key].operator,
+        });
+      }
+
+      filterSrc[key].search = plain[key].search;
+      if (plain[key].children) {
+        this.setFiltersFromPlain(plain[key].children, filterSrc[key].children);
       }
     });
   }
@@ -168,7 +171,7 @@ export abstract class FilterService {
       if (filter.children) {
         acc[key] = {
           operator: filter.operator,
-          children: this.getFiltersArray(filter.children),
+          children: TransformFilterToPlain(filter.children),
         };
       } else {
         acc[key] = GetFilterPlain(filter);
