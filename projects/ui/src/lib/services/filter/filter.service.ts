@@ -170,6 +170,8 @@ export abstract class FilterService {
       const filter = filters[key];
       if (filter.children) {
         acc[key] = {
+          field: filter.field,
+          search: filter.search,
           operator: filter.operator,
           children: TransformFilterToPlain(filter.children),
         };
