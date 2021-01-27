@@ -152,9 +152,9 @@ export abstract class FilterService {
     Object.keys(plain || {}).forEach((key) => {
       if (!Object.prototype.hasOwnProperty.call(filterSrc, key)) {
         filterSrc[key] = new FilterInput({
-          field: plain[key].field,
           condition: plain[key].condition,
           operator: plain[key].operator,
+          field: plain[key].field,
         });
       }
 

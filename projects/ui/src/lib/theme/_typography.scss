@@ -59,6 +59,18 @@ body h6 {
   color: var(--theme-primary)
 }
 
+.text--small {
+  font-size: 12px;
+}
+
+.text--normal {
+  font-size: 14px;
+}
+
+.text--big {
+  font-size: 16px;
+}
+
 
 a.disabled {
   color: var(--text-secondary) !important;
