@@ -14,6 +14,7 @@ export * from './lib/pipes/cut-number/cut-number.pipe';
 export * from './lib/directives/directives.module';
 export * from './lib/directives/decimal-mask/decimal-mask.directive';
 export * from './lib/directives/integer-mask/integer-mask.directive';
+export * from './lib/directives/is-link-active/is-link-active.directive';
 export * from './lib/directives/mask/mask.directive';
 
 /**

@@ -5,6 +5,7 @@ import { DecimalMaskDirective } from './decimal-mask/decimal-mask.directive';
 import { IntegerMaskDirective } from './integer-mask/integer-mask.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DragAndDropUploadDirective } from './drag-and-drop-upload/drag-and-drop-upload.directive';
+import { IsLinkActiveDirective } from './is-link-active/is-link-active.directive';
 
 @NgModule({
   declarations: [
@@ -12,12 +13,14 @@ import { DragAndDropUploadDirective } from './drag-and-drop-upload/drag-and-drop
     IntegerMaskDirective,
     DecimalMaskDirective,
     DragAndDropUploadDirective,
+    IsLinkActiveDirective,
   ],
   exports: [
     MaskDirective,
     IntegerMaskDirective,
     DecimalMaskDirective,
-    DragAndDropUploadDirective
+    DragAndDropUploadDirective,
+    IsLinkActiveDirective,
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
 })
