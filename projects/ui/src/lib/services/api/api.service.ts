@@ -1,7 +1,5 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
 type httpOptions = {
   headers?:
@@ -31,6 +29,10 @@ export abstract class ApiService {
 
   post(url: string, data: any, options?: httpOptions): Observable<any> {
     return this.http.post(`${this.apiUrl}/${url}`, data, options);
+  }
+
+  put(url: string, data: any, options?: httpOptions): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${url}`, data, options);
   }
 
   patch(url: string, data: any, options: httpOptions): Observable<any> {
