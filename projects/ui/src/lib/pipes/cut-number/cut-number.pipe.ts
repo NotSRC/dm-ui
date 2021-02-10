@@ -1,22 +1,37 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 
 @Pipe({
-  name: 'cutNumber'
+  name: 'cutNumber',
 })
 export class CutNumberPipe implements PipeTransform {
+  constructor(private decimalPipe: DecimalPipe) {}
 
-  transform(value: number|string, ...args: unknown[]): string {
+  transform(
+    value: number,
+    start: 'k' | 'm' = 'k',
+    digitsInfo?: string,
+    locale?: string
+  ): string {
     if (typeof value === 'string') {
       value = Number(value);
     }
-    if (value > 999999) {
-      return `${(value / 1000000).toFixed(2)} m`;
+
+    if (value >= 1000000) {
+      return `${this.decimalPipe.transform(
+        value / 1000000,
+        digitsInfo,
+        locale
+      )} m`;
     }
-    if (value > 999) {
-      return `${(value / 1000).toFixed(2)} k`;
+    if (value >= 1000 && start === 'k') {
+      return `${this.decimalPipe.transform(
+        value / 1000,
+        digitsInfo,
+        locale
+      )} k`;
     }
 
-    return `${Math.round((value))}`;
+    return this.decimalPipe.transform(Math.round(value), digitsInfo, locale);
   }
-
 }
