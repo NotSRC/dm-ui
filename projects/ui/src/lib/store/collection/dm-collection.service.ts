@@ -37,6 +37,7 @@ export class DmCollectionService<
 
   getFromCacheOrLoad(id: string) {
     return this.getFromCacheById(id).pipe(
+      take(1),
       mergeMap((entity) => (entity ? of(entity) : this.getByKey(id)))
     );
   }
