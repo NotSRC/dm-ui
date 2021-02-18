@@ -1,8 +1,8 @@
 import { EntityCollectionServiceBase } from '@ngrx/data';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { createSelector } from '@ngrx/store';
 import { Pagination } from '../models/pagination.model';
-import { map } from 'rxjs/operators';
+import { map, mergeMap, take } from 'rxjs/operators';
 import { BaseEntityModel } from '../models/base-entity.model';
 import { EntityCollectionServiceElementsFactory } from '@ngrx/data/src/entity-services/entity-collection-service-elements-factory';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -32,6 +32,12 @@ export class DmCollectionService<
   getFromCacheById(id: string) {
     return this.entities$.pipe(
       map((res) => res?.find((entity) => entity._id === id))
+    );
+  }
+
+  getFromCacheOrLoad(id: string) {
+    return this.getFromCacheById(id).pipe(
+      mergeMap((entity) => (entity ? of(entity) : this.getByKey(id)))
     );
   }
 
