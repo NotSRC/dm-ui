@@ -1,10 +1,5 @@
 <div
   class="renderer-wrapper"
-  [ngClass]="{
-    small: size === 'small',
-    big: size === 'big',
-    full: size === 'full'
-  }"
   #rendererWrapper
 >
   <img [src]="imageData" *ngIf="imageData" />
