@@ -16,12 +16,12 @@ import debounce from 'lodash.debounce';
 import { Converter } from './SpeckleConverter';
 import SelectionBox from './SelectionBox';
 import SelectionHelper from './SelectionHelper';
+import { Vector3 } from 'three';
 
 const singletonsStore = new Map();
 
 export class SpeckleRenderer extends EE {
-
-  opacityTable: { [key: string]: number} = {};
+  opacityTable: { [key: string]: number } = {};
   colorTable: { [key: string]: THREE.Color | string } = {};
 
   renderer = null;
@@ -75,7 +75,7 @@ export class SpeckleRenderer extends EE {
     viewerSettings,
     config: {
       dataObjects: any;
-      pipeline?: RendererPipelineMethod[]
+      pipeline?: RendererPipelineMethod[];
       size?: string;
       delay?: number;
     } = { size: 'small', dataObjects: null, delay: 1 }
@@ -122,6 +122,19 @@ export class SpeckleRenderer extends EE {
     this.rendererSettings = rendererSettings;
 
     this.initialise();
+  }
+
+  onCameraMove(callback = (event: Vector3) => {}) {
+    const mouseMoveEvent = () => {
+      callback(this.camera.position.clone());
+    };
+    this.renderer.domElement.addEventListener('mousedown', () => {
+      this.renderer.domElement.addEventListener('mousemove', mouseMoveEvent);
+    });
+
+    this.renderer.domElement.addEventListener('mouseup', () => {
+      this.renderer.domElement.removeEventListener('mousemove', mouseMoveEvent);
+    });
   }
 
   initialise() {
@@ -266,7 +279,9 @@ export class SpeckleRenderer extends EE {
     this.processPipeline();
   }
 
-  processPipeline(pipeline: RendererPipelineMethod[] = this.rendererSettings.pipeline) {
+  processPipeline(
+    pipeline: RendererPipelineMethod[] = this.rendererSettings.pipeline
+  ) {
     if (pipeline) {
       pipeline.forEach((cb) => {
         cb(this, this.rendererSettings);
@@ -308,20 +323,20 @@ export class SpeckleRenderer extends EE {
       this.domObject.offsetWidth,
       this.domObject.offsetHeight
     );
-  }
+  };
 
   // called on mouseover the render div - tells us we can actually enable interactions
   // in the threejs window
   enableEvents = (e) => {
     this.enableKeyobardEvents = true;
-  }
+  };
 
   // called on mouseout of the render div - will stop interactions, such as spacebar
   // for zoom extents, etc. in the threejs window
   disableEvents = (e) => {
     this.unHighlightObjects();
     this.enableKeyobardEvents = false;
-  }
+  };
 
   // HIC SUNT DRACONES:
   // Selection events and mouse interactions below.
@@ -332,7 +347,9 @@ export class SpeckleRenderer extends EE {
   // - (TODO) Clicking outside any objects/selection box will kill current selection
 
   keydown = (event) => {
-    if (!this.enableKeyobardEvents) { return; }
+    if (!this.enableKeyobardEvents) {
+      return;
+    }
     switch (event.code) {
       case 'Space':
         this.computeSceneBoundingSphere();
@@ -348,10 +365,12 @@ export class SpeckleRenderer extends EE {
       default:
         break;
     }
-  }
+  };
 
   keyup = (event) => {
-    if (!this.enableKeyobardEvents) { return; }
+    if (!this.enableKeyobardEvents) {
+      return;
+    }
     // console.log( `key: ${event.code}` )
     switch (event.code) {
       case 'ShiftLeft': {
@@ -363,7 +382,7 @@ export class SpeckleRenderer extends EE {
         break;
       }
     }
-  }
+  };
 
   // we dont' do much on mouse down:
   // 1) if it's a doubleclick, and we have a hovered object, zoom to it
@@ -379,7 +398,7 @@ export class SpeckleRenderer extends EE {
       this.selectionBox.startPoint.set(this.mouse.x, this.mouse.y, 0.5);
 
     this.mouseDownTime = Date.now();
-  }
+  };
 
   mouseUp = (event) => {
     this.isSpinning = false;
@@ -428,7 +447,7 @@ export class SpeckleRenderer extends EE {
         );
       }
     }
-  }
+  };
 
   onTouchMove = (event) => {
     let x, y;
@@ -462,7 +481,7 @@ export class SpeckleRenderer extends EE {
     else if (!this.isSpinning) {
       this.highlightMouseOverObject();
     }
-  }
+  };
 
   highlightMouseOverObject() {
     this.raycaster.setFromCamera(this.mouse, this.camera);
@@ -564,7 +583,10 @@ export class SpeckleRenderer extends EE {
       try {
         const splitType = obj.type.split('/');
         let convertType = splitType.pop();
-        while ((splitType.length > 0) & !Converter.hasOwnProperty(convertType)) {
+        while (
+          (splitType.length > 0) &
+          !Converter.hasOwnProperty(convertType)
+        ) {
           convertType = splitType.pop();
         }
         if (Converter.hasOwnProperty(convertType)) {
@@ -578,7 +600,7 @@ export class SpeckleRenderer extends EE {
             threeObj.castShadow = true;
             threeObj.receiveShadow = true;
             if (threeObj.material && obj.opacity >= 0) {
-              threeObj.material.opacity = obj.opacity  / 100;
+              threeObj.material.opacity = obj.opacity / 100;
             }
             this.drawEdges(threeObj, obj._id);
             this.scene.add(threeObj);
@@ -602,7 +624,9 @@ export class SpeckleRenderer extends EE {
   }
 
   drawEdges(threeObj, id) {
-    if (threeObj.type !== 'Mesh') { return; }
+    if (threeObj.type !== 'Mesh') {
+      return;
+    }
     const objEdges = new THREE.EdgesGeometry(
       threeObj.geometry,
       this.viewerSettings.edgesThreshold
@@ -620,7 +644,9 @@ export class SpeckleRenderer extends EE {
       this.edgesGroup.remove(obj);
     });
     this.processLargeArray(this.scene.children, (obj) => {
-      if (obj.type !== 'Mesh') { return; }
+      if (obj.type !== 'Mesh') {
+        return;
+      }
       this.drawEdges(obj, obj.userData._id);
     });
   }
@@ -653,7 +679,9 @@ export class SpeckleRenderer extends EE {
       const sceneObject = this.scene.children.find(
         (o) => o.userData._id === obj._id
       );
-      if (!sceneObject) { return; }
+      if (!sceneObject) {
+        return;
+      }
       sceneObject.userData.properties = flatten(obj.properties);
     });
   }
@@ -676,7 +704,9 @@ export class SpeckleRenderer extends EE {
       console.warn(`no property found (${propertyName}) on any scene objects.`);
       return;
     }
-    if (this.currentColorByProp === propertyName) { return; }
+    if (this.currentColorByProp === propertyName) {
+      return;
+    }
     this.unHighlightObjects();
     this.currentColorByProp = propertyName;
 
@@ -783,7 +813,9 @@ export class SpeckleRenderer extends EE {
     });
   }
 
-  registerColorAndOpacity(table: {[key: string]: { color: number[] | string; alpha: number; } }) {
+  registerColorAndOpacity(table: {
+    [key: string]: { color: number[] | string; alpha: number };
+  }) {
     const keysArray = Object.keys(table);
     const alphaHash = keysArray.reduce((acc, key) => {
       acc[key] = table[key].alpha;
@@ -808,7 +840,7 @@ export class SpeckleRenderer extends EE {
     });
   }
 
-  addValuesToOpacityTable(opacityHash: { [key: string]: number}) {
+  addValuesToOpacityTable(opacityHash: { [key: string]: number }) {
     this.opacityTable = Object.assign({}, this.opacityTable, opacityHash);
     Object.keys(opacityHash).forEach((key) => {
       this.opacityTable[key] = 1 - opacityHash[key];
@@ -912,9 +944,9 @@ export class SpeckleRenderer extends EE {
           if (value === 'no material') {
             this.colorTable[value] = new THREE.Color('#B3B3B3');
           } else {
-            this.colorTable[value] = this.colorTable['all else'] || new THREE.Color(
-              this.colorHasher.hex(value)
-            );
+            this.colorTable[value] =
+              this.colorTable['all else'] ||
+              new THREE.Color(this.colorHasher.hex(value));
           }
         }
         const color = this.colorTable[value];
@@ -936,7 +968,8 @@ export class SpeckleRenderer extends EE {
       5000
     );
 
-    const defaultColor = this.colorTable['all else'] || new THREE.Color('#B3B3B3');
+    const defaultColor =
+      this.colorTable['all else'] || new THREE.Color('#B3B3B3');
 
     toReset.forEach((obj) => {
       if (obj.material) {
@@ -1058,16 +1091,19 @@ export class SpeckleRenderer extends EE {
       this.scene.traverse((obj) => {
         if (objIds.indexOf(obj.userData._id) !== -1) {
           if (obj.name !== null) {
-            if (obj.name === 'displayEdgesGroup') { return; }
+            if (obj.name === 'displayEdgesGroup') {
+              return;
+            }
           }
           obj.visible = true;
         }
       });
-    }
-    else {
+    } else {
       this.scene.traverse((obj) => {
         if (obj.name !== null) {
-          if (obj.name === 'displayEdgesGroup') { return; }
+          if (obj.name === 'displayEdgesGroup') {
+            return;
+          }
         }
         obj.visible = true;
       });
@@ -1077,17 +1113,20 @@ export class SpeckleRenderer extends EE {
   hideObjects(objIds) {
     if (objIds.length !== 0) {
       this.scene.traverse((obj) => {
-        if (objIds.indexOf(obj.userData._id) !== -1) { obj.visible = false; }
+        if (objIds.indexOf(obj.userData._id) !== -1) {
+          obj.visible = false;
+        }
       });
-    }
-    else {
+    } else {
       this.scene.traverse((obj) => (obj.visible = false));
     }
   }
   // leaves only the provided objIds visible
   isolateObjects(objIds) {
     this.scene.children.forEach((obj) => {
-      if (!obj.userData._id) { return; }
+      if (!obj.userData._id) {
+        return;
+      }
       if (objIds.includes(obj.userData._id)) {
         obj.visible = true;
       } else {
@@ -1128,7 +1167,9 @@ export class SpeckleRenderer extends EE {
     if (typeof obj === 'string') {
       obj = this.scene.children.find((o) => o.userData._id === obj);
     }
-    if (!obj) { return; }
+    if (!obj) {
+      return;
+    }
     const bsphere = obj.geometry.boundingSphere;
     if (bsphere.radius < 1) bsphere.radius = 2;
     // let r = bsphere.radius
@@ -1196,8 +1237,12 @@ export class SpeckleRenderer extends EE {
       k = 0;
 
     for (const obj of this.scene.children) {
-      if (!obj.userData._id) { continue; }
-      if (!obj.geometry) { continue; }
+      if (!obj.userData._id) {
+        continue;
+      }
+      if (!obj.geometry) {
+        continue;
+      }
 
       if (k === 0) {
         center = new THREE.Vector3(
@@ -1213,7 +1258,9 @@ export class SpeckleRenderer extends EE {
       const otherDist =
         obj.geometry.boundingSphere.radius +
         center.distanceTo(obj.geometry.boundingSphere.center);
-      if (radius < otherDist) { radius = otherDist; }
+      if (radius < otherDist) {
+        radius = otherDist;
+      }
 
       center.x += obj.geometry.boundingSphere.center.x;
       center.y += obj.geometry.boundingSphere.center.y;
@@ -1272,7 +1319,9 @@ export class SpeckleRenderer extends EE {
       )
       .onUpdate(() => {
         self.controls.update();
-        if (this.x === where.target[0]) { console.log('camera finished stuff'); }
+        if (this.x === where.target[0]) {
+          console.log('camera finished stuff');
+        }
       })
       .easing(TWEEN.Easing.Quadratic.InOut)
       .start();
@@ -1290,7 +1339,9 @@ export class SpeckleRenderer extends EE {
         fn.call(context, array[index], index, array);
         ++index;
       }
-      if (index < array.length) { setTimeout(doChunk, 1); }
+      if (index < array.length) {
+        setTimeout(doChunk, 1);
+      }
     }
     doChunk();
   }
@@ -1310,7 +1361,9 @@ export class SpeckleRenderer extends EE {
         fn.call(context, array[index], index, array);
         ++index;
       }
-      if (index < array.length) { setTimeout(doChunk, 1); }
+      if (index < array.length) {
+        setTimeout(doChunk, 1);
+      }
     }
     doChunk();
   }
@@ -1398,8 +1451,14 @@ export class SpeckleRenderer extends EE {
     this.controls.removeEventListener('change', this.controlsListener);
 
     if (this.rendererSettings.selectable) {
-      this.renderer.domElement.removeEventListener('mousemove', this.onTouchMove);
-      this.renderer.domElement.removeEventListener('touchmove', this.onTouchMove);
+      this.renderer.domElement.removeEventListener(
+        'mousemove',
+        this.onTouchMove
+      );
+      this.renderer.domElement.removeEventListener(
+        'touchmove',
+        this.onTouchMove
+      );
 
       this.renderer.domElement.removeEventListener('mousedown', this.mouseDown);
       this.renderer.domElement.removeEventListener('mouseup', this.mouseUp);

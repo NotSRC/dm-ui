@@ -16,14 +16,15 @@ import { SpeckleRenderer } from './renderer/SpeckleRenderer';
 import { RendererPipelineMethod } from './renderer/SpeckleRenderer.model';
 import {
   DesignOptionSize,
+  ObjectDisplayDescriptor,
+  RefinedMetadataGroup,
   ViewDescriptorBean,
   ViewMode,
-  RefinedMetadataGroup,
-  ObjectDisplayDescriptor,
   ViewModeMetadata,
 } from '../../models/renderer.model';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import merge from 'lodash.merge';
+import { Vector3 } from 'three';
 
 @Component({
   selector: 'dm-speckle-renderer',
@@ -70,13 +71,17 @@ export class SpeckleRendererComponent
   @ViewChild('rendererWrapper', { static: true }) wrapper: ElementRef;
 
   @Output() imageDataReady = new EventEmitter<string>();
+  @Output() cameraChanged = new EventEmitter<ViewDescriptorBean>();
 
   @Input() renderToImage = false;
+
   @Input()
   get viewType(): ViewDescriptorBean {
     return this.localViewType;
   }
+
   set viewType(value: ViewDescriptorBean) {
+    console.log(value);
     if (value) {
       const viewWasChanged = this.localViewType && this.localViewType !== value;
       this.localViewType = value;
@@ -90,6 +95,7 @@ export class SpeckleRendererComponent
   get viewModeMetadata(): ViewModeMetadata[] {
     return this.localViewModeMetadata;
   }
+
   set viewModeMetadata(value: ViewModeMetadata[]) {
     if (value) {
       const viewWasChanged =
@@ -109,6 +115,7 @@ export class SpeckleRendererComponent
   get viewMode(): ViewMode {
     return this.localViewMode;
   }
+
   set viewMode(value: ViewMode) {
     if (value) {
       const viewWasChanged = this.localViewMode && this.localViewMode !== value;
@@ -124,6 +131,7 @@ export class SpeckleRendererComponent
   get imageData(): string {
     return this.localImageData;
   }
+
   set imageData(value: string) {
     if (value && value !== this.localImageData) {
       this.localImageData = value;
@@ -148,6 +156,7 @@ export class SpeckleRendererComponent
       this.runDefaultPipeline();
     }
   }
+
   get dataObjects() {
     return this.localDataObjects;
   }
@@ -156,6 +165,7 @@ export class SpeckleRendererComponent
   get disableControls() {
     return this.localDisableControls;
   }
+
   set disableControls(value) {
     const valueWasChanged =
       this.localDisableControls !== value &&
@@ -170,6 +180,7 @@ export class SpeckleRendererComponent
   get size(): DesignOptionSize {
     return this.localSize;
   }
+
   set size(value: DesignOptionSize) {
     if (value) {
       const sizeWasChanged = this.localSize && this.localSize !== value;
@@ -297,6 +308,10 @@ export class SpeckleRendererComponent
       }
     );
 
+    this.renderer.onCameraMove((event) => {
+      this.cameraChanged.emit(this.getViewTypeWithNewPosition(event));
+    });
+
     this.mode3D = true;
 
     if (!this.disableControls) {
@@ -311,6 +326,18 @@ export class SpeckleRendererComponent
 
       this.listeners.push(unListen);
     }
+  }
+
+  private getViewTypeWithNewPosition(event: Vector3) {
+    return JSON.parse(
+      JSON.stringify({
+        ...this.viewType,
+        cameraDescriptor: {
+          ...this.viewType.cameraDescriptor,
+          position: { x: event.x, y: event.y, z: event.z },
+        },
+      })
+    );
   }
 
   private reInitRenderer() {
