@@ -1,14 +1,6 @@
-import {
-  ViewDescriptorBean,
-  ViewModeMetadata,
-} from './../../projects/ui/src/lib/models/renderer.model';
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import {
-  SAMPLE_RESOURCE_OBJECTS,
-  SAMPLE_RESPONSE,
-  SAMPLE_METADATA,
-} from 'src/mocks/speckle-objects.mock';
+import { SIMPLE_SPECKLE_OBJECT_WITH_PARCEL } from './speckle-objects.mock';
+import { ViewDescriptorBean } from '../../projects/ui/src/lib/models/renderer.model';
 
 @Component({
   selector: 'app-root',
@@ -16,22 +8,21 @@ import {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'dm-ui';
-  form = new FormGroup({
-    number: new FormControl(0),
-    title: new FormControl('<b>ba</b>', [Validators.required]),
-  });
-  viewMode: 'program' | 'building' = 'building';
-  speckleObjects = SAMPLE_RESOURCE_OBJECTS;
-  cameraDscr: ViewDescriptorBean = SAMPLE_RESPONSE.building_data.camera;
-  viewModeMetadata: ViewModeMetadata[] = [SAMPLE_METADATA];
+  rend = true;
+  dataObjects = SIMPLE_SPECKLE_OBJECT_WITH_PARCEL;
+  viewType = {
+    viewType: 'PARCEL-ISOMETRY-VIEW',
+    cameraDescriptor: {
+      position: { x: 110, y: 316, z: -192 },
+      rotation: { x: 0, y: 0, z: 1 },
+      target: { x: 110, y: 99, z: 25 },
+    },
+  };
 
-  reset() {
-    this.form.get('title').disable();
-    // this.form.reset();
-  }
-
-  uploadFile(event) {
-    console.log(event);
+  cameraChanged(event: ViewDescriptorBean) {
+    const pos = event.cameraDescriptor.position;
+    this.viewType.cameraDescriptor.position.x = pos.x;
+    this.viewType.cameraDescriptor.position.y = pos.y;
+    this.viewType.cameraDescriptor.position.z = pos.z;
   }
 }

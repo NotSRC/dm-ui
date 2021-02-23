@@ -1,5 +1,7 @@
-{{ 9 | number }}<br/>
-{{ 999 | cutNumber }}<br/>
-{{ 99999.4 | cutNumber : 'm' : '0.0-1' }}<br/>
-{{ 1200000 | cutNumber : 'm' : '0.0-1' }}<br/>
-
+<button (click)="rend = !rend">Hide renderer</button>
+<dm-speckle-renderer
+  *ngIf="rend"
+  [viewType]="viewType"
+  [dataObjects]="dataObjects"
+  (cameraChanged)="cameraChanged($event)">
+</dm-speckle-renderer>
