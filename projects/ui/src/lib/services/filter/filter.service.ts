@@ -165,6 +165,27 @@ export abstract class FilterService {
     });
   }
 
+  setFiltersFromArray(plain: filtersPlainType, filterSrc = this.filters) {
+    Object.keys(plain || {}).forEach((key) => {
+      const field = plain[key].field;
+      if (!Object.prototype.hasOwnProperty.call(filterSrc, field)) {
+        filterSrc[field] = new FilterInput({
+          condition: plain[key].condition,
+          operator: plain[key].operator,
+          field: plain[key].field,
+        });
+      }
+
+      filterSrc[field].search = plain[key].search;
+      if (plain[key].children) {
+        this.setFiltersFromArray(
+          plain[key].children,
+          filterSrc[field].children
+        );
+      }
+    });
+  }
+
   getFiltersPlain(filters = this.filters): filtersPlainType {
     return Object.keys(filters).reduce((acc, key) => {
       const filter = filters[key];
