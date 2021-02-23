@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -30,6 +31,7 @@ import { Vector3 } from 'three';
   selector: 'dm-speckle-renderer',
   templateUrl: './speckle-renderer.component.html',
   styleUrls: ['./speckle-renderer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SpeckleRendererComponent
   implements OnInit, OnDestroy, AfterViewInit {
@@ -81,7 +83,6 @@ export class SpeckleRendererComponent
   }
 
   set viewType(value: ViewDescriptorBean) {
-    console.log(value);
     if (value) {
       const viewWasChanged = this.localViewType && this.localViewType !== value;
       this.localViewType = value;
