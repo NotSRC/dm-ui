@@ -32,8 +32,10 @@
 }
 
 .mat-form-field,
-dm-date-time-picker {
+dm-date-time-picker,
+dm-location-select{
   & + dm-date-time-picker,
+  & + dm-location-select,
   & + .mat-form-field {
     margin-top: 15px;
   }
